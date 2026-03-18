@@ -47,6 +47,7 @@ export function MobileNav() {
                       key={item.name}
                       variant={pathname.startsWith(item.href) ? "secondary" : "ghost"}
                       className="w-full justify-start gap-2 mb-1"
+                      onClick={() => setOpen(false)}
                       asChild
                     >
                       <Link href={item.href}>
