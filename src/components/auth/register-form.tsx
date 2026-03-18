@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { signup } from "@/app/(auth)/actions"
+import { signup } from "@/app/(auth)/actions/index"
 import { useState } from "react"
 
 export function RegisterForm({
@@ -20,11 +20,18 @@ export function RegisterForm({
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
   const [pending, setPending] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   
   async function handleSubmit(formData: FormData) {
     setPending(true)
+    setError(null)
     try {
-      await signup(formData)
+      const result = await signup(formData)
+      if (result?.error) {
+        setError(result.error)
+      }
+    } catch (err: any) {
+      setError("An unexpected error occurred.")
     } finally {
       setPending(false)
     }
@@ -42,6 +49,11 @@ export function RegisterForm({
         <CardContent>
           <form action={handleSubmit}>
             <div className="grid gap-6">
+              {error && (
+                <div className="text-red-500 text-sm text-center bg-red-50 p-2 rounded border border-red-200">
+                  {error}
+                </div>
+              )}
               <div className="grid gap-6">
                 <div className="grid gap-2">
                   <Label htmlFor="gymName">Gym Name</Label>

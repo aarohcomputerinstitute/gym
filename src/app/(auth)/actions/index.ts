@@ -29,12 +29,51 @@ export async function signup(formData: FormData) {
     email: formData.get("email") as string,
     password: formData.get("password") as string,
   }
+  const gymName = formData.get("gymName") as string
 
-  const { error } = await supabase.auth.signUp(data)
+  // 1. Sign up the user in Supabase Auth
+  const { data: authData, error: authError } = await supabase.auth.signUp(data)
 
-  if (error) {
-    console.error(error)
-    throw new Error(error.message)
+  if (authError) {
+    return { error: authError.message }
+  }
+
+  if (!authData.user) {
+    return { error: "User creation failed." }
+  }
+
+  // 2. Create the Gym record
+  const { data: gymData, error: gymError } = await supabase
+    .from('gyms')
+    .insert({
+      name: gymName,
+      slug: gymName.toLowerCase().replace(/\s+/g, '-'),
+      owner_name: 'Owner', // Initial placeholder
+      email: data.email,
+      status: 'active'
+    })
+    .select()
+    .single()
+
+  if (gymError) {
+    // We should ideally delete the auth user here if it was just created, 
+    // but Suapbase Auth might require manual cleanup or we just return error
+    return { error: "Gym registration failed: " + gymError.message }
+  }
+
+  // 3. Create the User record in our public table
+  const { error: userError } = await supabase
+    .from('users')
+    .insert({
+      id: authData.user.id,
+      gym_id: gymData.id,
+      name: 'Gym Owner',
+      email: data.email,
+      role: 'owner'
+    })
+
+  if (userError) {
+    return { error: "User profile creation failed: " + userError.message }
   }
 
   revalidatePath("/", "layout")
