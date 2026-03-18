@@ -28,7 +28,7 @@ function StatItem({ title, value, change, isPositive, icon: Icon, color }: StatI
           </div>
         </div>
         <div className="space-y-1">
-          <h3 className="text-sm font-medium text-slate-400">{title}</h3>
+          <h3 className="text-sm font-medium text-slate-200">{title}</h3>
           <div className="text-2xl font-bold text-white tracking-tight">{value}</div>
         </div>
       </CardContent>
