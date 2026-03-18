@@ -7,47 +7,63 @@ import {
   XAxis,
   YAxis,
   Tooltip,
+  Cell,
 } from "recharts"
 
 const data = [
-  { name: "Jan", total: Math.floor(Math.random() * 50000) + 100000 },
-  { name: "Feb", total: Math.floor(Math.random() * 50000) + 120000 },
-  { name: "Mar", total: Math.floor(Math.random() * 50000) + 150000 },
-  { name: "Apr", total: Math.floor(Math.random() * 50000) + 170000 },
-  { name: "May", total: Math.floor(Math.random() * 50000) + 140000 },
-  { name: "Jun", total: Math.floor(Math.random() * 50000) + 190000 },
-  { name: "Jul", total: Math.floor(Math.random() * 50000) + 210000 },
-  { name: "Aug", total: Math.floor(Math.random() * 50000) + 240000 },
-  { name: "Sep", total: Math.floor(Math.random() * 50000) + 200000 },
-  { name: "Oct", total: Math.floor(Math.random() * 50000) + 220000 },
-  { name: "Nov", total: Math.floor(Math.random() * 50000) + 250000 },
-  { name: "Dec", total: Math.floor(Math.random() * 50000) + 280000 },
+  { name: "Jan", total: 125000 },
+  { name: "Feb", total: 142000 },
+  { name: "Mar", total: 158000 },
+  { name: "Apr", total: 185000 },
+  { name: "May", total: 162000 },
+  { name: "Jun", total: 210000 },
+  { name: "Jul", total: 245000 },
 ]
 
 export function RevenueChart() {
   return (
     <ResponsiveContainer width="100%" height={350}>
-      <BarChart data={data}>
+      <BarChart data={data} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
+        <defs>
+          <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#3b82f6" stopOpacity={1} />
+            <stop offset="100%" stopColor="#2563eb" stopOpacity={0.6} />
+          </linearGradient>
+        </defs>
         <XAxis
           dataKey="name"
-          stroke="#888888"
-          fontSize={12}
+          stroke="#475569"
+          fontSize={11}
           tickLine={false}
           axisLine={false}
+          dy={10}
         />
         <YAxis
-          stroke="#888888"
-          fontSize={12}
+          stroke="#475569"
+          fontSize={11}
           tickLine={false}
           axisLine={false}
-          tickFormatter={(value) => `₹${value}`}
+          tickFormatter={(value) => `₹${value / 1000}k`}
         />
-        <Tooltip cursor={{fill: 'transparent'}} />
+        <Tooltip 
+          content={({ active, payload }) => {
+            if (active && payload && payload.length) {
+              return (
+                <div className="bg-slate-900/90 backdrop-blur-md border border-white/10 p-3 rounded-xl shadow-2xl">
+                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">{payload[0].payload.name}</p>
+                  <p className="text-lg font-bold text-white italic">₹{payload[0].value?.toLocaleString()}</p>
+                </div>
+              )
+            }
+            return null
+          }}
+          cursor={{ fill: 'rgba(255,255,255,0.03)' }} 
+        />
         <Bar
           dataKey="total"
-          fill="currentColor"
-          radius={[4, 4, 0, 0]}
-          className="fill-primary"
+          fill="url(#barGradient)"
+          radius={[6, 6, 0, 0]}
+          barSize={45}
         />
       </BarChart>
     </ResponsiveContainer>

@@ -30,8 +30,13 @@ export default async function DashboardLayout({
       <Sidebar role={role} />
       <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-4 md:w-full">
         <Navbar user={user} role={role} />
-        <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
-          {children}
+        <main className="flex-1 overflow-y-auto p-4 md:p-8 bg-slate-950/50 backdrop-blur-sm relative">
+          {/* Subtle Grid Pattern Overlay */}
+          <div className="absolute inset-0 z-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none"></div>
+          
+          <div className="max-w-7xl mx-auto relative z-10">
+            {children}
+          </div>
         </main>
       </div>
     </div>

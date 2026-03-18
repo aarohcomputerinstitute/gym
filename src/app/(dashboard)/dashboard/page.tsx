@@ -9,68 +9,88 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Button } from "@/components/ui/button"
+import { Plus, Download } from "lucide-react"
 
 export default function DashboardPage() {
+  const currentHour = new Date().getHours()
+  const greeting = currentHour < 12 ? "Good Morning" : currentHour < 18 ? "Good Afternoon" : "Good Evening"
+
   return (
-    <div className="flex-1 space-y-4 pt-6">
-      <div className="flex items-center justify-between space-y-2">
-        <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
-        <div className="flex items-center space-x-2">
-          {/* Add date picker here if needed */}
+    <div className="flex-1 space-y-8 p-4 md:p-8 pt-6">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 animate-fade-in-up">
+        <div className="space-y-1">
+          <p className="text-sm font-medium text-blue-500 uppercase tracking-wider">{greeting}</p>
+          <div className="flex items-center gap-3">
+            <h2 className="text-4xl font-bold tracking-tight text-white italic font-sans">
+              Dashboard
+            </h2>
+            <div className="h-1.5 w-1.5 rounded-full bg-blue-500 animate-pulse mt-3" />
+          </div>
+          <p className="text-slate-400">Your gym's performance is optimized and looking great today.</p>
+        </div>
+        <div className="flex items-center gap-3">
+          <Button variant="outline" size="sm" className="hidden md:flex bg-white/5 border-white/10 text-slate-300 hover:text-white hover:bg-white/10 h-11 rounded-xl transition-all">
+            <Download className="mr-2 h-4 w-4" />
+            Export Data
+          </Button>
+          <Button size="sm" className="bg-blue-600 hover:bg-blue-500 text-white h-11 px-6 rounded-xl shadow-lg shadow-blue-500/20 transition-all active:scale-95">
+            <Plus className="mr-2 h-4 w-4" />
+            Add Member
+          </Button>
         </div>
       </div>
-      <Tabs defaultValue="overview" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="analytics" disabled>
-            Analytics
-          </TabsTrigger>
-          <TabsTrigger value="reports" disabled>
-            Reports
-          </TabsTrigger>
-        </TabsList>
-        <TabsContent value="overview" className="space-y-4">
-          <StatsCards />
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-            <Card className="col-span-4">
-              <CardHeader>
-                <CardTitle>Revenue Override</CardTitle>
-                <CardDescription>
-                  Your gym made ₹2,45,000 this month.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="pl-2">
-                <RevenueChart />
-              </CardContent>
-            </Card>
-            <Card className="col-span-3">
-              <CardHeader>
-                <CardTitle>Member Growth</CardTitle>
-                <CardDescription>
-                  Active members vs new signups.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <MemberGrowthChart />
-              </CardContent>
-            </Card>
-          </div>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-            <Card className="col-span-4">
-              <CardHeader>
-                <CardTitle>Recent Activity</CardTitle>
-                <CardDescription>
-                  Real-time updates from your gym floor.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <RecentActivity />
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent>
-      </Tabs>
+
+      <StatsCards />
+
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
+        <Card className="col-span-4 bg-slate-900/40 border-white/5 backdrop-blur-sm shadow-2xl rounded-2xl overflow-hidden hover:border-white/10 transition-colors animate-fade-in">
+          <CardHeader className="flex flex-row items-center justify-between pb-8">
+            <div className="space-y-1">
+              <CardTitle className="text-xl font-bold text-slate-100 flex items-center gap-2">
+                Revenue Insights
+                <div className="px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 text-[10px] font-bold">LIVE</div>
+              </CardTitle>
+              <CardDescription className="text-slate-500">
+                Monthly revenue distribution across all plans.
+              </CardDescription>
+            </div>
+            <div className="text-2xl font-bold text-white italic">₹2,45,000</div>
+          </CardHeader>
+          <CardContent className="h-[350px]">
+            <RevenueChart />
+          </CardContent>
+        </Card>
+
+        <Card className="col-span-3 bg-slate-900/40 border-white/5 backdrop-blur-sm shadow-2xl rounded-2xl overflow-hidden hover:border-white/10 transition-colors animate-fade-in delay-100">
+          <CardHeader className="pb-8">
+            <CardTitle className="text-xl font-bold text-slate-100">Member Dynamics</CardTitle>
+            <CardDescription className="text-slate-500">
+              Retention rate vs new signups.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="h-[350px]">
+            <MemberGrowthChart />
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
+        <Card className="col-span-4 bg-slate-900/40 border-white/5 backdrop-blur-sm shadow-2xl rounded-2xl overflow-hidden hover:border-white/10 transition-colors animate-fade-in delay-200">
+          <CardHeader className="flex flex-row items-center justify-between border-b border-white/5 mb-4">
+            <div className="space-y-1">
+              <CardTitle className="text-xl font-bold text-slate-100">Recent Activity</CardTitle>
+              <CardDescription className="text-slate-500">
+                Real-time stream from your facility.
+              </CardDescription>
+            </div>
+            <Button variant="ghost" className="text-blue-400 hover:text-blue-300 hover:bg-blue-400/10 rounded-xl px-4">See All</Button>
+          </CardHeader>
+          <CardContent>
+            <RecentActivity />
+          </CardContent>
+        </Card>
+      </div>
     </div>
   )
 }
