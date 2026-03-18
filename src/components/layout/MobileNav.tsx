@@ -13,17 +13,13 @@ import { LogOut, Dumbbell } from "lucide-react"
 import { signOut } from "@/app/(auth)/actions/index"
 
 export function MobileNav() {
-  const [open, setOpen] = useState(false)
-  const pathname = usePathname()
-
   return (
-    <Sheet open={open} onOpenChange={setOpen}>
+    <Sheet>
       <SheetTrigger asChild>
         <Button 
           variant="ghost" 
           size="icon" 
           className="md:hidden h-10 w-10 text-slate-400 hover:text-white hover:bg-white/5 rounded-xl border border-white/5 transition-all"
-          onClick={() => alert('Mobile Menu Interaction Working!')}
         >
           <Menu className="h-5 w-5" />
           <span className="sr-only">Toggle navigation menu</span>
@@ -49,7 +45,6 @@ export function MobileNav() {
                       key={item.name}
                       variant={pathname.startsWith(item.href) ? "secondary" : "ghost"}
                       className="w-full justify-start gap-2 mb-1"
-                      onClick={() => setOpen(false)}
                       asChild
                     >
                       <Link href={item.href}>

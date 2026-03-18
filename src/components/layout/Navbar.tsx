@@ -38,7 +38,6 @@ export function Navbar({ user, role }: { user: User, role: string }) {
           variant="ghost" 
           size="icon" 
           className="h-10 w-10 text-slate-500 hover:text-white hover:bg-white/5 rounded-xl transition-all relative"
-          onClick={() => { console.log('Bell clicked'); alert('Interaction Working!'); }}
         >
           <Bell className="h-5 w-5" />
           <span className="sr-only">Toggle notifications</span>
