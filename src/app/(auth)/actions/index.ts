@@ -42,3 +42,24 @@ export async function signup(formData: FormData) {
   revalidatePath("/", "layout")
   redirect("/dashboard")
 }
+
+export async function resetPassword(formData: FormData) {
+  const supabase = await createClient()
+  const email = formData.get("email") as string
+
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback?next=/auth/reset-password`,
+  })
+
+  if (error) {
+    console.error(error)
+    throw new Error(error.message)
+  }
+}
+
+export async function signOut() {
+  const supabase = await createClient()
+  await supabase.auth.signOut()
+  revalidatePath("/", "layout")
+  redirect("/login")
+}
