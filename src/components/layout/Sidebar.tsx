@@ -59,6 +59,8 @@ export function Sidebar({ className }: SidebarProps) {
                   )
                 }
                 
+                const Icon = item.icon
+                
                 return (
                   <Link
                     key={item.name}
@@ -70,7 +72,7 @@ export function Sidebar({ className }: SidebarProps) {
                       "w-full justify-start gap-2 mb-1"
                     )}
                   >
-                    {item.icon && <item.icon className="h-4 w-4" />}
+                    {Icon && <Icon className="h-4 w-4" />}
                     {item.name}
                   </Link>
                 )

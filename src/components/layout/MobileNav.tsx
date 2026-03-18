@@ -30,20 +30,23 @@ export function MobileNav() {
             </h2>
             <div className="space-y-1">
               <ScrollArea className="h-[calc(100vh-8rem)]">
-                {sidebarNavigation.map((item) => (
-                  <Button
-                    key={item.name}
-                    variant={pathname.startsWith(item.href) ? "secondary" : "ghost"}
-                    className="w-full justify-start gap-2 mb-1"
-                    onClick={() => setOpen(false)}
-                    asChild
-                  >
-                    <Link href={item.href}>
-                      <item.icon className="h-4 w-4" />
-                      {item.name}
-                    </Link>
-                  </Button>
-                ))}
+                {sidebarNavigation.map((item) => {
+                  const Icon = item.icon
+                  return (
+                    <Button
+                      key={item.name}
+                      variant={pathname.startsWith(item.href) ? "secondary" : "ghost"}
+                      className="w-full justify-start gap-2 mb-1"
+                      onClick={() => setOpen(false)}
+                      asChild
+                    >
+                      <Link href={item.href}>
+                        {Icon && <Icon className="h-4 w-4" />}
+                        {item.name}
+                      </Link>
+                    </Button>
+                  )
+                })}
               </ScrollArea>
             </div>
           </div>

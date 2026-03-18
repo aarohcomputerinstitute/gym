@@ -46,13 +46,13 @@ const memberFormSchema = z.object({
   gender: z.enum(["male", "female", "other"]),
   dob: z.date().optional(),
   joinDate: z.date({
-    required_error: "A join date is required.",
+    invalid_type_error: "A join date is required.",
   }),
   bloodGroup: z.string().optional(),
   emergencyContact: z.string().optional(),
   address: z.string().optional(),
   planId: z.string({
-    required_error: "Please select a membership plan.",
+    invalid_type_error: "Please select a membership plan.",
   }),
 })
 
