@@ -26,15 +26,18 @@ export default async function DashboardLayout({
   const role = userData?.role || 'receptionist'
 
   return (
-    <div className="flex min-h-screen w-full flex-col bg-muted/40 md:flex-row">
+    <div className="flex min-h-screen bg-[#020617]">
       <Sidebar role={role} />
-      <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-4 md:w-full">
+      <div className="flex flex-col flex-1 min-w-0">
         <Navbar user={user} role={role} />
-        <main className="flex-1 overflow-y-auto p-4 md:p-8 bg-slate-950/50 backdrop-blur-sm relative">
-          {/* Subtle Grid Pattern Overlay */}
-          <div className="absolute inset-0 z-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none"></div>
+        <main className="flex-1 overflow-y-auto relative">
+          {/* High-end subtle background decoration */}
+          <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+            <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-600/10 rounded-full blur-[120px] animate-pulse"></div>
+            <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-indigo-600/10 rounded-full blur-[120px] animate-pulse delay-700"></div>
+          </div>
           
-          <div className="max-w-7xl mx-auto relative z-10">
+          <div className="max-w-7xl mx-auto p-4 md:p-8 relative z-10 transition-all duration-300">
             {children}
           </div>
         </main>

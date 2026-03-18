@@ -44,28 +44,28 @@ export default function DashboardPage() {
       <StatsCards />
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
-        <Card className="col-span-4 bg-slate-900/40 border-white/5 backdrop-blur-sm shadow-2xl rounded-2xl overflow-hidden hover:border-white/10 transition-colors animate-fade-in">
-          <CardHeader className="flex flex-row items-center justify-between pb-8">
+        <Card className="col-span-4 bg-slate-900/60 border-white/10 backdrop-blur-xl shadow-2xl rounded-2xl overflow-hidden hover:border-blue-500/30 transition-all duration-300 animate-fade-in">
+          <CardHeader className="flex flex-row items-center justify-between pb-8 border-b border-white/5 mb-4">
             <div className="space-y-1">
               <CardTitle className="text-xl font-bold text-white flex items-center gap-2">
                 Revenue Insights
                 <div className="px-2 py-0.5 rounded-full bg-blue-600/20 text-blue-400 border border-blue-500/30 text-[10px] font-bold shadow-sm">LIVE</div>
               </CardTitle>
-              <CardDescription className="text-slate-500">
+              <CardDescription className="text-slate-400">
                 Monthly revenue distribution across all plans.
               </CardDescription>
             </div>
-            <div className="text-2xl font-bold text-white italic">₹2,45,000</div>
+            <div className="text-3xl font-bold text-white italic tracking-tight">₹2,45,000</div>
           </CardHeader>
           <CardContent className="h-[350px]">
             <RevenueChart />
           </CardContent>
         </Card>
 
-        <Card className="col-span-3 bg-slate-900/40 border-white/5 backdrop-blur-sm shadow-2xl rounded-2xl overflow-hidden hover:border-white/10 transition-colors animate-fade-in delay-100">
-          <CardHeader className="pb-8">
-            <CardTitle className="text-xl font-bold text-slate-100">Member Dynamics</CardTitle>
-            <CardDescription className="text-slate-500">
+        <Card className="col-span-3 bg-slate-900/60 border-white/10 backdrop-blur-xl shadow-2xl rounded-2xl overflow-hidden hover:border-blue-500/30 transition-all duration-300 animate-fade-in delay-100">
+          <CardHeader className="pb-8 border-b border-white/5 mb-4">
+            <CardTitle className="text-xl font-bold text-white">Member Dynamics</CardTitle>
+            <CardDescription className="text-slate-400">
               Retention rate vs new signups.
             </CardDescription>
           </CardHeader>
@@ -76,15 +76,15 @@ export default function DashboardPage() {
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
-        <Card className="col-span-4 bg-slate-900/40 border-white/5 backdrop-blur-sm shadow-2xl rounded-2xl overflow-hidden hover:border-white/10 transition-colors animate-fade-in delay-200">
-          <CardHeader className="flex flex-row items-center justify-between border-b border-white/5 mb-4">
+        <Card className="col-span-4 bg-slate-900/60 border-white/10 backdrop-blur-xl shadow-2xl rounded-2xl overflow-hidden hover:border-blue-500/30 transition-all duration-300 animate-fade-in delay-200">
+          <CardHeader className="flex flex-row items-center justify-between border-b border-white/5 mb-6">
             <div className="space-y-1">
-              <CardTitle className="text-xl font-bold text-slate-100">Recent Activity</CardTitle>
-              <CardDescription className="text-slate-500">
+              <CardTitle className="text-xl font-bold text-white">Recent Activity</CardTitle>
+              <CardDescription className="text-slate-400">
                 Real-time stream from your facility.
               </CardDescription>
             </div>
-            <Button variant="ghost" className="text-blue-400 hover:text-blue-300 hover:bg-blue-400/10 rounded-xl px-4">See All</Button>
+            <Button variant="ghost" className="text-blue-400 hover:text-blue-300 hover:bg-blue-400/10 rounded-xl px-4 border border-white/5">See All</Button>
           </CardHeader>
           <CardContent>
             <RecentActivity />
