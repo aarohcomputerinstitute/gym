@@ -28,7 +28,7 @@ export function Navbar({ user, role }: { user: User, role: string }) {
   const userInitial = user.email?.charAt(0).toUpperCase() || 'U'
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center gap-4 bg-slate-950/20 backdrop-blur-md px-6 sm:h-20 lg:px-8 border-b border-white/5">
+    <header className="sticky top-0 z-50 flex h-16 items-center gap-4 bg-slate-950/20 backdrop-blur-md px-6 sm:h-20 lg:px-8 border-b border-white/5 pointer-events-auto">
       <div className="flex w-full items-center justify-between gap-4">
         <div className="md:hidden">
           <MobileNav />
