@@ -20,7 +20,7 @@ In Vercel Project Settings, add these variables from your `.env.local`:
 ### 4. Database Setup
 Apply [`supabase/schema.sql`](file:///f:/gym-erp/supabase/schema.sql) in your Supabase SQL Editor if you haven't already.
 
-## Local Development
+## Local Development.
 
 ```bash
 npm install
