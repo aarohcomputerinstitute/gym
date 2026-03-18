@@ -16,7 +16,7 @@ function SheetTrigger({
   asChild = false,
   ...props
 }: SheetPrimitive.Trigger.Props & { asChild?: boolean }) {
-  const Comp = asChild ? Slot : SheetPrimitive.Trigger
+  const Comp = (asChild ? Slot : SheetPrimitive.Trigger) as any
   return <Comp data-slot="sheet-trigger" {...props} />
 }
 

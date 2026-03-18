@@ -17,7 +17,7 @@ const SelectTrigger = React.forwardRef<
     asChild?: boolean
   }
 >(({ className, children, asChild = false, ...props }, ref) => {
-  const Comp = asChild ? Slot : SelectPrimitive.Trigger
+  const Comp = (asChild ? Slot : SelectPrimitive.Trigger) as any
   return (
     <Comp
       ref={ref}
@@ -37,10 +37,10 @@ const SelectTrigger = React.forwardRef<
 SelectTrigger.displayName = SelectPrimitive.Trigger.displayName
 
 const SelectScrollUpButton = React.forwardRef<
-  React.ElementRef<typeof SelectPrimitive.ScrollUpButton>,
-  React.ComponentPropsWithoutRef<typeof SelectPrimitive.ScrollUpButton>
+  React.ElementRef<typeof SelectPrimitive.ScrollUpArrow>,
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.ScrollUpArrow>
 >(({ className, ...props }, ref) => (
-  <SelectPrimitive.ScrollUpButton
+  <SelectPrimitive.ScrollUpArrow
     ref={ref}
     className={cn(
       "flex cursor-default items-center justify-center py-1",
@@ -49,15 +49,15 @@ const SelectScrollUpButton = React.forwardRef<
     {...props}
   >
     <ChevronUp className="h-4 w-4" />
-  </SelectPrimitive.ScrollUpButton>
+  </SelectPrimitive.ScrollUpArrow>
 ))
-SelectScrollUpButton.displayName = SelectPrimitive.ScrollUpButton.displayName
+SelectScrollUpButton.displayName = "SelectScrollUpButton"
 
 const SelectScrollDownButton = React.forwardRef<
-  React.ElementRef<typeof SelectPrimitive.ScrollDownButton>,
-  React.ComponentPropsWithoutRef<typeof SelectPrimitive.ScrollDownButton>
+  React.ElementRef<typeof SelectPrimitive.ScrollDownArrow>,
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.ScrollDownArrow>
 >(({ className, ...props }, ref) => (
-  <SelectPrimitive.ScrollDownButton
+  <SelectPrimitive.ScrollDownArrow
     ref={ref}
     className={cn(
       "flex cursor-default items-center justify-center py-1",
@@ -66,46 +66,33 @@ const SelectScrollDownButton = React.forwardRef<
     {...props}
   >
     <ChevronDown className="h-4 w-4" />
-  </SelectPrimitive.ScrollDownButton>
+  </SelectPrimitive.ScrollDownArrow>
 ))
-SelectScrollDownButton.displayName =
-  SelectPrimitive.ScrollDownButton.displayName
+SelectScrollDownButton.displayName = "SelectScrollDownButton"
 
 const SelectContent = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Portal>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Portal> & {
     className?: string
-    position?: "popper" | "item-aligned"
   }
->(({ className, children, position = "popper", ...props }, ref) => (
+>(({ className, children, ...props }, ref) => (
   <SelectPrimitive.Portal>
     <SelectPrimitive.Positioner
       className={cn(
         "relative z-50 max-h-96 min-w-[8rem] overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
-        position === "popper" &&
-          "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1",
         className
       )}
-      position={position}
       {...props}
     >
       <SelectPrimitive.Popup className="h-[var(--available-height)] w-[var(--anchor-width)] overflow-hidden">
         <SelectScrollUpButton />
-        <SelectPrimitive.Viewport
-          className={cn(
-            "p-1",
-            position === "popper" &&
-              "h-[var(--available-height)] w-full min-w-[var(--anchor-width)]"
-          )}
-        >
-          {children}
-        </SelectPrimitive.Viewport>
+        {children}
         <SelectScrollDownButton />
       </SelectPrimitive.Popup>
     </SelectPrimitive.Positioner>
   </SelectPrimitive.Portal>
 ))
-SelectContent.displayName = SelectPrimitive.Portal.displayName
+SelectContent.displayName = "SelectContent"
 
 const SelectLabel = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.GroupLabel>,

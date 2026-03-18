@@ -14,7 +14,7 @@ function PopoverTrigger({
   asChild = false,
   ...props
 }: PopoverPrimitive.Trigger.Props & { asChild?: boolean }) {
-  const Comp = asChild ? Slot : PopoverPrimitive.Trigger
+  const Comp = (asChild ? Slot : PopoverPrimitive.Trigger) as any
   return <Comp data-slot="popover-trigger" {...props} />
 }
 
