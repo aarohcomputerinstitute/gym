@@ -13,6 +13,8 @@ import { LogOut, Dumbbell } from "lucide-react"
 import { signOut } from "@/app/(auth)/actions/index"
 
 export function MobileNav() {
+  const pathname = usePathname()
+
   return (
     <Sheet>
       <SheetTrigger asChild>
