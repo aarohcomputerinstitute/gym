@@ -26,9 +26,9 @@ export default async function DashboardLayout({
   const role = userData?.role || 'receptionist'
 
   return (
-    <div className="flex min-h-screen bg-[#020617]">
+    <div className="flex h-screen overflow-hidden bg-[#020617]">
       <Sidebar role={role} />
-      <div className="flex flex-col flex-1 min-w-0">
+      <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
         <Navbar user={user} role={role} />
         <main className="flex-1 overflow-y-auto relative">
           {/* High-end subtle background decoration */}
