@@ -6,7 +6,7 @@ CREATE EXTENSION IF NOT EXISTS pgcrypto;
 -- 1. ENUMS (Custom Types)
 --------------------------------------------------------------------------------
 CREATE TYPE gym_status AS ENUM ('active', 'suspended', 'trial', 'cancelled');
-CREATE TYPE user_role AS ENUM ('owner', 'manager', 'trainer', 'receptionist');
+CREATE TYPE user_role AS ENUM ('super_admin', 'owner', 'manager', 'trainer', 'receptionist');
 CREATE TYPE member_gender AS ENUM ('male', 'female', 'other');
 CREATE TYPE member_status AS ENUM ('active', 'inactive', 'expired', 'frozen');
 CREATE TYPE subscription_status AS ENUM ('active', 'expired', 'frozen', 'cancelled');
