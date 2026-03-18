@@ -12,23 +12,26 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { login } from "@/app/(auth)/actions"
 import { useState } from "react"
-import { useActionState } from "react"
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
   const [pending, setPending] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   
   async function handleSubmit(formData: FormData) {
     setPending(true)
+    setError(null)
     try {
-      await login(formData)
+      const result = await login(formData)
+      if (result?.error) {
+        setError(result.error)
+      }
+    } catch (err: any) {
+      setError("An unexpected error occurred.")
     } finally {
-      // If there's an error, login action will return it (handled by useActionState normally)
-      // For simplicity in this version, we just reset pending if it doesn't redirect
       setPending(false)
     }
   }
@@ -45,6 +48,11 @@ export function LoginForm({
         <CardContent>
           <form action={handleSubmit}>
             <div className="grid gap-6">
+              {error && (
+                <div className="text-red-500 text-sm text-center bg-red-50 p-2 rounded border border-red-200">
+                  {error}
+                </div>
+              )}
               <div className="grid gap-6">
                 <div className="grid gap-2">
                   <Label htmlFor="email">Email</Label>
