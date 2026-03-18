@@ -50,13 +50,13 @@ export function RecentActivity() {
         <div key={i} className="flex items-center group">
           <Avatar className="h-10 w-10 rounded-xl border border-white/5 shadow-sm">
             <AvatarImage src="" />
-            <AvatarFallback className="bg-slate-800 text-slate-300 font-bold text-xs">{item.initials}</AvatarFallback>
+            <AvatarFallback className="bg-slate-800 text-white font-bold text-xs">{item.initials}</AvatarFallback>
           </Avatar>
           <div className="ml-4 space-y-0.5">
-            <p className="text-sm font-semibold text-white leading-none transition-colors group-hover:text-blue-400">
+            <p className="text-sm font-semibold text-slate-300 leading-none transition-colors group-hover:text-blue-400">
               {item.name}
             </p>
-            <p className="text-xs text-slate-500 font-medium">
+            <p className="text-xs text-slate-400 font-medium">
               {item.action}
             </p>
           </div>

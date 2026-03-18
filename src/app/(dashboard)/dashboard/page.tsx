@@ -47,9 +47,9 @@ export default function DashboardPage() {
         <Card className="col-span-4 bg-slate-900/40 border-white/5 backdrop-blur-sm shadow-2xl rounded-2xl overflow-hidden hover:border-white/10 transition-colors animate-fade-in">
           <CardHeader className="flex flex-row items-center justify-between pb-8">
             <div className="space-y-1">
-              <CardTitle className="text-xl font-bold text-slate-100 flex items-center gap-2">
+              <CardTitle className="text-xl font-bold text-white flex items-center gap-2">
                 Revenue Insights
-                <div className="px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 text-[10px] font-bold">LIVE</div>
+                <div className="px-2 py-0.5 rounded-full bg-blue-600/20 text-blue-400 border border-blue-500/30 text-[10px] font-bold shadow-sm">LIVE</div>
               </CardTitle>
               <CardDescription className="text-slate-500">
                 Monthly revenue distribution across all plans.

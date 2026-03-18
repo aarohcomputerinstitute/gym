@@ -57,7 +57,7 @@ export function Sidebar({ className, role }: SidebarProps) {
   });
 
   return (
-    <div className={cn("flex flex-col h-screen border-r bg-slate-950 text-slate-300 w-64 hidden md:flex", className)}>
+    <div className={cn("flex flex-col h-screen sticky top-0 border-r bg-slate-950 text-slate-300 w-64 hidden md:flex shrink-0", className)}>
       <div className="p-6">
         <div className="flex items-center gap-2 mb-8">
           <div className="h-8 w-8 rounded-lg bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
