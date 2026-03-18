@@ -20,8 +20,8 @@ export function RoleSelector({ userId, initialRole }: RoleSelectorProps) {
   const router = useRouter()
   const [isLoading, setIsLoading] = React.useState(false)
 
-  const handleChange = async (newRole: string) => {
-    if (isLoading) return
+  const handleChange = async (newRole: string | null) => {
+    if (!newRole || isLoading) return
     setIsLoading(true)
     try {
       await updateRole(userId, newRole)
