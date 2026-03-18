@@ -12,6 +12,7 @@ import { useState } from "react"
 import { LogOut, Dumbbell } from "lucide-react"
 import { signOut } from "@/app/(auth)/actions/index"
 
+export function MobileNav() {
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
 
