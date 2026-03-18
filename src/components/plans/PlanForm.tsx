@@ -48,7 +48,7 @@ export function PlanForm() {
   const router = useRouter()
   
   const form = useForm<PlanFormValues>({
-    resolver: zodResolver(planFormSchema),
+    resolver: zodResolver(planFormSchema) as any,
     defaultValues,
   })
 
