@@ -61,6 +61,15 @@ CREATE TABLE gyms (
     updated_at TIMESTAMPTZ DEFAULT now()
 );
 
+-- RLS for Gyms
+ALTER TABLE gyms ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Allow public insert for signup" ON gyms
+    FOR INSERT WITH CHECK (true);
+
+CREATE POLICY "Owners can view their own gym" ON gyms
+    FOR SELECT USING (id IN (SELECT gym_id FROM users WHERE id = auth.uid()));
+
 CREATE INDEX idx_gyms_status ON gyms(status);
 CREATE INDEX idx_gyms_email ON gyms(email);
 
@@ -412,6 +421,15 @@ USING (gym_id = current_gym_id());
 CREATE POLICY "Owners and Managers can delete members" 
 ON members FOR DELETE 
 USING (gym_id = current_gym_id() AND (auth.jwt()->>'role' IN ('owner', 'manager')));
+
+-- Additional Users Table Policies for Signup
+CREATE POLICY "Allow users to insert their own profile" 
+ON users FOR INSERT 
+WITH CHECK (auth.uid() = id);
+
+CREATE POLICY "Users can view their own profile" 
+ON users FOR SELECT 
+USING (auth.uid() = id);
 
 -- Apply similar generic Isolation Policies to remaining tables
 CREATE POLICY "Gym Isolation - Trainers" ON trainers USING (gym_id = current_gym_id());
