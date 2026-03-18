@@ -37,10 +37,22 @@ export const sidebarNavigation = [
   { name: "Gym Management", href: "/super-admin/gyms", icon: Building2 },
 ]
 
-interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
+  role?: string
+}
 
-export function Sidebar({ className }: SidebarProps) {
+export function Sidebar({ className, role }: SidebarProps) {
   const pathname = usePathname()
+
+  // Filter navigation based on role
+  const filteredNav = sidebarNavigation.filter(item => {
+    if (role === 'super_admin') return true;
+    // Hide super admin paths for non-admins
+    if (item.href.startsWith('/super-admin')) return false;
+    // Hide the platform admin separator
+    if (item.name.includes('Platform Admin')) return false;
+    return true;
+  });
 
   return (
     <div className={cn("pb-12 border-r bg-muted/40 h-screen hidden md:block w-64", className)}>
@@ -51,7 +63,7 @@ export function Sidebar({ className }: SidebarProps) {
           </h2>
           <div className="space-y-1">
             <ScrollArea className="h-[calc(100vh-8rem)]">
-              {sidebarNavigation.map((item) => {
+              {filteredNav.map((item) => {
                 if (item.disabled) {
                   return (
                     <div key={item.name} className="px-4 py-2 mt-4 text-xs font-semibold text-muted-foreground uppercase tracking-wider border-t pt-4">

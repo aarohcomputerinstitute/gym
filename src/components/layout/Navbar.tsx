@@ -11,9 +11,13 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Bell } from "lucide-react"
+import { Bell, LogOut } from "lucide-react"
+import { signOut } from "@/app/(auth)/actions/index"
+import { User } from "@supabase/supabase-js"
 
-export function Navbar() {
+export function Navbar({ user, role }: { user: User, role: string }) {
+  const userInitial = user.email?.charAt(0).toUpperCase() || 'U'
+
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
       <MobileNav />
@@ -28,7 +32,7 @@ export function Navbar() {
             <Button variant="ghost" size="icon" className="rounded-full">
               <Avatar className="h-8 w-8">
                 <AvatarImage src="" alt="User admin" />
-                <AvatarFallback>AD</AvatarFallback>
+                <AvatarFallback>{userInitial}</AvatarFallback>
               </Avatar>
               <span className="sr-only">Toggle user menu</span>
             </Button>
@@ -39,7 +43,14 @@ export function Navbar() {
             <DropdownMenuItem>Settings</DropdownMenuItem>
             <DropdownMenuItem>Support</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-red-500">Logout</DropdownMenuItem>
+            <form action={signOut}>
+              <DropdownMenuItem asChild>
+                <button type="submit" className="w-full text-red-500 cursor-pointer flex items-center gap-2">
+                  <LogOut className="h-4 w-4" />
+                  Logout
+                </button>
+              </DropdownMenuItem>
+            </form>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
