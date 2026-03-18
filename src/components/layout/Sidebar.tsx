@@ -35,6 +35,7 @@ export const sidebarNavigation = [
   { name: "--- Platform Admin ---", href: "#", icon: null, disabled: true },
   { name: "Super Admin Dashboard", href: "/super-admin/dashboard", icon: LayoutDashboard },
   { name: "Gym Management", href: "/super-admin/gyms", icon: Building2 },
+  { name: "User Management", href: "/super-admin/users", icon: Users },
 ]
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {

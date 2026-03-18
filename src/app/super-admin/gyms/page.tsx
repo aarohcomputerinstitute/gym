@@ -11,60 +11,19 @@ import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Search, MoreHorizontal, ExternalLink } from "lucide-react"
 
-const gyms = [
-  {
-    id: "g1",
-    name: "Power Fitness",
-    owner: "Amit Kumar",
-    city: "Mumbai",
-    plan: "Pro",
-    status: "Active",
-    members: 450,
-    mrr: "₹1,999"
-  },
-  {
-    id: "g2",
-    name: "Iron Temple",
-    owner: "Rajesh Singh",
-    city: "Delhi",
-    plan: "Starter",
-    status: "Active",
-    members: 120,
-    mrr: "₹999"
-  },
-  {
-    id: "g3",
-    name: "Elite Gym",
-    owner: "Sanjay Gupta",
-    city: "Bangalore",
-    plan: "Enterprise",
-    status: "Active",
-    members: 1200,
-    mrr: "₹4,999"
-  },
-  {
-    id: "g4",
-    name: "Fit Zone",
-    owner: "Vikram Shah",
-    city: "Pune",
-    plan: "Trial",
-    status: "Active",
-    members: 50,
-    mrr: "₹0"
-  },
-  {
-    id: "g5",
-    name: "Muscle Mania",
-    owner: "Prakash Jha",
-    city: "Patna",
-    plan: "Pro",
-    status: "Suspended",
-    members: 200,
-    mrr: "₹1,999"
-  }
-]
+import { createClient } from "@/lib/supabase/server"
 
-export default function GymsManagementPage() {
+export default async function GymsManagementPage() {
+  const supabase = await createClient()
+  
+  const { data: gyms, error } = await supabase
+    .from('gyms')
+    .select('*, users(name)')
+    .order('created_at', { ascending: false })
+
+  if (error) {
+    return <div>Error loading gyms: {error.message}</div>
+  }
   return (
     <div className="flex-1 space-y-4 pt-6">
       <div className="flex items-center justify-between">
@@ -101,22 +60,22 @@ export default function GymsManagementPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {gyms.map((gym) => (
+            {gyms?.map((gym) => (
               <TableRow key={gym.id}>
                 <TableCell className="font-medium">{gym.name}</TableCell>
-                <TableCell>{gym.owner}</TableCell>
-                <TableCell>{gym.city}</TableCell>
+                <TableCell>{gym.owner_name || 'N/A'}</TableCell>
+                <TableCell>{gym.location || 'N/A'}</TableCell>
                 <TableCell>
-                  <Badge variant="outline">{gym.plan}</Badge>
+                  <Badge variant="outline">Trial</Badge>
                 </TableCell>
-                <TableCell>{gym.members}</TableCell>
+                <TableCell>0</TableCell>
                 <TableCell>
                   <Badge 
                     variant="outline" 
                     className={
-                      gym.status === "Active" 
-                        ? "bg-green-50 text-green-700 border-green-200" 
-                        : "bg-red-50 text-red-700 border-red-200"
+                      gym.status === "active" 
+                        ? "bg-green-50 text-green-700 border-green-200 uppercase" 
+                        : "bg-red-50 text-red-700 border-red-200 uppercase"
                     }
                   >
                     {gym.status}

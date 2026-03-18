@@ -100,3 +100,30 @@ export async function signOut() {
   revalidatePath("/", "layout")
   redirect("/login")
 }
+
+export async function updateRole(userId: string, newRole: string) {
+  const supabase = await createClient()
+  
+  // Verify requester is super_admin
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) throw new Error("Unauthorized")
+  
+  const { data: requester } = await supabase
+    .from('users')
+    .select('role')
+    .eq('id', user.id)
+    .single()
+    
+  if (requester?.role !== 'super_admin') {
+    throw new Error("Unauthorized: Only super admins can update roles")
+  }
+
+  const { error } = await supabase
+    .from('users')
+    .update({ role: newRole })
+    .eq('id', userId)
+
+  if (error) throw new Error(error.message)
+  
+  revalidatePath("/super-admin/users")
+}
