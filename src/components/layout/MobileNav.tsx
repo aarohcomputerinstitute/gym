@@ -19,7 +19,12 @@ export function MobileNav() {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" className="md:hidden h-10 w-10 text-slate-400 hover:text-white hover:bg-white/5 rounded-xl border border-white/5 transition-all">
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          className="md:hidden h-10 w-10 text-slate-400 hover:text-white hover:bg-white/5 rounded-xl border border-white/5 transition-all"
+          onClick={() => alert('Mobile Menu Interaction Working!')}
+        >
           <Menu className="h-5 w-5" />
           <span className="sr-only">Toggle navigation menu</span>
         </Button>

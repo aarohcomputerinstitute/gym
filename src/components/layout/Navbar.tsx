@@ -28,13 +28,18 @@ export function Navbar({ user, role }: { user: User, role: string }) {
   const userInitial = user.email?.charAt(0).toUpperCase() || 'U'
 
   return (
-    <header className="sticky top-0 z-50 flex h-16 items-center gap-4 bg-slate-950/20 backdrop-blur-md px-6 sm:h-20 lg:px-8 border-b border-white/5 pointer-events-auto">
+    <header className="sticky top-0 z-[100] flex h-16 items-center gap-4 bg-slate-950/20 backdrop-blur-md px-6 sm:h-20 lg:px-8 border-b border-white/5">
       <div className="flex w-full items-center justify-between gap-4">
         <div className="md:hidden">
           <MobileNav />
         </div>
         <div className="flex items-center gap-4 ml-auto">
-        <Button variant="ghost" size="icon" className="h-10 w-10 text-slate-500 hover:text-white hover:bg-white/5 rounded-xl transition-all relative">
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          className="h-10 w-10 text-slate-500 hover:text-white hover:bg-white/5 rounded-xl transition-all relative"
+          onClick={() => { console.log('Bell clicked'); alert('Interaction Working!'); }}
+        >
           <Bell className="h-5 w-5" />
           <span className="sr-only">Toggle notifications</span>
           <span className="absolute top-2.5 right-2.5 h-2 w-2 rounded-full bg-red-600 ring-2 ring-slate-950"></span>
