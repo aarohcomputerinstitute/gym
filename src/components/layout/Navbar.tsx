@@ -29,7 +29,11 @@ export function Navbar({ user, role }: { user: User, role: string }) {
 
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center gap-4 bg-slate-950/20 backdrop-blur-md px-6 sm:h-20 lg:px-8 border-b border-white/5">
-      <div className="flex w-full items-center justify-end gap-4">
+      <div className="flex w-full items-center justify-between gap-4">
+        <div className="md:hidden">
+          <MobileNav />
+        </div>
+        <div className="flex items-center gap-4 ml-auto">
         <Button variant="ghost" size="icon" className="h-10 w-10 text-slate-500 hover:text-white hover:bg-white/5 rounded-xl transition-all relative">
           <Bell className="h-5 w-5" />
           <span className="sr-only">Toggle notifications</span>
@@ -81,6 +85,7 @@ export function Navbar({ user, role }: { user: User, role: string }) {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-    </header>
+    </div>
+  </header>
   )
 }
