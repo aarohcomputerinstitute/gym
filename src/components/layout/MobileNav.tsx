@@ -12,20 +12,19 @@ import { useState } from "react"
 import { LogOut, Dumbbell } from "lucide-react"
 import { signOut } from "@/app/(auth)/actions/index"
 
-export function MobileNav() {
+  const [open, setOpen] = useState(false)
   const pathname = usePathname()
 
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button 
-          variant="ghost" 
-          size="icon" 
-          className="md:hidden h-10 w-10 text-slate-400 hover:text-white hover:bg-white/5 rounded-xl border border-white/5 transition-all"
+        <button 
+          className="md:hidden h-10 w-10 flex items-center justify-center text-slate-400 hover:text-white bg-white/5 hover:bg-white/10 rounded-xl border border-white/10 transition-all cursor-pointer"
+          onClick={() => setOpen(true)}
         >
-          <Menu className="h-5 w-5" />
+          <Menu className="h-6 w-6" />
           <span className="sr-only">Toggle navigation menu</span>
-        </Button>
+        </button>
       </SheetTrigger>
       <SheetContent side="left" className="w-64 p-0">
         <div className="flex flex-col h-full bg-slate-950 text-slate-300">
