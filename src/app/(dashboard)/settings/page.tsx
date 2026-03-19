@@ -60,7 +60,7 @@ export default function SettingsProfilePage() {
     <div className="space-y-6">
       <div>
         <h3 className="text-lg font-medium">Gym Profile</h3>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-light">
           This information will be displayed on member receipts and emails.
         </p>
       </div>
@@ -156,7 +156,7 @@ export default function SettingsProfilePage() {
               )}
             />
           </div>
-          
+
           <FormField
             control={form.control}
             name="gstNumber"
