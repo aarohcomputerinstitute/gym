@@ -35,38 +35,38 @@ export default function SettingsBillingPage() {
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="text-3xl font-bold">₹1,999<span className="text-sm text-muted-foreground font-normal">/month</span></div>
+          <div className="text-3xl font-bold text-white">₹1,999<span className="text-sm text-slate-400 font-normal">/month</span></div>
           
-          <div className="space-y-2 text-sm pt-4 border-t">
-            <div className="flex items-center text-muted-foreground">
-              <CheckCircle2 className="mr-2 h-4 w-4 text-primary" /> Up to 1,000 Members
+          <div className="space-y-2 text-sm pt-4 border-t border-white/10">
+            <div className="flex items-center text-slate-300">
+              <CheckCircle2 className="mr-2 h-4 w-4 text-green-500" /> Up to 1,000 Members
             </div>
-            <div className="flex items-center text-muted-foreground">
-              <CheckCircle2 className="mr-2 h-4 w-4 text-primary" /> 10 Staff Accounts
+            <div className="flex items-center text-slate-300">
+              <CheckCircle2 className="mr-2 h-4 w-4 text-green-500" /> 10 Staff Accounts
             </div>
-            <div className="flex items-center text-muted-foreground">
-              <CheckCircle2 className="mr-2 h-4 w-4 text-primary" /> Advanced Reports & Analytics
+            <div className="flex items-center text-slate-300">
+              <CheckCircle2 className="mr-2 h-4 w-4 text-green-500" /> Advanced Reports & Analytics
             </div>
-            <div className="flex items-center text-muted-foreground">
-              <CheckCircle2 className="mr-2 h-4 w-4 text-primary" /> SMS Notifications Integration
+            <div className="flex items-center text-slate-300">
+              <CheckCircle2 className="mr-2 h-4 w-4 text-green-500" /> SMS Notifications Integration
             </div>
           </div>
         </CardContent>
-        <CardFooter className="flex justify-between border-t pt-4 bg-background/50">
-          <div className="text-sm text-muted-foreground">
+        <CardFooter className="flex justify-between border-t border-white/10 pt-4 bg-background/50">
+          <div className="text-sm text-slate-300">
             Next billing date: <strong>April 15, 2024</strong>
           </div>
-          <Button variant="outline">Manage Subscription</Button>
+          <Button variant="outline" className="text-white border-white/20">Manage Subscription</Button>
         </CardFooter>
       </Card>
 
-      <Card>
+      <Card className="border-white/10 bg-white/5">
         <CardHeader>
-          <CardTitle>Invoices</CardTitle>
-          <CardDescription>View and download your past platform invoices</CardDescription>
+          <CardTitle className="text-white">Invoices</CardTitle>
+          <CardDescription className="text-slate-400">View and download your past platform invoices</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="text-sm text-muted-foreground text-center py-6">
+          <div className="text-sm text-slate-400 text-center py-6">
             No past invoices available yet.
           </div>
         </CardContent>

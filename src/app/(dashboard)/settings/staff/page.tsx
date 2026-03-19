@@ -71,16 +71,16 @@ export default function SettingsStaffPage() {
             {staffMembers.map((staff) => (
               <TableRow key={staff.id}>
                 <TableCell>
-                  <div className="font-medium">{staff.name}</div>
-                  <div className="text-xs text-muted-foreground">{staff.email}</div>
+                  <div className="font-medium text-white">{staff.name}</div>
+                  <div className="text-xs text-slate-400">{staff.email}</div>
                 </TableCell>
                 <TableCell>
                   <Badge variant="outline">{staff.role}</Badge>
                 </TableCell>
                 <TableCell>
-                  <span className="text-green-600 text-sm font-medium">{staff.status}</span>
+                  <span className="text-green-500 text-sm font-medium">{staff.status}</span>
                 </TableCell>
-                <TableCell className="text-muted-foreground text-sm">
+                <TableCell className="text-slate-300 text-sm">
                   {staff.lastActive}
                 </TableCell>
                 <TableCell>
