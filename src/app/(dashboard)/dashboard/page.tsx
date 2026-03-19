@@ -2,6 +2,7 @@ import { StatsCards, StatData } from "@/components/dashboard/StatsCards"
 import { RevenueChart } from "@/components/dashboard/RevenueChart"
 import { MemberGrowthChart } from "@/components/dashboard/MemberGrowthChart"
 import { RecentActivity, ActivityItem } from "@/components/dashboard/RecentActivity"
+import Link from "next/link"
 import {
   Card,
   CardContent,
@@ -114,9 +115,11 @@ export default async function DashboardPage() {
             <Download className="mr-2 h-4 w-4" />
             Export Data
           </Button>
-          <Button size="sm" className="bg-blue-600 hover:bg-blue-500 text-white h-11 px-6 rounded-xl shadow-lg shadow-blue-500/20 transition-all active:scale-95">
-            <Plus className="mr-2 h-4 w-4" />
-            Add Member
+          <Button asChild size="sm" className="bg-blue-600 hover:bg-blue-500 text-white h-11 px-6 rounded-xl shadow-lg shadow-blue-500/20 transition-all active:scale-95">
+            <Link href="/members/new">
+              <Plus className="mr-2 h-4 w-4" />
+              Add Member
+            </Link>
           </Button>
         </div>
       </div>
