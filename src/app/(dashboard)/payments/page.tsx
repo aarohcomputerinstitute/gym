@@ -15,7 +15,8 @@ export default async function PaymentsPage() {
       invoice_number,
       total_amount,
       payment_date,
-      payment_method,
+      payment_mode,
+      transaction_id,
       status,
       members (
         name
@@ -29,7 +30,8 @@ export default async function PaymentsPage() {
     memberName: p.members?.name || "Unknown Member",
     amount: Number(p.total_amount),
     date: p.payment_date,
-    method: p.payment_method,
+    method: p.payment_mode,
+    transactionId: p.transaction_id,
     status: p.status as any,
   }))
 

@@ -43,6 +43,7 @@ export interface Payment {
   amount: number
   date: string
   method: string
+  transactionId?: string
   status: "paid" | "pending" | "failed" | "refunded"
 }
 
@@ -127,7 +128,28 @@ export const columns: ColumnDef<Payment>[] = [
   {
     accessorKey: "method",
     header: "Payment Method",
-    cell: ({ row }) => <div>{row.getValue("method")}</div>,
+    cell: ({ row }) => {
+      const method = row.getValue("method") as string
+      return (
+        <div className="flex items-center gap-2">
+          {method === 'upi' && <span className="text-xs">📱 UPI</span>}
+          {method === 'cash' && <span className="text-xs">💵 Cash</span>}
+          {method === 'card' && <span className="text-xs">💳 Card</span>}
+          {method === 'bank_transfer' && <span className="text-xs">🏦 Bank</span>}
+          {method === 'online' && <span className="text-xs">🌐 Online</span>}
+          {!['upi', 'cash', 'card', 'bank_transfer', 'online'].includes(method) && <span className="text-xs capitalize">{method}</span>}
+        </div>
+      )
+    },
+  },
+  {
+    accessorKey: "transactionId",
+    header: "Reference / TXN ID",
+    cell: ({ row }) => (
+      <div className="font-mono text-[10px] text-slate-400">
+        {row.getValue("transactionId") || "—"}
+      </div>
+    ),
   },
   {
     accessorKey: "status",

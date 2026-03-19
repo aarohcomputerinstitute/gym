@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server"
 import { revalidatePath } from "next/cache"
 
 export async function createPlanAction(data: any) {
+  console.log("Creating membership plan with data:", data)
   const supabase = await createClient()
   
   // 1. Authenticate user
@@ -20,8 +21,11 @@ export async function createPlanAction(data: any) {
     .single()
     
   if (profileError || !profile?.gym_id) {
+    console.error("Profile fetch error or missing gym_id:", profileError)
     throw new Error("Could not find your associated Gym profile.")
   }
+
+  console.log("Saving plan for Gym ID:", profile.gym_id)
 
   // 3. Insert the new plan into the database
   const { error: insertError } = await supabase
@@ -40,8 +44,11 @@ export async function createPlanAction(data: any) {
     })
     
   if (insertError) {
+    console.error("Supabase Insert Error (membership_plans):", insertError)
     throw new Error(insertError.message || "Failed to save membership plan.")
   }
+  
+  console.log("Membership plan saved successfully!")
   
   // 4. Force Next.js to re-fetch the plans list
   revalidatePath('/plans')

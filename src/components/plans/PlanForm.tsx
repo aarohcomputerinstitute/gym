@@ -37,6 +37,7 @@ const planFormSchema = z.object({
   description: z.string().optional(),
   maxFreezeDays: z.coerce.number().min(0).default(0),
   isActive: z.boolean().default(true),
+  features: z.string().optional(),
 })
 
 type PlanFormValues = z.infer<typeof planFormSchema>
@@ -59,7 +60,11 @@ export function PlanForm() {
   function onSubmit(data: PlanFormValues) {
     startTransition(async () => {
       try {
-        await createPlanAction(data)
+        const payload = {
+          ...data,
+          features: data.features ? data.features.split(',').map(f => f.trim()).filter(Boolean) : []
+        }
+        await createPlanAction(payload)
         toast.success("Membership plan saved correctly in database!")
         router.push("/plans")
         router.refresh()
@@ -154,6 +159,27 @@ export function PlanForm() {
                   </FormControl>
                   <FormDescription>
                     One-time fee charged on first signup
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="features"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Features (Comma separated)</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="e.g. Yoga Classes, Steam Room, Personal Trainer"
+                      className="resize-none"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Separate features with commas to display them as a list
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
