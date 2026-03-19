@@ -45,45 +45,6 @@ export interface Member {
   expiryDate: string
 }
 
-const data: Member[] = [
-  {
-    id: "m1",
-    name: "John Doe",
-    phone: "+91 9876543210",
-    plan: "Pro (6 Months)",
-    status: "active",
-    joinDate: "2023-01-15",
-    expiryDate: "2024-07-15",
-  },
-  {
-    id: "m2",
-    name: "Jane Smith",
-    phone: "+91 9876543211",
-    plan: "Starter (1 Month)",
-    status: "expired",
-    joinDate: "2023-11-01",
-    expiryDate: "2023-12-01",
-  },
-  {
-    id: "m3",
-    name: "Robert Johnson",
-    phone: "+91 9876543212",
-    plan: "Enterprise (1 Year)",
-    status: "active",
-    joinDate: "2023-05-20",
-    expiryDate: "2024-05-20",
-  },
-  {
-    id: "m4",
-    name: "Emily Davis",
-    phone: "+91 9876543213",
-    plan: "Pro (3 Months)",
-    status: "frozen",
-    joinDate: "2023-09-10",
-    expiryDate: "2023-12-10",
-  },
-]
-
 export const columns: ColumnDef<Member>[] = [
   {
     accessorKey: "name",
@@ -168,7 +129,7 @@ export const columns: ColumnDef<Member>[] = [
   },
 ]
 
-export function MemberTable() {
+export function MemberTable({ data = [] }: { data?: Member[] }) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []

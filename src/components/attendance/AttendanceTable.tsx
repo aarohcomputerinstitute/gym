@@ -186,7 +186,7 @@ export const columns: ColumnDef<AttendanceRecord>[] = [
   },
 ]
 
-export function AttendanceTable() {
+export function AttendanceTable({ data }: { data: AttendanceRecord[] }) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})

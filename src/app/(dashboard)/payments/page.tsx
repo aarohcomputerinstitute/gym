@@ -1,8 +1,37 @@
-import { PaymentTable } from "@/components/payments/PaymentTable"
+import { PaymentTable, type Payment } from "@/components/payments/PaymentTable"
 import { Button } from "@/components/ui/button"
 import { PlusCircle } from "lucide-react"
+import { createClient } from "@/lib/supabase/server"
 
-export default function PaymentsPage() {
+export default async function PaymentsPage() {
+  const supabase = await createClient()
+
+  // Fetch payments with member names
+  const { data: rawPayments } = await supabase
+    .from('payments')
+    .select(`
+      id,
+      invoice_number,
+      total_amount,
+      payment_date,
+      payment_method,
+      status,
+      members (
+        name
+      )
+    `)
+    .order('payment_date', { ascending: false })
+
+  const formattedPayments: Payment[] = (rawPayments || []).map((p: any) => ({
+    id: p.id,
+    invoiceNumber: p.invoice_number || `INV-${p.id.substring(0, 8)}`,
+    memberName: p.members?.name || "Unknown Member",
+    amount: Number(p.total_amount),
+    date: p.payment_date,
+    method: p.payment_method,
+    status: p.status as any,
+  }))
+
   return (
     <div className="flex-1 space-y-4 pt-6">
       <div className="flex items-center justify-between">
@@ -20,7 +49,7 @@ export default function PaymentsPage() {
         </div>
       </div>
       <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
-        <PaymentTable />
+        <PaymentTable data={formattedPayments} />
       </div>
     </div>
   )

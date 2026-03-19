@@ -1,48 +1,22 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
-export function RecentActivity() {
-  const activities = [
-    {
-      name: "Olivia Martin",
-      action: "Checked in (Manual)",
-      time: "Just now",
-      initials: "OM",
-      amount: null,
-      color: "bg-blue-500/10 text-blue-400"
-    },
-    {
-      name: "Jackson Lee",
-      action: "Renewed Pro Plan for 6 months",
-      time: "12 mins ago",
-      initials: "JL",
-      amount: "+₹12,000",
-      color: "bg-green-500/10 text-green-400"
-    },
-    {
-      name: "Isabella Nguyen",
-      action: "New Registration (Starter Plan)",
-      time: "1 hr ago",
-      initials: "IN",
-      amount: "+₹1,999",
-      color: "bg-purple-500/10 text-purple-400"
-    },
-    {
-      name: "William Kim",
-      action: "Checked out",
-      time: "2 hrs ago",
-      initials: "WK",
-      amount: null,
-      color: "bg-slate-500/10 text-slate-400"
-    },
-    {
-      name: "Sofia Davis",
-      action: "Membership Expiring soon",
-      time: "3 hrs ago",
-      initials: "SD",
-      amount: "Alert Sent",
-      color: "bg-orange-500/10 text-orange-400"
-    }
-  ]
+export interface ActivityItem {
+  name: string
+  action: string
+  time: string
+  initials: string
+  amount?: string | null
+  color: string
+}
+
+export function RecentActivity({ activities = [] }: { activities?: ActivityItem[] }) {
+  if (activities.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center py-10 text-slate-500">
+        <p className="text-sm italic">No recent activity found.</p>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-6">

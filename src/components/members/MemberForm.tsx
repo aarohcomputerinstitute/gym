@@ -7,6 +7,7 @@ import { format } from "date-fns"
 import { CalendarIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { useState, useTransition } from "react"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import {
@@ -34,6 +35,7 @@ import {
 import { Textarea } from "@/components/ui/textarea"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
+import { createMemberAction } from "@/app/actions/member"
 
 const memberFormSchema = z.object({
   name: z.string().min(2, {
@@ -58,12 +60,19 @@ const memberFormSchema = z.object({
 
 type MemberFormValues = z.infer<typeof memberFormSchema>
 
+export interface PlanOption {
+  id: string
+  name: string
+  price: number
+}
+
 const defaultValues: Partial<MemberFormValues> = {
   joinDate: new Date(),
 }
 
-export function MemberForm() {
+export function MemberForm({ plans = [] }: { plans?: PlanOption[] }) {
   const router = useRouter()
+  const [isPending, startTransition] = useTransition()
   
   const form = useForm<MemberFormValues>({
     resolver: zodResolver(memberFormSchema),
@@ -71,10 +80,16 @@ export function MemberForm() {
   })
 
   function onSubmit(data: MemberFormValues) {
-    // This would actually submit to the server action
-    console.log(data)
-    toast.success("Member created successfully!")
-    router.push("/members")
+    startTransition(async () => {
+      try {
+        await createMemberAction(data)
+        toast.success("Member dynamically created inside Supabase!")
+        router.push("/members")
+        router.refresh()
+      } catch (error: any) {
+        toast.error(error.message || "An unexpected error occurred.")
+      }
+    })
   }
 
   return (
@@ -214,10 +229,15 @@ export function MemberForm() {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="plan-1">Starter - 1 Month (₹999)</SelectItem>
-                      <SelectItem value="plan-3">Pro - 3 Months (₹2,499)</SelectItem>
-                      <SelectItem value="plan-6">Pro - 6 Months (₹4,499)</SelectItem>
-                      <SelectItem value="plan-12">Enterprise - 1 Year (₹7,999)</SelectItem>
+                      {plans.length > 0 ? (
+                        plans.map((plan) => (
+                          <SelectItem key={plan.id} value={plan.id}>
+                            {plan.name} (₹{plan.price})
+                          </SelectItem>
+                        ))
+                      ) : (
+                        <SelectItem value="none" disabled>No active plans available</SelectItem>
+                      )}
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -337,10 +357,12 @@ export function MemberForm() {
         </div>
 
         <div className="flex justify-end space-x-4">
-          <Button variant="outline" type="button" onClick={() => router.back()}>
+          <Button variant="outline" type="button" onClick={() => router.back()} disabled={isPending}>
             Cancel
           </Button>
-          <Button type="submit">Save & Create Profile</Button>
+          <Button type="submit" disabled={isPending}>
+            {isPending ? "Connecting to Real DB..." : "Save & Create Profile"}
+          </Button>
         </div>
       </form>
     </Form>

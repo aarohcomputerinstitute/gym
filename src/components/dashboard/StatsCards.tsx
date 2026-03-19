@@ -37,42 +37,16 @@ function StatItem({ title, value, change, isPositive, icon: Icon, color }: StatI
   )
 }
 
-export function StatsCards() {
-  const stats = [
-    {
-      title: "Total Members",
-      value: "1,248",
-      change: "+12.5%",
-      isPositive: true,
-      icon: Users,
-      color: "bg-blue-500"
-    },
-    {
-      title: "Active Members",
-      value: "983",
-      change: "+5.2%",
-      isPositive: true,
-      icon: UserCheck,
-      color: "bg-indigo-500"
-    },
-    {
-      title: "Monthly Revenue",
-      value: "₹2,45,000",
-      change: "+18.3%",
-      isPositive: true,
-      icon: DollarSign,
-      color: "bg-emerald-500"
-    },
-    {
-      title: "Today's Check-ins",
-      value: "142",
-      change: "-2.4%",
-      isPositive: false,
-      icon: CalendarClock,
-      color: "bg-amber-500"
-    }
-  ]
+export interface StatData {
+  title: string
+  value: string
+  change: string
+  isPositive: boolean
+  icon: any
+  color: string
+}
 
+export function StatsCards({ stats }: { stats: StatData[] }) {
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
       {stats.map((stat, i) => (

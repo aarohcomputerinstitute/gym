@@ -2,55 +2,31 @@ import { Button } from "@/components/ui/button"
 import { PlusCircle } from "lucide-react"
 import Link from "next/link"
 import { PlanCard, type Plan } from "@/components/plans/PlanCard"
+import { createClient } from "@/lib/supabase/server"
 
-const mockPlans: Plan[] = [
-  {
-    id: "p1",
-    name: "Starter",
-    durationDays: 30,
-    price: 999,
-    registrationFee: 500,
-    description: "Perfect for beginners getting into fitness.",
-    features: ["Access to gym floor", "Locker facility", "1 Diet consultation"],
-    maxFreezeDays: 0,
-    isActive: true,
-  },
-  {
-    id: "p2",
-    name: "Pro - 3 Months",
-    durationDays: 90,
-    price: 2499,
-    registrationFee: 0,
-    description: "Our most popular short-term package.",
-    features: ["Access to gym floor", "Locker facility", "2 Diet consultations", "Group classes"],
-    maxFreezeDays: 7,
-    isActive: true,
-  },
-  {
-    id: "p3",
-    name: "Pro - 6 Months",
-    durationDays: 180,
-    price: 4499,
-    registrationFee: 0,
-    description: "Great value for committed members.",
-    features: ["Access to gym floor", "Locker facility", "Monthly diet review", "Group classes"],
-    maxFreezeDays: 15,
-    isActive: true,
-  },
-  {
-    id: "p4",
-    name: "Enterprise - Annual",
-    durationDays: 365,
-    price: 7999,
-    registrationFee: 0,
-    description: "The ultimate fitness commitment with max benefits.",
-    features: ["24/7 Access", "Premium Locker", "Weekly diet review", "Unlimited classes", "Guest pass (2/mo)"],
-    maxFreezeDays: 30,
-    isActive: true,
-  },
-]
+export default async function PlansPage() {
+  const supabase = await createClient()
 
-export default function PlansPage() {
+  // Fetch plans from database
+  const { data: plans } = await supabase
+    .from('membership_plans')
+    .select('*')
+    .eq('is_active', true)
+    .order('sort_order', { ascending: true })
+
+  // Map to the format expected by our PlanCard
+  const formattedPlans: Plan[] = (plans || []).map(p => ({
+    id: p.id,
+    name: p.name,
+    durationDays: p.duration_days,
+    price: Number(p.price),
+    registrationFee: Number(p.registration_fee),
+    description: p.description || "",
+    features: p.features || [],
+    maxFreezeDays: p.max_freeze_days || 0,
+    isActive: p.is_active
+  }))
+
   return (
     <div className="flex-1 space-y-4 pt-6">
       <div className="flex items-center justify-between">
@@ -70,11 +46,24 @@ export default function PlansPage() {
         </div>
       </div>
       
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-6">
-        {mockPlans.map((plan) => (
-          <PlanCard key={plan.id} plan={plan} />
-        ))}
-      </div>
+      {formattedPlans.length > 0 ? (
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-6">
+          {formattedPlans.map((plan) => (
+            <PlanCard key={plan.id} plan={plan} />
+          ))}
+        </div>
+      ) : (
+        <div className="flex flex-col items-center justify-center py-20 border-2 border-dashed border-slate-700 rounded-2xl bg-slate-800/20 text-center mt-6">
+          <div className="p-4 rounded-full bg-blue-500/10 mb-4">
+            <PlusCircle className="h-10 w-10 text-blue-400" />
+          </div>
+          <h3 className="text-xl font-bold text-white mb-1">No Membership Plans Found</h3>
+          <p className="text-slate-400 max-w-xs mb-6">Create your first membership plan to start registering members.</p>
+          <Button asChild>
+             <Link href="/plans/new">Create First Plan</Link>
+          </Button>
+        </div>
+      )}
     </div>
   )
 }

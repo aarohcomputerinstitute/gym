@@ -1,5 +1,3 @@
-"use client"
-
 import { Button } from "@/components/ui/button"
 import {
   Table,
@@ -12,35 +10,17 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { PlusCircle, MoreHorizontal } from "lucide-react"
+import { createClient } from "@/lib/supabase/server"
 
-const staffMembers = [
-  {
-    id: "u1",
-    name: "Admin User",
-    email: "admin@goldsfit.com",
-    role: "Owner",
-    status: "Active",
-    lastActive: "Just now"
-  },
-  {
-    id: "u2",
-    name: "Sarah Manager",
-    email: "sarah@goldsfit.com",
-    role: "Manager",
-    status: "Active",
-    lastActive: "2 hours ago"
-  },
-  {
-    id: "u3",
-    name: "Front Desk 1",
-    email: "desk1@goldsfit.com",
-    role: "Receptionist",
-    status: "Active",
-    lastActive: "Today, 06:00 AM"
-  }
-]
+export default async function SettingsStaffPage() {
+  const supabase = await createClient()
 
-export default function SettingsStaffPage() {
+  // Fetch staff dynamically (RLS will automatically restrict this to the active gym)
+  const { data: staffMembers } = await supabase
+    .from('users')
+    .select('id, name, email, role, is_active, last_login_at')
+    .order('created_at', { ascending: true })
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -68,28 +48,38 @@ export default function SettingsStaffPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {staffMembers.map((staff) => (
-              <TableRow key={staff.id}>
-                <TableCell>
-                  <div className="font-medium text-white">{staff.name}</div>
-                  <div className="text-xs text-slate-400">{staff.email}</div>
-                </TableCell>
-                <TableCell>
-                  <Badge variant="outline" className="text-white">{staff.role}</Badge>
-                </TableCell>
-                <TableCell>
-                  <span className="text-green-500 text-sm font-medium">{staff.status}</span>
-                </TableCell>
-                <TableCell className="text-slate-300 text-sm">
-                  {staff.lastActive}
-                </TableCell>
-                <TableCell>
-                  <Button variant="ghost" size="icon">
-                    <MoreHorizontal className="h-4 w-4" />
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
+            {staffMembers && staffMembers.length > 0 ? (
+              staffMembers.map((staff) => (
+                <TableRow key={staff.id}>
+                  <TableCell>
+                    <div className="font-medium text-white">{staff.name}</div>
+                    <div className="text-xs text-slate-400">{staff.email}</div>
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant="outline" className="text-white capitalize">{staff.role}</Badge>
+                  </TableCell>
+                  <TableCell>
+                    <span className={staff.is_active ? "text-green-500 text-sm font-medium" : "text-slate-500 text-sm font-medium"}>
+                      {staff.is_active ? "Active" : "Inactive"}
+                    </span>
+                  </TableCell>
+                  <TableCell className="text-slate-300 text-sm">
+                    {staff.last_login_at ? new Date(staff.last_login_at).toLocaleDateString() : "Never"}
+                  </TableCell>
+                  <TableCell>
+                    <Button variant="ghost" size="icon">
+                      <MoreHorizontal className="h-4 w-4" />
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+                <TableRow>
+                  <TableCell colSpan={5} className="h-24 text-center text-slate-400">
+                    No staff members found. Add your first team member!
+                  </TableCell>
+                </TableRow>
+            )}
           </TableBody>
         </Table>
       </div>

@@ -184,7 +184,7 @@ export const columns: ColumnDef<Payment>[] = [
   },
 ]
 
-export function PaymentTable() {
+export function PaymentTable({ data }: { data: Payment[] }) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})

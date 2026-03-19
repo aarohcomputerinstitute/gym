@@ -1,7 +1,7 @@
-import { StatsCards } from "@/components/dashboard/StatsCards"
+import { StatsCards, StatData } from "@/components/dashboard/StatsCards"
 import { RevenueChart } from "@/components/dashboard/RevenueChart"
 import { MemberGrowthChart } from "@/components/dashboard/MemberGrowthChart"
-import { RecentActivity } from "@/components/dashboard/RecentActivity"
+import { RecentActivity, ActivityItem } from "@/components/dashboard/RecentActivity"
 import {
   Card,
   CardContent,
@@ -10,11 +10,91 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Plus, Download } from "lucide-react"
+import { Plus, Download, Users, UserCheck, DollarSign, CalendarClock } from "lucide-react"
+import { createClient } from "@/lib/supabase/server"
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const supabase = await createClient()
   const currentHour = new Date().getHours()
   const greeting = currentHour < 12 ? "Good Morning" : currentHour < 18 ? "Good Afternoon" : "Good Evening"
+
+  // 1. Fetch Dynamics Stats
+  const { count: totalMembers } = await supabase.from('members').select('*', { count: 'exact', head: true })
+  const { count: activeMembers } = await supabase.from('members').select('*', { count: 'exact', head: true }).eq('status', 'active')
+  const { count: todayAttendance } = await supabase.from('attendance').select('*', { count: 'exact', head: true }).eq('date', new Date().toISOString().split('T')[0])
+  
+  // Fetch Monthly Revenue
+  const firstDayOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString().split('T')[0]
+  const { data: paymentsSum } = await supabase.from('payments').select('total_amount').filter('payment_date', 'gte', firstDayOfMonth)
+  const monthlyRevenue = (paymentsSum || []).reduce((acc, curr) => acc + Number(curr.total_amount), 0)
+
+  // 2. Fetch Recent Activities (Combined)
+  const { data: recentPayments } = await supabase
+    .from('payments')
+    .select('total_amount, created_at, members(name)')
+    .order('created_at', { ascending: false })
+    .limit(3)
+
+  const { data: recentCheckins } = await supabase
+    .from('attendance')
+    .select('checkin_time, created_at, members(name)')
+    .order('created_at', { ascending: false })
+    .limit(3)
+
+  // Merge and sort activities
+  const actItems: ActivityItem[] = [
+    ...(recentPayments || []).map(p => ({
+      name: (p.members as any)?.name || "Unknown Member",
+      action: "Payment Received",
+      time: new Date(p.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      initials: (p.members as any)?.name?.split(' ').map((n: string) => n[0]).join('') || "??",
+      amount: `+₹${p.total_amount}`,
+      color: "bg-green-500/10 text-green-400"
+    })),
+    ...(recentCheckins || []).map(a => ({
+      name: (a.members as any)?.name || "Unknown Member",
+      action: "Checked in",
+      time: new Date(a.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      initials: (a.members as any)?.name?.split(' ').map((n: string) => n[0]).join('') || "??",
+      amount: null,
+      color: "bg-blue-500/10 text-blue-400"
+    }))
+  ].sort((a, b) => b.time.localeCompare(a.time)).slice(0, 5)
+
+  const stats: StatData[] = [
+    {
+      title: "Total Members",
+      value: (totalMembers || 0).toString(),
+      change: "+0%",
+      isPositive: true,
+      icon: Users,
+      color: "bg-blue-500"
+    },
+    {
+      title: "Active Members",
+      value: (activeMembers || 0).toString(),
+      change: "+0%",
+      isPositive: true,
+      icon: UserCheck,
+      color: "bg-indigo-500"
+    },
+    {
+      title: "Monthly Revenue",
+      value: `₹${monthlyRevenue.toLocaleString()}`,
+      change: "+0%",
+      isPositive: true,
+      icon: DollarSign,
+      color: "bg-emerald-500"
+    },
+    {
+      title: "Today's Check-ins",
+      value: (todayAttendance || 0).toString(),
+      change: "0%",
+      isPositive: true,
+      icon: CalendarClock,
+      color: "bg-amber-500"
+    }
+  ]
 
   return (
     <div className="flex-1 space-y-8 p-4 md:p-8 pt-6">
@@ -41,7 +121,7 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      <StatsCards />
+      <StatsCards stats={stats} />
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
         <Card className="col-span-4 bg-slate-800/50 border-white/20 backdrop-blur-xl shadow-[0_8px_30px_rgb(0,0,0,0.5)] rounded-2xl overflow-hidden hover:border-blue-500/50 transition-all duration-300 animate-fade-in relative group">
@@ -56,7 +136,7 @@ export default function DashboardPage() {
                 Monthly revenue distribution across all plans.
               </CardDescription>
             </div>
-            <div className="text-3xl font-bold text-white italic tracking-tight drop-shadow-md">₹2,45,000</div>
+            <div className="text-3xl font-bold text-white italic tracking-tight drop-shadow-md">₹{monthlyRevenue.toLocaleString()}</div>
           </CardHeader>
           <CardContent className="h-[350px]">
             <RevenueChart />
@@ -90,7 +170,7 @@ export default function DashboardPage() {
             <Button variant="ghost" className="text-blue-300 hover:text-blue-200 hover:bg-blue-500/20 rounded-xl px-4 border border-white/10">See All</Button>
           </CardHeader>
           <CardContent>
-            <RecentActivity />
+            <RecentActivity activities={actItems} />
           </CardContent>
         </Card>
       </div>
