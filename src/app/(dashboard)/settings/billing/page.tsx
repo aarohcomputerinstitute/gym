@@ -23,12 +23,12 @@ export default function SettingsBillingPage() {
         </p>
       </div>
       <Separator />
-      
+
       <Card className="border-primary/20 bg-primary/5">
         <CardHeader>
           <div className="flex justify-between items-start">
             <div>
-              <CardTitle className="text-xl">Pro Plan</CardTitle>
+              <CardTitle className="text-xl text-white">Pro Plan</CardTitle>
               <CardDescription>Billed Monthly</CardDescription>
             </div>
             <Badge variant="default" className="bg-green-600">Active</Badge>
@@ -36,7 +36,7 @@ export default function SettingsBillingPage() {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="text-3xl font-bold text-white">₹1,999<span className="text-sm text-slate-400 font-normal">/month</span></div>
-          
+
           <div className="space-y-2 text-sm pt-4 border-t border-white/10">
             <div className="flex items-center text-slate-300">
               <CheckCircle2 className="mr-2 h-4 w-4 text-green-500" /> Up to 1,000 Members
@@ -56,7 +56,7 @@ export default function SettingsBillingPage() {
           <div className="text-sm text-slate-300">
             Next billing date: <strong>April 15, 2024</strong>
           </div>
-          <Button variant="outline" className="text-white border-white/20">Manage Subscription</Button>
+          <Button variant="outline" className="text-dark border-white/20">Manage Subscription</Button>
         </CardFooter>
       </Card>
 

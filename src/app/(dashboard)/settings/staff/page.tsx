@@ -55,7 +55,7 @@ export default function SettingsStaffPage() {
         </Button>
       </div>
       <Separator />
-      
+
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -75,7 +75,7 @@ export default function SettingsStaffPage() {
                   <div className="text-xs text-slate-400">{staff.email}</div>
                 </TableCell>
                 <TableCell>
-                  <Badge variant="outline">{staff.role}</Badge>
+                  <Badge variant="outline" className="text-white">{staff.role}</Badge>
                 </TableCell>
                 <TableCell>
                   <span className="text-green-500 text-sm font-medium">{staff.status}</span>
