@@ -12,7 +12,7 @@ export async function createMemberAction(data: any) {
     throw new Error("You must be logged in to add members.")
   }
   
-  // 2. Fetch the user's gym_id so we know where to assign the member
+  // 2. Fetch the user's gym_id
   const { data: profile, error: profileError } = await supabase
     .from('users')
     .select('gym_id')
@@ -22,8 +22,38 @@ export async function createMemberAction(data: any) {
   if (profileError || !profile?.gym_id) {
     throw new Error("Could not find your associated Gym profile.")
   }
+
+  // 3. Fetch the gym's active plan limit and current member count
+  const { data: gymStatus, error: statusError } = await supabase
+    .from('gyms')
+    .select(`
+      id,
+      members:members(count),
+      subscription:saas_subscriptions(
+        status,
+        plan:saas_plans(member_limit, name)
+      )
+    `)
+    .eq('id', profile.gym_id)
+    .single()
+
+  if (statusError || !gymStatus) {
+    throw new Error("Could not verify your subscription status.")
+  }
+
+  // Find active subscription
+  const activeSub = gymStatus.subscription?.find((s: any) => s.status === 'active')
   
-  // 3. Insert the new member into the database
+  // @ts-ignore
+  const memberCount = gymStatus.members?.[0]?.count || 0
+  const limit = activeSub?.plan?.member_limit ?? -1
+  const planName = activeSub?.plan?.name || "Trial"
+
+  if (limit !== -1 && memberCount >= limit) {
+    throw new Error(`Plan Limit Reached: Your ${planName} plan only allows up to ${limit} members. Please upgrade your subscription to add more.`)
+  }
+
+  // 4. Insert the new member into the database
   const { error: insertError } = await supabase
     .from('members')
     .insert({
