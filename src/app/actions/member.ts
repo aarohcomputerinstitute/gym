@@ -42,12 +42,15 @@ export async function createMemberAction(data: any) {
   }
 
   // Find active subscription
+  // @ts-ignore
   const activeSub = gymStatus.subscription?.find((s: any) => s.status === 'active')
   
   // @ts-ignore
   const memberCount = gymStatus.members?.[0]?.count || 0
-  const limit = activeSub?.plan?.member_limit ?? -1
-  const planName = activeSub?.plan?.name || "Trial"
+  // @ts-ignore
+  const limit = activeSub?.plan?.[0]?.member_limit ?? -1
+  // @ts-ignore
+  const planName = activeSub?.plan?.[0]?.name || "Trial"
 
   if (limit !== -1 && memberCount >= limit) {
     throw new Error(`Plan Limit Reached: Your ${planName} plan only allows up to ${limit} members. Please upgrade your subscription to add more.`)
