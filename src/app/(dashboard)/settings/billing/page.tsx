@@ -17,8 +17,8 @@ export default function SettingsBillingPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-medium">Platform Billing</h3>
-        <p className="text-sm text-muted-foreground">
+        <h3 className="text-lg font-medium text-white">Platform Billing</h3>
+        <p className="text-sm text-slate-300">
           Manage your GymOS subscription and billing details.
         </p>
       </div>

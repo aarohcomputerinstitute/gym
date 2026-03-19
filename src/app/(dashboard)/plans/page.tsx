@@ -55,8 +55,8 @@ export default function PlansPage() {
     <div className="flex-1 space-y-4 pt-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Membership Plans</h2>
-          <p className="text-muted-foreground">
+          <h2 className="text-3xl font-bold tracking-tight text-white">Membership Plans</h2>
+          <p className="text-slate-300">
             Manage your pricing tiers and subscription packages
           </p>
         </div>

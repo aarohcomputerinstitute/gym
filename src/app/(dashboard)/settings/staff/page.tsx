@@ -45,8 +45,8 @@ export default function SettingsStaffPage() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h3 className="text-lg font-medium">Staff Management</h3>
-          <p className="text-sm text-muted-foreground">
+          <h3 className="text-lg font-medium text-white">Staff Management</h3>
+          <p className="text-sm text-slate-300">
             Manage your team members and their access roles.
           </p>
         </div>

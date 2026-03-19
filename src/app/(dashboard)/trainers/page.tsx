@@ -60,8 +60,8 @@ export default function TrainersPage() {
     <div className="flex-1 space-y-4 pt-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Trainers</h2>
-          <p className="text-muted-foreground">
+          <h2 className="text-3xl font-bold tracking-tight text-white">Trainers</h2>
+          <p className="text-slate-300">
             Manage your coaching staff and their client assignments
           </p>
         </div>

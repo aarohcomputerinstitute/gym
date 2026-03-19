@@ -110,30 +110,30 @@ export default async function MemberProfilePage({
             
             <TabsContent value="membership" className="space-y-4 mt-4">
               <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
-                <h3 className="font-semibold text-lg mb-4">Current Subscription</h3>
+                <h3 className="font-semibold text-lg mb-4 text-white">Current Subscription</h3>
                 <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
                   <div>
-                    <span className="text-xs text-muted-foreground block">Plan</span>
-                    <span className="font-medium">{member.plan}</span>
+                    <span className="text-xs text-slate-400 block">Plan</span>
+                    <span className="font-medium text-slate-100">{member.plan}</span>
                   </div>
                   <div>
-                    <span className="text-xs text-muted-foreground block">Start Date</span>
-                    <span className="font-medium">Jan 15, 2024</span>
+                    <span className="text-xs text-slate-400 block">Start Date</span>
+                    <span className="font-medium text-slate-100">Jan 15, 2024</span>
                   </div>
                   <div>
-                    <span className="text-xs text-muted-foreground block">Expiry Date</span>
-                    <span className="font-medium text-red-600">{member.expiryDate}</span>
+                    <span className="text-xs text-slate-400 block">Expiry Date</span>
+                    <span className="font-medium text-red-500">{member.expiryDate}</span>
                   </div>
                   <div>
-                    <span className="text-xs text-muted-foreground block">Status</span>
-                    <span className="font-medium text-green-600">Active</span>
+                    <span className="text-xs text-slate-400 block">Status</span>
+                    <span className="font-medium text-green-500">Active</span>
                   </div>
                 </div>
               </div>
               
               <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
-                <h3 className="font-semibold text-lg mb-4">Subscription History</h3>
-                <div className="text-center py-8 text-muted-foreground text-sm border-2 border-dashed rounded-md">
+                <h3 className="font-semibold text-lg mb-4 text-white">Subscription History</h3>
+                <div className="text-center py-8 text-slate-400 text-sm border-2 border-slate-700 border-dashed rounded-md">
                   History will be displayed here
                 </div>
               </div>
@@ -141,8 +141,8 @@ export default async function MemberProfilePage({
             
             <TabsContent value="payments" className="mt-4">
               <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
-                <h3 className="font-semibold text-lg mb-4">Payment History</h3>
-                <div className="text-center py-8 text-muted-foreground text-sm border-2 border-dashed rounded-md">
+                <h3 className="font-semibold text-lg mb-4 text-white">Payment History</h3>
+                <div className="text-center py-8 text-slate-400 text-sm border-2 border-slate-700 border-dashed rounded-md">
                   Payment records will be displayed here
                 </div>
               </div>
@@ -150,8 +150,8 @@ export default async function MemberProfilePage({
             
             <TabsContent value="attendance" className="mt-4">
               <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
-                <h3 className="font-semibold text-lg mb-4">Recent Attendance</h3>
-                <div className="text-center py-8 text-muted-foreground text-sm border-2 border-dashed rounded-md">
+                <h3 className="font-semibold text-lg mb-4 text-white">Recent Attendance</h3>
+                <div className="text-center py-8 text-slate-400 text-sm border-2 border-slate-700 border-dashed rounded-md">
                   Attendance logs will be displayed here
                 </div>
               </div>
@@ -159,8 +159,8 @@ export default async function MemberProfilePage({
 
             <TabsContent value="workouts" className="mt-4">
               <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
-                <h3 className="font-semibold text-lg mb-4">Assigned Workouts</h3>
-                <div className="text-center py-8 text-muted-foreground text-sm border-2 border-dashed rounded-md">
+                <h3 className="font-semibold text-lg mb-4 text-white">Assigned Workouts</h3>
+                <div className="text-center py-8 text-slate-400 text-sm border-2 border-slate-700 border-dashed rounded-md">
                   Workout plans will be displayed here
                 </div>
               </div>
@@ -168,8 +168,8 @@ export default async function MemberProfilePage({
 
             <TabsContent value="progress" className="mt-4">
               <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
-                <h3 className="font-semibold text-lg mb-4">Body Measurements</h3>
-                <div className="text-center py-8 text-muted-foreground text-sm border-2 border-dashed rounded-md">
+                <h3 className="font-semibold text-lg mb-4 text-white">Body Measurements</h3>
+                <div className="text-center py-8 text-slate-400 text-sm border-2 border-slate-700 border-dashed rounded-md">
                   Progress tracking charts will be displayed here
                 </div>
               </div>
