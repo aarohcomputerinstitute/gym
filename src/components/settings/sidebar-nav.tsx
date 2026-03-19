@@ -24,21 +24,24 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
       )}
       {...props}
     >
-      {items.map((item) => (
-        <Link
-          key={item.href}
-          href={item.href}
-          className={cn(
-            buttonVariants({ variant: "ghost" }),
-            pathname === item.href
-              ? "bg-muted hover:bg-muted"
-              : "hover:bg-transparent hover:underline",
-            "justify-start"
-          )}
-        >
-          {item.title}
-        </Link>
-      ))}
+      {items.map((item) => {
+        const isActive = pathname === item.href
+        return (
+          <Link
+            key={item.href}
+            href={item.href}
+            className={cn(
+              buttonVariants({ variant: "ghost" }),
+              isActive
+                ? "bg-white/10 text-white hover:bg-white/15 font-medium"
+                : "text-slate-400 hover:bg-white/5 hover:text-white",
+              "justify-start transition-all duration-200 rounded-xl"
+            )}
+          >
+            {item.title}
+          </Link>
+        )
+      })}
     </nav>
   )
 }

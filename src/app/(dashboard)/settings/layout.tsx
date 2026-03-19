@@ -34,13 +34,13 @@ interface SettingsLayoutProps {
 export default function SettingsLayout({ children }: SettingsLayoutProps) {
   return (
     <div className="space-y-6 pt-6 pb-16 block">
-      <div className="space-y-0.5">
-        <h2 className="text-2xl font-bold tracking-tight">Settings</h2>
-        <p className="text-muted-foreground">
+      <div className="space-y-1">
+        <h2 className="text-2xl font-bold tracking-tight text-white">Settings</h2>
+        <p className="text-slate-300">
           Manage your gym account settings, staff, and billing preferences.
         </p>
       </div>
-      <Separator className="my-6" />
+      <Separator className="my-6 border-white/10" />
       <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
         <aside className="lg:w-1/5">
           <SidebarNav items={sidebarNavItems} />
