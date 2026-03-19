@@ -70,6 +70,7 @@ export async function createMemberAction(data: any) {
       blood_group: data.bloodGroup || null,
       emergency_contact: data.emergencyContact || null,
       address: data.address || null,
+      plan_id: data.planId,
       status: 'active'
     })
     

@@ -20,6 +20,9 @@ import { Switch } from "@/components/ui/switch"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 
+import { createPlanAction } from "@/app/actions/plan"
+import { useState, useTransition } from "react"
+
 const planFormSchema = z.object({
   name: z.string().min(2, {
     message: "Plan name must be at least 2 characters.",
@@ -46,6 +49,7 @@ const defaultValues: Partial<PlanFormValues> = {
 
 export function PlanForm() {
   const router = useRouter()
+  const [isPending, startTransition] = useTransition()
   
   const form = useForm<PlanFormValues>({
     resolver: zodResolver(planFormSchema) as any,
@@ -53,9 +57,16 @@ export function PlanForm() {
   })
 
   function onSubmit(data: PlanFormValues) {
-    console.log(data)
-    toast.success("Membership plan saved successfully!")
-    router.push("/plans")
+    startTransition(async () => {
+      try {
+        await createPlanAction(data)
+        toast.success("Membership plan saved correctly in database!")
+        router.push("/plans")
+        router.refresh()
+      } catch (error: any) {
+        toast.error(error.message || "Failed to save plan.")
+      }
+    })
   }
 
   return (
@@ -192,10 +203,12 @@ export function PlanForm() {
         </div>
 
         <div className="flex justify-end space-x-4 border-t pt-4">
-          <Button variant="outline" type="button" onClick={() => router.back()}>
+          <Button variant="outline" type="button" onClick={() => router.back()} disabled={isPending}>
             Cancel
           </Button>
-          <Button type="submit">Save Plan</Button>
+          <Button type="submit" disabled={isPending}>
+            {isPending ? "Saving Plan..." : "Save Plan"}
+          </Button>
         </div>
       </form>
     </Form>
