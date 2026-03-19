@@ -48,16 +48,20 @@ export function Navbar({ user, role }: { user: User; role: string }) {
           {/* Profile Dropdown */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="relative h-10 w-10 rounded-xl border-2 border-white/10 hover:border-blue-500/40 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 group">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="relative h-10 w-10 p-0 hover:bg-white/5 rounded-xl border-2 border-white/10 hover:border-blue-500/40 transition-all duration-200 group"
+              >
                 <Avatar className="h-full w-full rounded-xl">
                   <AvatarImage src="" />
-                  <AvatarFallback className="bg-gradient-to-br from-blue-500 to-indigo-600 text-white font-bold rounded-xl text-sm group-hover:from-blue-400 group-hover:to-indigo-500 transition-all">
+                  <AvatarFallback className="bg-gradient-to-br from-blue-500 to-indigo-600 text-white font-bold rounded-xl text-sm">
                     {userInitial}
                   </AvatarFallback>
                 </Avatar>
                 {/* Online indicator */}
-                <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full bg-emerald-500 border-2 border-slate-950 shadow-sm" />
-              </button>
+                <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full bg-emerald-500 border-2 border-slate-950 shadow-sm pointer-events-none" />
+              </Button>
             </DropdownMenuTrigger>
 
             <DropdownMenuContent
