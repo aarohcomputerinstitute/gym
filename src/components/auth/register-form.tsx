@@ -25,14 +25,10 @@ export function RegisterForm({
   async function handleSubmit(formData: FormData) {
     setPending(true)
     setError(null)
-    try {
-      const result = await signup(formData)
-      if (result?.error) {
-        setError(result.error)
-      }
-    } catch (err: any) {
-      setError("An unexpected error occurred.")
-    } finally {
+    
+    const result = await signup(formData)
+    if (result?.error) {
+      setError(result.error)
       setPending(false)
     }
   }

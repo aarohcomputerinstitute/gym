@@ -22,17 +22,13 @@ export function LoginForm({
   const [pending, setPending] = useState(false)
   const [error, setError] = useState<string | null>(null)
   
-  async function handleSubmit(formData: FormData) {
+    async function handleSubmit(formData: FormData) {
     setPending(true)
     setError(null)
-    try {
-      const result = await login(formData)
-      if (result?.error) {
-        setError(result.error)
-      }
-    } catch (err: any) {
-      setError("An unexpected error occurred.")
-    } finally {
+    
+    const result = await login(formData)
+    if (result?.error) {
+      setError(result.error)
       setPending(false)
     }
   }
