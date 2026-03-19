@@ -29,8 +29,8 @@ export function MobileNav() {
       </SheetTrigger>
       <SheetContent side="left" className="w-64 p-0">
         <div className="flex flex-col h-full bg-slate-950 text-slate-300">
-          <div className="p-6">
-            <div className="flex items-center gap-2 mb-8">
+          <div className="p-6 flex-shrink-0">
+            <div className="flex items-center gap-2">
               <div className="h-8 w-8 rounded-lg bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
                 <Dumbbell className="h-5 w-5 text-white" />
               </div>
@@ -38,8 +38,11 @@ export function MobileNav() {
                 Gym<span className="text-blue-500">OS</span>
               </h2>
             </div>
-            <div className="space-y-1">
-              <ScrollArea className="h-[calc(100vh-8rem)]">
+          </div>
+          
+          <div className="flex-1 overflow-hidden px-6 pb-6">
+            <ScrollArea className="h-full">
+              <div className="space-y-1">
                 {sidebarNavigation.map((item) => {
                   const Icon = item.icon
                   return (
@@ -57,11 +60,11 @@ export function MobileNav() {
                     </Button>
                   )
                 })}
-              </ScrollArea>
-            </div>
+              </div>
+            </ScrollArea>
           </div>
 
-          <div className="mt-auto p-4 border-t border-white/5">
+          <div className="flex-shrink-0 p-4 border-t border-white/5 bg-slate-950/50">
              <form action={signOut}>
               <button 
                 type="submit"
