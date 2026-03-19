@@ -55,7 +55,7 @@ export default function Home() {
       <nav className="fixed top-0 w-full z-50 border-b border-white/10 bg-black/50 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-orange-600 flex items-center justify-center shadow-[0_0_20px_rgba(234,88,12,0.4)]">
+            <div className="h-10 w-10 rounded-xl bg-indigo-600 flex items-center justify-center shadow-[0_0_20px_rgba(79,70,229,0.4)]">
               <Dumbbell className="h-6 w-6 text-white" />
             </div>
             <span className="text-2xl font-bold tracking-tight">GymOS</span>
@@ -96,7 +96,7 @@ export default function Home() {
             <Button variant="outline" asChild className="w-full border-white/20 text-white bg-transparent">
               <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>Login</Link>
             </Button>
-            <Button asChild className="w-full bg-orange-600 text-white hover:bg-orange-700">
+            <Button asChild className="w-full bg-indigo-600 text-white hover:bg-indigo-700">
               <Link href="/register" onClick={() => setIsMobileMenuOpen(false)}>Get Started Free</Link>
             </Button>
           </div>
@@ -105,19 +105,19 @@ export default function Home() {
 
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden flex flex-col items-center justify-center min-h-[90vh]">
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-orange-600/20 rounded-full blur-[120px] animate-pulse pointer-events-none" />
-        <div className="absolute top-1/3 left-1/4 w-[400px] h-[400px] bg-indigo-600/10 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-indigo-600/30 rounded-full blur-[120px] animate-pulse pointer-events-none" />
+        <div className="absolute top-1/3 left-1/4 w-[400px] h-[400px] bg-fuchsia-600/20 rounded-full blur-[100px] pointer-events-none" />
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
           <div className="text-center max-w-4xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-500/10 border border-orange-500/20 text-sm font-medium text-orange-300 mb-8 animate-fade-in shadow-[0_0_15px_rgba(234,88,12,0.2)]">
-              <span className="flex h-2 w-2 rounded-full bg-orange-400 animate-ping" />
-              The #1 Choice for Indian Fitness Centers in 2026
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-sm font-medium text-indigo-300 mb-8 animate-fade-in shadow-[0_0_15px_rgba(79,70,229,0.2)]">
+              <span className="flex h-2 w-2 rounded-full bg-indigo-400 animate-ping" />
+              The #1 Choice for Modern Fitness Centers in 2026
             </div>
             <h1 className="text-5xl sm:text-6xl md:text-7xl font-extrabold tracking-tight mb-8 leading-[1.1]">
-              The OS for Bharat's <br className="hidden md:block" /> 
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-orange-500 to-amber-500">
-                Gym Empires.
+              The OS for Modern <br className="hidden md:block" /> 
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-fuchsia-400">
+                Fitness Enterprises.
               </span>
             </h1>
             <p className="text-lg md:text-xl text-slate-300 mb-10 max-w-2xl mx-auto leading-relaxed">
@@ -171,10 +171,10 @@ export default function Home() {
       {/* Pricing Section */}
       <section id="pricing" className="py-24 relative overflow-hidden bg-slate-950/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-          <div className="inline-flex items-center justify-center gap-2 mb-4 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-xs font-bold text-orange-400 uppercase tracking-widest">
+          <div className="inline-flex items-center justify-center gap-2 mb-4 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-xs font-bold text-blue-400 uppercase tracking-widest">
             Pricing Plans (INR)
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white to-slate-400">Simple, scalable pricing</h2>
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white tracking-tight">Simple, scalable pricing</h2>
           <p className="text-lg text-slate-400 mb-12 max-w-2xl mx-auto">Choose the perfect tier for your growth. Billed in Indian Rupees (₹).</p>
           
           {/* Billing Switcher */}
@@ -185,7 +185,7 @@ export default function Home() {
               className="relative w-14 h-7 rounded-full bg-slate-800 p-1 transition-all duration-300 hover:bg-slate-700"
             >
               <div className={cn(
-                "w-5 h-5 rounded-full bg-orange-500 shadow-lg transition-transform duration-300",
+                "w-5 h-5 rounded-full bg-indigo-500 shadow-lg transition-transform duration-300",
                 billingCycle === "annually" ? "translate-x-7" : "translate-x-0"
               )} />
             </button>
@@ -212,17 +212,17 @@ export default function Home() {
             All plans include a 14-day free trial. No credit card required. Taxes applicable as per Indian laws.
           </p>
         </div>
-        <div className="absolute bottom-0 -left-1/4 w-[600px] h-[600px] bg-orange-500/10 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute bottom-0 -left-1/4 w-[600px] h-[600px] bg-indigo-500/10 rounded-full blur-[120px] pointer-events-none" />
       </section>
 
       {/* CTA Section */}
       <section className="py-24 relative overflow-hidden bg-black">
-        <div className="absolute inset-0 bg-orange-600/5" />
+        <div className="absolute inset-0 bg-indigo-600/5" />
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           <h2 className="text-4xl md:text-6xl font-extrabold text-white mb-6 tracking-tight">Ready to transform your gym?</h2>
-          <p className="text-xl text-slate-300 mb-10 max-w-2xl mx-auto leading-relaxed">Join Bharat's fastest growing gyms automating their operations with GymOS today.</p>
+          <p className="text-xl text-slate-300 mb-10 max-w-2xl mx-auto leading-relaxed">Join 500+ successful fitness centers completely automating their operations with GymOS today.</p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button size="lg" asChild className="h-14 px-10 text-lg bg-orange-600 text-white hover:bg-orange-700 rounded-full shadow-[0_0_30px_rgba(234,88,12,0.5)] transform transition hover:scale-105 active:scale-95">
+            <Button size="lg" asChild className="h-14 px-10 text-lg bg-indigo-600 text-white hover:bg-indigo-700 rounded-full shadow-[0_0_30px_rgba(79,70,229,0.5)] transform transition hover:scale-105 active:scale-95">
               <Link href="/register">Start Your 14-Day Free Trial</Link>
             </Button>
             <Button size="lg" variant="ghost" asChild className="h-14 px-10 text-lg text-slate-300 hover:text-white hover:bg-white/5 rounded-full border border-white/5">
@@ -236,16 +236,16 @@ export default function Home() {
       <footer className="py-12 border-t border-white/5 bg-black">
         <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-8 text-center md:text-left">
            <div className="flex items-center gap-3">
-            <div className="h-8 w-8 rounded-lg bg-orange-600 flex items-center justify-center">
+            <div className="h-8 w-8 rounded-lg bg-indigo-600 flex items-center justify-center">
               <Dumbbell className="h-4 w-4 text-white" />
             </div>
             <span className="text-xl font-bold tracking-tight text-white">GymOS</span>
           </div>
-          <p className="text-slate-600 text-sm">© 2026 GymOS Bharat. Built for Indian Entrepreneurs.</p>
+          <p className="text-slate-600 text-sm">© 2026 GymOS SaaS. Engineered for supreme performance and scale.</p>
           <div className="flex gap-6 text-slate-500 text-sm">
-            <a href="#" className="hover:text-orange-400 transition-colors">Privacy</a>
-            <a href="#" className="hover:text-orange-400 transition-colors">Terms</a>
-            <a href="#" className="hover:text-orange-400 transition-colors">Support</a>
+            <a href="#" className="hover:text-indigo-400 transition-colors">Privacy</a>
+            <a href="#" className="hover:text-indigo-400 transition-colors">Terms</a>
+            <a href="#" className="hover:text-indigo-400 transition-colors">Contact</a>
           </div>
         </div>
       </footer>
@@ -270,12 +270,12 @@ function PricingCard({
     <div className={cn(
       "p-8 rounded-[2rem] border transition-all duration-500 hover:-translate-y-2 flex flex-col group relative",
       popular 
-        ? 'bg-gradient-to-br from-orange-600/20 via-slate-900/40 to-black border-orange-500/40 shadow-[0_0_50px_rgba(234,88,12,0.2)] scale-[1.02] z-10' 
+        ? 'bg-gradient-to-br from-indigo-600/20 via-slate-900/40 to-black border-indigo-500/40 shadow-[0_0_50px_rgba(79,70,229,0.2)] scale-[1.02] z-10' 
         : 'bg-white/[0.02] border-white/10 hover:border-white/20'
     )}>
       {popular && (
-        <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full bg-gradient-to-r from-orange-500 to-amber-600 text-white text-[10px] font-black uppercase tracking-[0.2em] shadow-xl">
-          Recommended
+        <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-[10px] font-black uppercase tracking-[0.2em] shadow-xl">
+          Most Popular
         </div>
       )}
       
@@ -286,7 +286,7 @@ function PricingCard({
 
       <div className="flex items-baseline gap-1 mb-10">
         <span className="text-4xl lg:text-5xl font-black text-white">{price}</span>
-        <span className="text-slate-500 font-medium whitespace-nowrap">/{billingCycle === "monthly" ? "mo" : "mo"}</span>
+        <span className="text-slate-500 font-medium whitespace-nowrap">/mo</span>
       </div>
       
       <ul className="space-y-4 mb-10 flex-1">
@@ -294,7 +294,7 @@ function PricingCard({
           <li key={i} className="flex items-start gap-3 group/item text-left">
             <div className={cn(
               "mt-1 flex h-4 w-4 shrink-0 items-center justify-center rounded-full transition-colors",
-              popular ? "bg-orange-500/20 text-orange-400" : "bg-slate-800 text-slate-500 group-hover/item:bg-orange-500/20 group-hover/item:text-orange-400"
+              popular ? "bg-indigo-500/20 text-indigo-400" : "bg-slate-800 text-slate-500 group-hover/item:bg-indigo-500/20 group-hover/item:text-indigo-400"
             )}>
               <CheckCircle2 className="h-2.5 w-2.5" />
             </div>
@@ -309,12 +309,24 @@ function PricingCard({
         className={cn(
           "w-full h-14 text-sm font-bold uppercase tracking-widest rounded-2xl transition-all duration-300 active:scale-95",
           popular 
-            ? 'bg-orange-600 hover:bg-orange-500 text-white shadow-lg shadow-orange-500/30' 
+            ? 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-500/30' 
             : 'border-white/10 hover:bg-white/10 text-white bg-transparent'
         )}
       >
-        <Link href="/register">Choose {tier}</Link>
+        <Link href="/register">Start with {tier}</Link>
       </Button>
+    </div>
+  );
+}
+
+function FeatureCard({ icon, title, description }: { icon: React.ReactNode, title: string, description: string }) {
+  return (
+    <div className="p-8 rounded-3xl border border-white/5 bg-white/[0.01] hover:bg-white/[0.03] transition-all duration-500 hover:-translate-y-2 hover:border-indigo-500/20 group">
+      <div className="h-14 w-14 rounded-2xl bg-indigo-500/10 flex items-center justify-center text-indigo-400 mb-6 group-hover:scale-110 group-hover:bg-indigo-500/20 transition-all duration-300">
+        {icon}
+      </div>
+      <h3 className="text-xl font-bold mb-3 text-white group-hover:text-indigo-300 transition-colors uppercase tracking-tight">{title}</h3>
+      <p className="text-slate-500 leading-relaxed text-sm font-medium">{description}</p>
     </div>
   );
 }
