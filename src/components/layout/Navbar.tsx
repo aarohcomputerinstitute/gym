@@ -37,7 +37,7 @@ export function Navbar({ user, role }: { user: User; role: string }) {
     <header className="sticky top-0 z-[100] flex h-16 items-center gap-4 bg-slate-950/20 backdrop-blur-md px-6 sm:h-20 lg:px-8 border-b border-white/5">
       <div className="flex w-full items-center justify-between gap-4">
         <div className="md:hidden">
-          <MobileNav />
+          <MobileNav role={role} />
         </div>
 
         <div className="flex items-center gap-3 ml-auto">

@@ -12,9 +12,17 @@ import { useState } from "react"
 import { LogOut, Dumbbell } from "lucide-react"
 import { signOut } from "@/app/(auth)/actions/index"
 
-export function MobileNav() {
+export function MobileNav({ role }: { role?: string }) {
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
+
+  // Filter navigation based on role
+  const filteredNav = sidebarNavigation.filter(item => {
+    if (role === 'super_admin') return true;
+    if (item.href.startsWith('/super-admin')) return false;
+    if (item.name.includes('Platform Admin')) return false;
+    return true;
+  });
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -27,7 +35,7 @@ export function MobileNav() {
           <span className="sr-only">Toggle navigation menu</span>
         </button>
       </SheetTrigger>
-      <SheetContent side="left" className="w-64 p-0">
+      <SheetContent side="left" className="w-64 p-0 border-white/10">
         <div className="flex flex-col h-full bg-slate-950 text-slate-300">
           <div className="p-6 flex-shrink-0">
             <div className="flex items-center gap-2">
@@ -40,22 +48,38 @@ export function MobileNav() {
             </div>
           </div>
           
-          <div className="flex-1 overflow-hidden px-6 pb-6">
-            <ScrollArea className="h-full">
+          <div className="flex-1 overflow-hidden px-4 pb-6">
+            <ScrollArea className="h-full pr-2">
               <div className="space-y-1">
-                {sidebarNavigation.map((item) => {
+                {filteredNav.map((item) => {
+                  if (item.disabled) {
+                    return (
+                      <div key={item.name} className="px-4 py-2 mt-6 mb-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                        {item.name}
+                      </div>
+                    )
+                  }
+
                   const Icon = item.icon
+                  const isActive = pathname.startsWith(item.href) && item.href !== "#"
+
                   return (
                     <Button
                       key={item.name}
-                      variant={pathname.startsWith(item.href) ? "secondary" : "ghost"}
-                      className="w-full justify-start gap-2 mb-1"
+                      variant="ghost"
+                      className={cn(
+                        "w-full justify-start gap-3 mb-1 h-11 px-4 rounded-xl transition-all duration-200",
+                        isActive 
+                          ? "bg-blue-600/10 text-blue-400 font-medium" 
+                          : "text-slate-400 hover:bg-white/5 hover:text-white"
+                      )}
                       onClick={() => setOpen(false)}
                       asChild
                     >
                       <Link href={item.href}>
-                        {Icon && <Icon className="h-4 w-4" />}
-                        {item.name}
+                        {Icon && <Icon className={cn("h-4 w-4", isActive ? "text-blue-400" : "text-slate-500")} />}
+                        <span className="text-sm">{item.name}</span>
+                        {isActive && <div className="ml-auto h-1 w-1 rounded-full bg-blue-400 shadow-[0_0_8px_rgba(96,165,250,0.8)]" />}
                       </Link>
                     </Button>
                   )

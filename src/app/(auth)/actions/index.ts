@@ -22,58 +22,76 @@ export async function login(formData: FormData) {
   redirect("/dashboard")
 }
 
+import { createAdminClient } from "@/lib/supabase/admin"
+
 export async function signup(formData: FormData) {
   const supabase = await createClient()
+  const adminClient = createAdminClient()
 
-  const data = {
+  const authData = {
     email: formData.get("email") as string,
     password: formData.get("password") as string,
   }
   const gymName = formData.get("gymName") as string
 
   // 1. Sign up the user in Supabase Auth
-  const { data: authData, error: authError } = await supabase.auth.signUp(data)
+  const { data: { user, session }, error: authError } = await supabase.auth.signUp({
+    email: authData.email,
+    password: authData.password,
+    options: {
+      data: {
+        gym_name: gymName
+      }
+    }
+  })
 
   if (authError) {
     return { error: authError.message }
   }
 
-  if (!authData.user) {
+  if (!user) {
     return { error: "User creation failed." }
   }
 
-  // 2. Create the Gym record
-  const { data: gymData, error: gymError } = await supabase
+  // 2. Create the Gym record using Admin Client (bypasses RLS)
+  const { data: gymData, error: gymError } = await adminClient
     .from('gyms')
     .insert({
       name: gymName,
       slug: gymName.toLowerCase().replace(/\s+/g, '-'),
       owner_name: 'Owner', // Initial placeholder
-      email: data.email,
-      status: 'active'
+      email: authData.email,
+      status: 'trial'
     })
     .select()
     .single()
 
   if (gymError) {
-    // We should ideally delete the auth user here if it was just created, 
-    // but Suapbase Auth might require manual cleanup or we just return error
+    // Cleanup: We should ideally delete the user if possible, but for simplicity we'll just error
+    console.error("Gym Error:", gymError)
     return { error: "Gym registration failed: " + gymError.message }
   }
 
-  // 3. Create the User record in our public table
-  const { error: userError } = await supabase
+  // 3. Create the User record in our public table using Admin Client
+  const { error: userError } = await adminClient
     .from('users')
     .insert({
-      id: authData.user.id,
+      id: user.id,
       gym_id: gymData.id,
       name: 'Gym Owner',
-      email: data.email,
+      email: authData.email,
       role: 'owner'
     })
 
   if (userError) {
+    console.error("User Error:", userError)
     return { error: "User profile creation failed: " + userError.message }
+  }
+
+  // 4. Handle Redirection
+  // If email confirmation is required, session will be null
+  if (!session) {
+    redirect("/verify-email")
   }
 
   revalidatePath("/", "layout")
