@@ -59,8 +59,8 @@ export default function SettingsProfilePage() {
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-medium">Gym Profile</h3>
-        <p className="text-sm text-light">
+        <h3 className="text-lg font-medium text-white">Gym Profile</h3>
+        <p className="text-sm text-slate-300">
           This information will be displayed on member receipts and emails.
         </p>
       </div>
