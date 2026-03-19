@@ -18,9 +18,36 @@ import {
   Activity
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export default function Home() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [billingCycle, setBillingCycle] = useState<"monthly" | "annually">("annually");
+
+  const plans = [
+    {
+      tier: "Silver",
+      monthlyPrice: 39,
+      annualPrice: 31,
+      members: "200 Members",
+      features: ["Up to 200 Members", "Basic Analytics", "Email Support", "Professional Auto-Logout", "Standard Billing"],
+    },
+    {
+      tier: "Gold",
+      monthlyPrice: 89,
+      annualPrice: 71,
+      members: "1,000 Members",
+      popular: true,
+      features: ["Up to 1,000 Members", "Advanced Dashboard", "Priority Support", "Custom Branding", "Staff Management", "Real-time Platform MRR"],
+    },
+    {
+      tier: "Diamond",
+      monthlyPrice: 199,
+      annualPrice: 159,
+      members: "Unlimited Members",
+      features: ["Unlimited Members", "Multi-location Support", "Dedicated Account Manager", "Full API Access", "White-label Option", "Premium Security Suite"],
+    }
+  ];
 
   return (
     <div className="min-h-screen bg-black text-white font-sans selection:bg-indigo-500/30 selection:text-white">
@@ -36,21 +63,20 @@ export default function Home() {
           
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
-            <a href="#features" className="hover:text-white transition-colors">Features</a>
-            <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
-            <a href="#about" className="hover:text-white transition-colors">About</a>
+            <a href="#features" className="hover:text-white transition-colors uppercase tracking-widest text-xs">Features</a>
+            <a href="#pricing" className="hover:text-white transition-colors uppercase tracking-widest text-xs">Pricing</a>
+            <a href="#about" className="hover:text-white transition-colors uppercase tracking-widest text-xs">About</a>
           </div>
           
           <div className="hidden md:flex items-center gap-4">
             <Button variant="ghost" asChild className="text-slate-300 hover:text-white hover:bg-white/10">
               <Link href="/login">Login</Link>
             </Button>
-            <Button asChild className="bg-white text-black hover:bg-slate-200 shadow-[0_0_20px_rgba(255,255,255,0.2)] rounded-full px-6">
+            <Button asChild className="bg-white text-black hover:bg-slate-200 shadow-[0_0_20px_rgba(255,255,255,0.2)] rounded-full px-6 transition-all active:scale-95">
               <Link href="/register">Get Started</Link>
             </Button>
           </div>
 
-          {/* Mobile Menu Toggle */}
           <button 
             className="md:hidden p-2 text-slate-300 hover:text-white"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -78,10 +104,8 @@ export default function Home() {
 
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden flex flex-col items-center justify-center min-h-[90vh]">
-        {/* Animated Background Mesh */}
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-indigo-600/30 rounded-full blur-[120px] animate-pulse pointer-events-none" />
         <div className="absolute top-1/3 left-1/4 w-[400px] h-[400px] bg-fuchsia-600/20 rounded-full blur-[100px] pointer-events-none" />
-        <div className="absolute bottom-0 right-1/4 w-[600px] h-[400px] bg-blue-600/20 rounded-full blur-[120px] pointer-events-none" />
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
           <div className="text-center max-w-4xl mx-auto">
@@ -114,8 +138,6 @@ export default function Home() {
           {/* Floating UI Mockups Area */}
           <div className="mt-24 relative px-4 max-w-5xl mx-auto lg:h-[400px]">
             <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-20" />
-            
-            {/* Main Center Dashboard */}
             <div className="relative z-10 mx-auto w-full md:w-3/4 rounded-2xl overflow-hidden border border-white/10 bg-slate-950/80 backdrop-blur-xl shadow-2xl transition-transform duration-700 hover:scale-[1.02]">
               <div className="h-12 border-b border-white/10 flex items-center px-4 bg-white/[0.02]">
                 <div className="flex gap-2">
@@ -143,7 +165,6 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Floating Side Cards (Visible on Desktop) */}
             <div className="hidden lg:block absolute top-12 -left-12 w-64 p-4 rounded-xl border border-indigo-500/30 bg-black/60 backdrop-blur-2xl shadow-[0_0_30px_rgba(79,70,229,0.2)] animate-pulse" style={{ animationDuration: '4s' }}>
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center">
@@ -163,116 +184,93 @@ export default function Home() {
                 </div>
                 <div>
                   <div className="text-sm font-bold text-white">New Sign Up</div>
-                  <div className="text-xs text-slate-400">Mike Ross • Pro Plan</div>
+                  <div className="text-xs text-slate-400">Mike Ross • Gold Plan</div>
                 </div>
               </div>
             </div>
-
           </div>
         </div>
       </section>
 
-      {/* Social Proof / Trusted By */}
-      <section className="py-10 border-y border-white/10 bg-white/[0.02]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-sm font-medium text-slate-400 uppercase tracking-widest mb-6">Trusted by 500+ Fitness Centers Worldwide</p>
-          <div className="flex flex-wrap justify-center gap-8 md:gap-16 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
-            {/* Placeholder logo names using typography for a clean look */}
-            {['IRONFORGE', 'TITAN FIT', 'APEX ATHLETICS', 'OXYGEN GYM', 'PULSE STUDIOS'].map((logo, i) => (
-              <div key={i} className="text-xl md:text-2xl font-black tracking-tighter text-white">
-                {logo}.
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Features Grid */}
-      <section id="features" className="py-24 relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center mb-16 max-w-3xl mx-auto">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">Engineered for Success</h2>
-            <p className="text-lg text-slate-400">Replace 5 different software subscriptions with one incredibly powerful, unified system designed strictly for gym owners.</p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <FeatureCard 
-              icon={<Users className="h-6 w-6" />}
-              title="Member Management"
-              description="Complete lifecycle tracking from onboarding to retention with automated reminders and deep CRM tools."
-            />
-            <FeatureCard 
-              icon={<CreditCard className="h-6 w-6" />}
-              title="Automated Payments"
-              description="Hassle-free recurring billing with robust integrated payment gateways, auto-retry, and instant invoice generation."
-            />
-            <FeatureCard 
-              icon={<LayoutDashboard className="h-6 w-6" />}
-              title="Advanced Analytics"
-              description="Real-time, actionable insights into MRR revenue, member attendance heatmaps, and precise churn rates."
-            />
-            <FeatureCard 
-              icon={<Activity className="h-6 w-6" />}
-              title="Trainer & Class Scheduling"
-              description="Track PT sessions, manage trainer commissions effortlessly, and let members book classes directly."
-            />
-            <FeatureCard 
-              icon={<MessageSquare className="h-6 w-6" />}
-              title="Client Communication"
-              description="Engage members instantly with automated mass announcements, personalized SMS alerts, and in-app pushes."
-            />
-            <FeatureCard 
-              icon={<ShieldCheck className="h-6 w-6" />}
-              title="Enterprise Security"
-              description="Strict role-based access control, secure data encryption at rest, and full GDPR compliance at every layer."
-            />
-          </div>
-        </div>
-        <div className="absolute top-1/2 -right-1/4 w-[600px] h-[600px] bg-indigo-500/10 rounded-full blur-[120px] pointer-events-none" />
-      </section>
-
-      {/* Pricing Preview */}
-      <section id="pricing" className="py-24 relative overflow-hidden bg-slate-950/50">
+      {/* Pricing Section */}
+      <section id="pricing" className="py-24 relative overflow-hidden bg-slate-950/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">Simple, scalable pricing</h2>
-          <p className="text-lg text-slate-400 mb-16 max-w-2xl mx-auto">Choose the perfect tier for your growth. No hidden fees, ever.</p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto items-center">
-             <PricingCard tier="Starter" price="$49" features={["Up to 200 Members", "Basic Analytics", "Email Support", "Standard Billing"]} />
-             <PricingCard tier="Professional" price="$99" popular features={["Unlimited Members", "Advanced Dashboard", "Priority Support", "Custom Branding", "Staff Management"]} />
-             <PricingCard tier="Enterprise" price="Custom" features={["Multi-location Support", "Dedicated Account Manager", "Full API Access", "White-label Option", "Custom Integrations"]} />
+          <div className="inline-flex items-center justify-center gap-2 mb-4 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-xs font-bold text-blue-400 uppercase tracking-widest">
+            Pricing Plans
           </div>
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white tracking-tight">Simple, scalable pricing</h2>
+          <p className="text-lg text-slate-400 mb-12 max-w-2xl mx-auto">Choose the perfect tier for your growth. Save up to 20% with annual billing.</p>
+          
+          {/* Billing Switcher */}
+          <div className="flex items-center justify-center gap-4 mb-16">
+            <span className={cn("text-sm font-medium transition-colors", billingCycle === "monthly" ? "text-white" : "text-slate-500")}>Monthly</span>
+            <button 
+              onClick={() => setBillingCycle(billingCycle === "monthly" ? "annually" : "monthly")}
+              className="relative w-14 h-7 rounded-full bg-slate-800 p-1 transition-all duration-300 hover:bg-slate-700"
+            >
+              <div className={cn(
+                "w-5 h-5 rounded-full bg-indigo-500 shadow-lg transition-transform duration-300",
+                billingCycle === "annually" ? "translate-x-7" : "translate-x-0"
+              )} />
+            </button>
+            <span className={cn("text-sm font-medium transition-colors flex items-center gap-2", billingCycle === "annually" ? "text-white" : "text-slate-500")}>
+              Annually
+              <span className="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 py-0.5 px-2 rounded-full text-[10px] font-bold uppercase tracking-tighter">Save 20%</span>
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto items-stretch">
+             {plans.map((plan) => (
+                <PricingCard 
+                  key={plan.tier}
+                  tier={plan.tier}
+                  price={billingCycle === "monthly" ? `$${plan.monthlyPrice}` : `$${plan.annualPrice}`}
+                  features={plan.features}
+                  popular={plan.popular}
+                  billingCycle={billingCycle}
+                />
+             ))}
+          </div>
+
+          <p className="mt-12 text-slate-500 text-sm">
+            All plans include a 14-day free trial. No credit card required to start.
+          </p>
         </div>
         <div className="absolute bottom-0 -left-1/4 w-[600px] h-[600px] bg-fuchsia-500/10 rounded-full blur-[120px] pointer-events-none" />
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 relative overflow-hidden">
-        <div className="absolute inset-0 bg-indigo-600/10" />
+      <section className="py-24 relative overflow-hidden bg-black">
+        <div className="absolute inset-0 bg-indigo-600/5" />
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-          <h2 className="text-4xl md:text-6xl font-extrabold text-white mb-6">Ready to transform your gym?</h2>
-          <p className="text-xl text-slate-300 mb-10">Join 500+ successful fitness centers completely automating their operations with GymOS today.</p>
-          <Button size="lg" asChild className="h-14 px-10 text-lg bg-indigo-600 text-white hover:bg-indigo-700 rounded-full shadow-[0_0_30px_rgba(79,70,229,0.5)] transform transition hover:scale-105">
-            <Link href="/register">Start Your 14-Day Free Trial</Link>
-          </Button>
-          <p className="mt-4 text-sm text-slate-400">No credit card required. Cancel anytime.</p>
+          <h2 className="text-4xl md:text-6xl font-extrabold text-white mb-6 tracking-tight">Ready to transform your gym?</h2>
+          <p className="text-xl text-slate-300 mb-10 max-w-2xl mx-auto leading-relaxed">Join 500+ successful fitness centers completely automating their operations with GymOS today.</p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Button size="lg" asChild className="h-14 px-10 text-lg bg-indigo-600 text-white hover:bg-indigo-700 rounded-full shadow-[0_0_30px_rgba(79,70,229,0.5)] transform transition hover:scale-105 active:scale-95">
+              <Link href="/register">Start Your 14-Day Free Trial</Link>
+            </Button>
+            <Button size="lg" variant="ghost" asChild className="h-14 px-10 text-lg text-slate-300 hover:text-white hover:bg-white/5 rounded-full border border-white/5">
+              <Link href="/login">Explore Demo</Link>
+            </Button>
+          </div>
+          <p className="mt-6 text-sm text-slate-500">Risk-free trial. Secure database. Expert support included.</p>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="py-12 border-t border-white/10 bg-black">
-        <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-8">
+      <footer className="py-12 border-t border-white/5 bg-black">
+        <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-8 text-center md:text-left">
            <div className="flex items-center gap-3">
             <div className="h-8 w-8 rounded-lg bg-indigo-600 flex items-center justify-center">
               <Dumbbell className="h-4 w-4 text-white" />
             </div>
             <span className="text-xl font-bold tracking-tight text-white">GymOS</span>
           </div>
-          <p className="text-slate-500 text-sm">© 2026 GymOS Enterprises. Built for supreme performance.</p>
-          <div className="flex gap-6 text-slate-400 text-sm">
-            <a href="#" className="hover:text-white transition-colors">Privacy</a>
-            <a href="#" className="hover:text-white transition-colors">Terms</a>
-            <a href="#" className="hover:text-white transition-colors">Support</a>
+          <p className="text-slate-600 text-sm">© 2026 GymOS SaaS. Engineered for supreme performance and scale.</p>
+          <div className="flex gap-6 text-slate-500 text-sm">
+            <a href="#" className="hover:text-indigo-400 transition-colors">Privacy</a>
+            <a href="#" className="hover:text-indigo-400 transition-colors">Terms</a>
+            <a href="#" className="hover:text-indigo-400 transition-colors">Contact</a>
           </div>
         </div>
       </footer>
@@ -280,51 +278,80 @@ export default function Home() {
   );
 }
 
-function FeatureCard({ icon, title, description }: { icon: React.ReactNode, title: string, description: string }) {
+function PricingCard({ 
+  tier, 
+  price, 
+  features, 
+  popular, 
+  billingCycle 
+}: { 
+  tier: string, 
+  price: string, 
+  features: string[], 
+  popular?: boolean,
+  billingCycle: string
+}) {
   return (
-    <div className="p-8 rounded-2xl border border-white/5 bg-white/[0.02] hover:bg-white/[0.05] transition-all duration-300 hover:-translate-y-2 hover:border-indigo-500/30 group">
-      <div className="h-14 w-14 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-400 mb-6 group-hover:scale-110 group-hover:bg-indigo-500/20 transition-all duration-300">
-        {icon}
+    <div className={cn(
+      "p-8 rounded-[2rem] border transition-all duration-500 hover:-translate-y-2 flex flex-col group relative",
+      popular 
+        ? 'bg-gradient-to-br from-indigo-600/20 via-slate-900/40 to-black border-indigo-500/40 shadow-[0_0_50px_rgba(79,70,229,0.2)] scale-[1.02] z-10' 
+        : 'bg-white/[0.02] border-white/10 hover:border-white/20'
+    )}>
+      {popular && (
+        <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-[10px] font-black uppercase tracking-[0.2em] shadow-xl">
+          Most Popular
+        </div>
+      )}
+      
+      <div className="mb-8">
+        <h3 className="text-xl font-bold text-white mb-1">{tier}</h3>
+        <p className="text-slate-500 text-[10px] font-bold uppercase tracking-[0.2em]">{features[0]}</p>
       </div>
-      <h3 className="text-xl font-bold mb-3 text-white transition-colors group-hover:text-indigo-300">{title}</h3>
-      <p className="text-slate-400 leading-relaxed">{description}</p>
+
+      <div className="flex items-baseline gap-1 mb-10">
+        <span className="text-5xl font-black text-white">{price}</span>
+        <span className="text-slate-500 font-medium">/mo</span>
+      </div>
+      
+      <ul className="space-y-4 mb-10 flex-1">
+        {features.map((f, i) => (
+          <li key={i} className="flex items-start gap-3 group/item text-left">
+            <div className={cn(
+              "mt-1 flex h-4 w-4 shrink-0 items-center justify-center rounded-full transition-colors",
+              popular ? "bg-indigo-500/20 text-indigo-400" : "bg-slate-800 text-slate-500 group-hover/item:bg-indigo-500/20 group-hover/item:text-indigo-400"
+            )}>
+              <CheckCircle2 className="h-2.5 w-2.5" />
+            </div>
+            <span className="text-sm text-slate-400 group-hover/item:text-white transition-colors leading-tight">{f}</span>
+          </li>
+        ))}
+      </ul>
+
+      <Button 
+        variant={popular ? 'default' : 'outline'} 
+        asChild
+        className={cn(
+          "w-full h-14 text-sm font-bold uppercase tracking-widest rounded-2xl transition-all duration-300 active:scale-95",
+          popular 
+            ? 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-500/30' 
+            : 'border-white/10 hover:bg-white/10 text-white bg-transparent'
+        )}
+      >
+        <Link href="/register">Start with {tier}</Link>
+      </Button>
     </div>
   );
 }
 
-function PricingCard({ tier, price, features, popular }: { tier: string, price: string, features: string[], popular?: boolean }) {
+function FeatureCard({ icon, title, description }: { icon: React.ReactNode, title: string, description: string }) {
   return (
-    <div className={`p-8 rounded-3xl border transition-all duration-300 hover:-translate-y-2 ${
-      popular 
-        ? 'border-indigo-500/50 bg-indigo-500/10 shadow-[0_0_40px_rgba(79,70,229,0.15)] md:-mt-4 md:mb-4 relative z-10' 
-        : 'border-white/10 bg-white/[0.02] hover:border-white/20'
-    } relative flex flex-col h-full`}>
-      {popular && (
-        <span className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 px-4 py-1.5 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white text-xs font-bold uppercase tracking-widest shadow-lg">
-          Most Popular
-        </span>
-      )}
-      <h3 className="text-xl font-bold mb-2 text-white">{tier}</h3>
-      <div className="text-4xl md:text-5xl font-extrabold mb-8 text-white">{price}<span className="text-lg text-slate-500 font-medium">/mo</span></div>
-      
-      <ul className="space-y-4 mb-8 text-sm text-slate-300 flex-1">
-        {features.map((f, i) => (
-          <li key={i} className="flex items-center gap-3">
-            <CheckCircle2 className={`h-5 w-5 ${popular ? 'text-indigo-400' : 'text-slate-500'}`} />
-            {f}
-          </li>
-        ))}
-      </ul>
-      <Button 
-        variant={popular ? 'default' : 'outline'} 
-        className={`w-full py-6 text-base rounded-xl transition-all duration-300 ${
-          popular 
-            ? 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-500/25' 
-            : 'border-white/10 hover:bg-white/10 text-white bg-transparent'
-        }`}
-      >
-        Select {tier}
-      </Button>
+    <div className="p-8 rounded-3xl border border-white/5 bg-white/[0.01] hover:bg-white/[0.03] transition-all duration-500 hover:-translate-y-2 hover:border-indigo-500/20 group">
+      <div className="h-14 w-14 rounded-2xl bg-indigo-500/10 flex items-center justify-center text-indigo-400 mb-6 group-hover:scale-110 group-hover:bg-indigo-500/20 transition-all duration-300">
+        {icon}
+      </div>
+      <h3 className="text-xl font-bold mb-3 text-white group-hover:text-indigo-300 transition-colors uppercase tracking-tight">{title}</h3>
+      <p className="text-slate-500 leading-relaxed text-sm font-medium">{description}</p>
     </div>
   );
 }
