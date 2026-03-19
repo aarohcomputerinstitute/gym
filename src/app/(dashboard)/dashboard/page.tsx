@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Plus, Download, Users, UserCheck, DollarSign, CalendarClock } from "lucide-react"
+import { Plus, Download, Users, UserCheck, DollarSign, CalendarClock, Settings, UserCircle, CreditCard } from "lucide-react"
 import { createClient } from "@/lib/supabase/server"
 
 export default async function DashboardPage() {
@@ -174,6 +174,42 @@ export default async function DashboardPage() {
           </CardHeader>
           <CardContent>
             <RecentActivity activities={actItems} />
+          </CardContent>
+        </Card>
+
+        <Card className="col-span-3 bg-slate-800/50 border-white/20 backdrop-blur-xl shadow-[0_8px_30px_rgb(0,0,0,0.5)] rounded-2xl overflow-hidden hover:border-blue-500/50 transition-all duration-300 animate-fade-in delay-300 relative group">
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+          <CardHeader className="border-b border-white/10 mb-6">
+            <CardTitle className="text-xl font-bold text-white">Quick Actions</CardTitle>
+            <CardDescription className="text-slate-300">
+              Rapid management tools.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-3">
+             <Button asChild className="w-full justify-start h-12 bg-blue-600/10 hover:bg-blue-600 text-blue-400 hover:text-white border border-blue-500/20 rounded-xl transition-all group/btn">
+               <Link href="/members/new">
+                 <Plus className="mr-3 h-5 w-5" />
+                 Add New Member
+               </Link>
+             </Button>
+             <Button asChild variant="outline" className="w-full justify-start h-12 bg-white/5 border-white/10 text-slate-300 hover:text-white hover:bg-white/10 rounded-xl transition-all">
+               <Link href="/payments/new">
+                 <CreditCard className="mr-3 h-5 w-5 text-emerald-400" />
+                 Collect Payment
+               </Link>
+             </Button>
+             <Button asChild variant="outline" className="w-full justify-start h-12 bg-white/5 border-white/10 text-slate-300 hover:text-white hover:bg-white/10 rounded-xl transition-all">
+               <Link href="/settings">
+                 <UserCircle className="mr-3 h-5 w-5 text-indigo-400" />
+                 Update Profile
+               </Link>
+             </Button>
+             <Button asChild variant="outline" className="w-full justify-start h-12 bg-white/5 border-white/10 text-slate-300 hover:text-white hover:bg-white/10 rounded-xl transition-all">
+               <Link href="/settings">
+                 <Settings className="mr-3 h-5 w-5 text-amber-400" />
+                 Gym Settings
+               </Link>
+             </Button>
           </CardContent>
         </Card>
       </div>

@@ -88,9 +88,11 @@ export default async function MemberProfilePage({
           </p>
         </div>
         <div className="flex items-center space-x-2">
-          <Button variant="outline" className="bg-white/5 border-white/10 text-white">
-            <Edit className="mr-2 h-4 w-4" />
-            Edit Profile
+          <Button variant="outline" asChild className="bg-white/5 border-white/10 text-white cursor-pointer">
+            <Link href={`/members/new?edit=${id}`}>
+              <Edit className="mr-2 h-4 w-4" />
+              Edit Profile
+            </Link>
           </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -100,7 +102,11 @@ export default async function MemberProfilePage({
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="bg-slate-900 border-white/10 text-white">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem>Renew Membership</DropdownMenuItem>
+              <DropdownMenuItem asChild className="cursor-pointer">
+                <Link href={`/payments/new?memberId=${id}`}>
+                  Renew Membership
+                </Link>
+              </DropdownMenuItem>
               <DropdownMenuItem>Freeze Membership</DropdownMenuItem>
               <DropdownMenuItem>Log Check-in</DropdownMenuItem>
               <DropdownMenuSeparator className="bg-white/10" />

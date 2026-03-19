@@ -13,7 +13,8 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-import { ArrowUpDown, ChevronDown, MoreHorizontal, FileDown } from "lucide-react"
+import { ArrowUpDown, ChevronDown, MoreHorizontal, FileDown, User, CreditCard, Trash2 } from "lucide-react"
+import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -119,9 +120,23 @@ export const columns: ColumnDef<Member>[] = [
               Copy member ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View profile</DropdownMenuItem>
-            <DropdownMenuItem>Renew membership</DropdownMenuItem>
-            <DropdownMenuItem className="text-red-600">Delete member</DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href={`/members/${member.id}`} className="cursor-pointer">
+                <User className="mr-2 h-4 w-4" />
+                View profile
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href={`/payments/new?memberId=${member.id}`} className="cursor-pointer">
+                <CreditCard className="mr-2 h-4 w-4" />
+                Renew membership
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem className="text-red-500 focus:text-red-500 hover:bg-red-500/10 cursor-pointer">
+              <Trash2 className="mr-2 h-4 w-4" />
+              Delete member
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )

@@ -1,4 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { cn } from "@/lib/utils"
 
 export interface ActivityItem {
   name: string
@@ -51,4 +52,3 @@ export function RecentActivity({ activities = [] }: { activities?: ActivityItem[
   )
 }
 
-import { cn } from "@/lib/utils"

@@ -1,6 +1,7 @@
 import { PaymentTable, type Payment } from "@/components/payments/PaymentTable"
 import { Button } from "@/components/ui/button"
 import { PlusCircle } from "lucide-react"
+import Link from "next/link"
 import { createClient } from "@/lib/supabase/server"
 
 export default async function PaymentsPage() {
@@ -42,9 +43,11 @@ export default async function PaymentsPage() {
           </p>
         </div>
         <div className="flex items-center space-x-2">
-          <Button>
-            <PlusCircle className="mr-2 h-4 w-4" />
-            Record Payment
+          <Button asChild>
+            <Link href="/payments/new">
+              <PlusCircle className="mr-2 h-4 w-4" />
+              Record Payment
+            </Link>
           </Button>
         </div>
       </div>
