@@ -91,12 +91,12 @@ export default async function ExpiredPage() {
              const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
              const { createServerClient } = await import("@supabase/ssr")
              const { cookies } = await import("next/headers")
-             const c = cookies()
+             const cookieStore = await cookies()
              const supabase = createServerClient(supabaseUrl, supabaseKey, {
                cookies: {
-                 get(name) { return c.get(name)?.value },
-                 set(name, value, options) { c.set(name, value, options) },
-                 remove(name, options) { c.set(name, "", { ...options, maxAge: 0 }) },
+                 get(name) { return cookieStore.get(name)?.value },
+                 set(name, value, options) { cookieStore.set(name, value, options) },
+                 remove(name, options) { cookieStore.set(name, "", { ...options, maxAge: 0 }) },
                }
              })
              await supabase.auth.signOut()
