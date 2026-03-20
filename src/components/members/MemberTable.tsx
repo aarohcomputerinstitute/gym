@@ -44,6 +44,7 @@ export interface Member {
   status: "active" | "inactive" | "expired" | "frozen"
   joinDate: string
   expiryDate: string
+  pendingDues?: number
 }
 
 export const columns: ColumnDef<Member>[] = [
@@ -60,7 +61,16 @@ export const columns: ColumnDef<Member>[] = [
         </Button>
       )
     },
-    cell: ({ row }) => <div className="font-medium px-4">{row.getValue("name")}</div>,
+    cell: ({ row }) => (
+      <div className="font-medium px-4 flex items-center gap-2">
+        {row.getValue("name")}
+        {(row.original.pendingDues || 0) > 0 && (
+          <span className="px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-500 text-[10px] font-bold border border-rose-500/20 shadow-[0_0_10px_rgba(244,63,94,0.1)] whitespace-nowrap">
+            Dues: ₹{row.original.pendingDues?.toLocaleString()}
+          </span>
+        )}
+      </div>
+    ),
   },
   {
     accessorKey: "phone",

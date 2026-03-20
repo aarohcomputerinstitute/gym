@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import { PlusCircle } from "lucide-react"
 import Link from "next/link"
 import { createClient } from "@/lib/supabase/server"
+import { createAdminClient } from "@/lib/supabase/admin"
 
 export default async function MembersPage() {
   const supabase = await createClient()
@@ -13,6 +14,25 @@ export default async function MembersPage() {
     .select('id, name, phone, status, join_date')
     .order('created_at', { ascending: false })
 
+  // Fetch pending dues using Admin Client
+  const adminClient = createAdminClient()
+  const memberIds = (members || []).map(m => m.id)
+  
+  const { data: payments } = memberIds.length > 0 ? await adminClient
+    .from('payments')
+    .select('member_id, amount, total_amount')
+    .in('member_id', memberIds) : { data: [] }
+    
+  const duesMap: Record<string, number> = {}
+  ;(payments || []).forEach(p => {
+    const total = Number(p.total_amount) || 0
+    const paid = Number(p.amount) || 0
+    const due = Math.max(0, total - paid)
+    if (due > 0) {
+       duesMap[p.member_id] = (duesMap[p.member_id] || 0) + due
+    }
+  })
+
   // Map to the format expected by our data table
   const formattedMembers: Member[] = (members || []).map(m => ({
     id: m.id,
@@ -21,7 +41,8 @@ export default async function MembersPage() {
     plan: "Standard Options", // TODO: join with member_subscriptions table
     status: (m.status as "active" | "inactive" | "expired" | "frozen") || "inactive",
     joinDate: m.join_date ? new Date(m.join_date).toISOString().split('T')[0] : "N/A",
-    expiryDate: "N/A"
+    expiryDate: "N/A",
+    pendingDues: duesMap[m.id] || 0
   }))
 
   return (

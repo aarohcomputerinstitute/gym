@@ -35,10 +35,10 @@ export async function createPaymentAction(data: {
     throw new Error("Could not find your associated Gym profile.")
   }
 
-  // 4. Get plan details to calculate subscription end date
+  // 4. Get plan details to calculate subscription end date and price
   const { data: plan } = await adminClient
     .from('membership_plans')
-    .select('duration_days')
+    .select('duration_days, price')
     .eq('id', data.planId)
     .single()
 
@@ -76,6 +76,7 @@ export async function createPaymentAction(data: {
   // 6. Insert the payment record
   const invoiceNumber = `INV-${Date.now().toString().slice(-8)}`
   
+  // Total amount should be the plan's exact price, amount is what was actually paid today.
   const { error: paymentError } = await adminClient
     .from('payments')
     .insert({
@@ -83,12 +84,12 @@ export async function createPaymentAction(data: {
       member_id: data.memberId,
       subscription_id: sub.id,
       amount: data.amount,
-      total_amount: data.amount,
+      total_amount: plan.price,
       payment_mode: data.paymentMode,
       transaction_id: data.transactionId || null,
       invoice_number: invoiceNumber,
       payment_date: new Date().toISOString().split('T')[0],
-      status: 'paid',
+      status: data.amount >= plan.price ? 'paid' : 'partial',
       received_by: user.id,
       notes: data.notes || null
     })

@@ -174,37 +174,21 @@ export function MemberForm({ plans = [] }: { plans?: PlanOption[] }) {
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
                     <FormLabel className="mb-1 mt-1">Date of Birth</FormLabel>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            variant={"outline"}
-                            className={cn(
-                              "w-full pl-3 text-left font-normal",
-                              !field.value && "text-muted-foreground"
-                            )}
-                          >
-                            {field.value ? (
-                              format(field.value, "PPP")
-                            ) : (
-                              <span>Pick a date</span>
-                            )}
-                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          mode="single"
-                          selected={field.value}
-                          onSelect={field.onChange}
-                          disabled={(date) =>
-                            date > new Date() || date < new Date("1900-01-01")
-                          }
-                          initialFocus
-                        />
-                      </PopoverContent>
-                    </Popover>
+                    <FormControl>
+                      <Input
+                        type="date"
+                        max={new Date().toISOString().split("T")[0]}
+                        className={cn(
+                          "w-full bg-slate-950/50 border-white/10 text-white focus:border-blue-500/50 focus:ring-blue-500/20 h-10 rounded-md transition-all [color-scheme:dark]",
+                          !field.value && "text-slate-500"
+                        )}
+                        value={field.value ? format(field.value, "yyyy-MM-dd") : ""}
+                        onChange={(e) => {
+                          const val = e.target.value
+                          field.onChange(val ? new Date(val) : undefined)
+                        }}
+                      />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}

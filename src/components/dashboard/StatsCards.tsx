@@ -48,7 +48,7 @@ export interface StatData {
 
 export function StatsCards({ stats }: { stats: StatData[] }) {
   return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+    <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-5">
       {stats.map((stat, i) => (
         <StatItem key={i} {...stat} />
       ))}

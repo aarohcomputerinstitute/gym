@@ -40,10 +40,19 @@ export default async function DashboardPage() {
   const { count: activeMembers } = await adminClient.from('members').select('*', { count: 'exact', head: true }).eq('gym_id', gymId).eq('status', 'active')
   const { count: todayAttendance } = await adminClient.from('attendance').select('*', { count: 'exact', head: true }).eq('gym_id', gymId).eq('date', new Date().toISOString().split('T')[0])
   
-  // Fetch Monthly Revenue
+  // Fetch All Payments for Revenue and Dues Calculation
   const firstDayOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString().split('T')[0]
-  const { data: paymentsSum } = await adminClient.from('payments').select('total_amount').eq('gym_id', gymId).filter('payment_date', 'gte', firstDayOfMonth)
-  const monthlyRevenue = (paymentsSum || []).reduce((acc, curr) => acc + Number(curr.total_amount), 0)
+  const { data: allPayments } = await adminClient.from('payments').select('total_amount, amount, payment_date').eq('gym_id', gymId)
+  
+  const pendingDues = (allPayments || []).reduce((acc, curr) => {
+    const total = Number(curr.total_amount) || 0;
+    const paid = Number(curr.amount) || 0;
+    return acc + Math.max(0, total - paid);
+  }, 0)
+
+  const monthlyRevenue = (allPayments || [])
+    .filter(p => p.payment_date >= firstDayOfMonth)
+    .reduce((acc, curr) => acc + (Number(curr.amount) || Number(curr.total_amount) || 0), 0)
 
   // 2. Fetch Recent Activities (Combined)
   const { data: recentPayments } = await adminClient
@@ -112,6 +121,14 @@ export default async function DashboardPage() {
       isPositive: true,
       icon: CalendarClock,
       color: "bg-amber-500"
+    },
+    {
+      title: "Pending Dues",
+      value: `₹${pendingDues.toLocaleString()}`,
+      change: "Action Needed",
+      isPositive: pendingDues === 0,
+      icon: DollarSign,
+      color: "bg-rose-500"
     }
   ]
 
