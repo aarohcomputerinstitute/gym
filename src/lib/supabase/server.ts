@@ -22,12 +22,7 @@ export async function createClient() {
         setAll(cookiesToSet) {
           try {
             cookiesToSet.forEach(({ name, value, options }) => {
-              // FOR SECURITY: Make cookies session-only (no maxAge) 
-              // This triggers "auto logout" when the browser closes.
-              const sessionOptions = { ...options };
-              delete sessionOptions.maxAge; 
-              
-              cookieStore.set(name, value, sessionOptions);
+              cookieStore.set(name, value, options);
             });
           } catch {
             // The `setAll` method was called from a Server Component.

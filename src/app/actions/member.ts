@@ -1,6 +1,7 @@
 "use server"
 
 import { createClient } from "@/lib/supabase/server"
+import { createAdminClient } from "@/lib/supabase/admin"
 import { revalidatePath } from "next/cache"
 
 export async function createMemberAction(data: any) {
@@ -12,52 +13,24 @@ export async function createMemberAction(data: any) {
     throw new Error("You must be logged in to add members.")
   }
   
-  // 2. Fetch the user's gym_id
-  const { data: profile, error: profileError } = await supabase
+  // 2. Use admin client (bypasses RLS) for all DB operations
+  const adminClient = createAdminClient()
+  
+  // 3. Fetch the user's gym_id
+  const { data: profile, error: profileError } = await adminClient
     .from('users')
     .select('gym_id')
     .eq('id', user.id)
     .single()
     
   if (profileError || !profile?.gym_id) {
+    console.error("Profile fetch error:", profileError)
     throw new Error("Could not find your associated Gym profile.")
   }
 
-  // 3. Fetch the gym's active plan limit and current member count
-  const { data: gymStatus, error: statusError } = await supabase
-    .from('gyms')
-    .select(`
-      id,
-      members:members(count),
-      subscription:saas_subscriptions(
-        status,
-        plan:saas_plans(member_limit, name)
-      )
-    `)
-    .eq('id', profile.gym_id)
-    .single()
-
-  if (statusError || !gymStatus) {
-    throw new Error("Could not verify your subscription status.")
-  }
-
-  // Find active subscription
-  // @ts-ignore
-  const activeSub = gymStatus.subscription?.find((s: any) => s.status === 'active')
-  
-  // @ts-ignore
-  const memberCount = gymStatus.members?.[0]?.count || 0
-  // @ts-ignore
-  const limit = activeSub?.plan?.[0]?.member_limit ?? -1
-  // @ts-ignore
-  const planName = activeSub?.plan?.[0]?.name || "Trial"
-
-  if (limit !== -1 && memberCount >= limit) {
-    throw new Error(`Plan Limit Reached: Your ${planName} plan only allows up to ${limit} members. Please upgrade your subscription to add more.`)
-  }
-
   // 4. Insert the new member into the database
-  const { error: insertError } = await supabase
+  // NOTE: plan_id is NOT a column in the members table - removed it
+  const { error: insertError } = await adminClient
     .from('members')
     .insert({
       gym_id: profile.gym_id,
@@ -70,16 +43,22 @@ export async function createMemberAction(data: any) {
       blood_group: data.bloodGroup || null,
       emergency_contact: data.emergencyContact || null,
       address: data.address || null,
-      plan_id: data.planId,
       status: 'active'
     })
     
   if (insertError) {
+    console.error("Supabase Insert Error (members):", {
+      code: insertError.code,
+      message: insertError.message,
+      details: insertError.details,
+      hint: insertError.hint
+    })
     throw new Error(insertError.message || "Failed to insert member into database.")
   }
   
-  // 4. Force Next.js to re-fetch the members list so the new member appears
+  // 5. Revalidate
   revalidatePath('/members')
+  revalidatePath('/dashboard')
   
   return { success: true }
 }

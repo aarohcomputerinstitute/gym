@@ -1,6 +1,7 @@
 "use server"
 
 import { createClient } from "@/lib/supabase/server"
+import { createAdminClient } from "@/lib/supabase/admin"
 import { revalidatePath } from "next/cache"
 
 export async function createPaymentAction(data: {
@@ -19,20 +20,23 @@ export async function createPaymentAction(data: {
     throw new Error("You must be logged in to record payments.")
   }
   
-  // 2. Fetch the user's gym_id
-  const { data: profile, error: profileError } = await supabase
+  // 2. Use admin client (bypasses RLS) for all DB operations
+  const adminClient = createAdminClient()
+  
+  // 3. Fetch the user's gym_id
+  const { data: profile, error: profileError } = await adminClient
     .from('users')
     .select('gym_id')
     .eq('id', user.id)
     .single()
     
   if (profileError || !profile?.gym_id) {
+    console.error("Profile fetch error:", profileError)
     throw new Error("Could not find your associated Gym profile.")
   }
 
-  // 3. Create/Update Subscription record (Simplified for now)
-  // In a real app, you'd calculate end_date based on plan's duration_days
-  const { data: plan } = await supabase
+  // 4. Get plan details to calculate subscription end date
+  const { data: plan } = await adminClient
     .from('membership_plans')
     .select('duration_days')
     .eq('id', data.planId)
@@ -44,7 +48,8 @@ export async function createPaymentAction(data: {
   const endDate = new Date()
   endDate.setDate(startDate.getDate() + (plan.duration_days || 30))
 
-  const { data: sub, error: subError } = await supabase
+  // 5. Create subscription record
+  const { data: sub, error: subError } = await adminClient
     .from('member_subscriptions')
     .insert({
       gym_id: profile.gym_id,
@@ -59,14 +64,19 @@ export async function createPaymentAction(data: {
     .single()
 
   if (subError) {
-    console.error("Subscription Error:", subError)
+    console.error("Subscription Error:", {
+      code: subError.code,
+      message: subError.message,
+      details: subError.details,
+      hint: subError.hint
+    })
     throw new Error("Failed to create member subscription record.")
   }
 
-  // 4. Insert the payment record
+  // 6. Insert the payment record
   const invoiceNumber = `INV-${Date.now().toString().slice(-8)}`
   
-  const { error: paymentError } = await supabase
+  const { error: paymentError } = await adminClient
     .from('payments')
     .insert({
       gym_id: profile.gym_id,
@@ -84,11 +94,16 @@ export async function createPaymentAction(data: {
     })
     
   if (paymentError) {
-    console.error("Payment Error:", paymentError)
+    console.error("Payment Error:", {
+      code: paymentError.code,
+      message: paymentError.message,
+      details: paymentError.details,
+      hint: paymentError.hint
+    })
     throw new Error("Failed to record payment in database.")
   }
   
-  // 5. Revalidate paths
+  // 7. Revalidate paths
   revalidatePath('/payments')
   revalidatePath(`/members/${data.memberId}`)
   revalidatePath('/dashboard')

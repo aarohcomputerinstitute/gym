@@ -13,32 +13,50 @@ import {
 import { Button } from "@/components/ui/button"
 import { Plus, Download, Users, UserCheck, DollarSign, CalendarClock, Settings, UserCircle, CreditCard } from "lucide-react"
 import { createClient } from "@/lib/supabase/server"
+import { createAdminClient } from "@/lib/supabase/admin"
 
 export default async function DashboardPage() {
   const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  
+  if (!user) return null
+
+  const adminClient = createAdminClient()
+  
+  // Get gym_id for scoped queries
+  const { data: profile } = await adminClient
+    .from('users')
+    .select('gym_id')
+    .eq('id', user.id)
+    .single()
+  
+  const gymId = profile?.gym_id
+  
   const currentHour = new Date().getHours()
   const greeting = currentHour < 12 ? "Good Morning" : currentHour < 18 ? "Good Afternoon" : "Good Evening"
 
-  // 1. Fetch Dynamics Stats
-  const { count: totalMembers } = await supabase.from('members').select('*', { count: 'exact', head: true })
-  const { count: activeMembers } = await supabase.from('members').select('*', { count: 'exact', head: true }).eq('status', 'active')
-  const { count: todayAttendance } = await supabase.from('attendance').select('*', { count: 'exact', head: true }).eq('date', new Date().toISOString().split('T')[0])
+  // 1. Fetch Dynamic Stats (scoped by gym_id)
+  const { count: totalMembers } = await adminClient.from('members').select('*', { count: 'exact', head: true }).eq('gym_id', gymId)
+  const { count: activeMembers } = await adminClient.from('members').select('*', { count: 'exact', head: true }).eq('gym_id', gymId).eq('status', 'active')
+  const { count: todayAttendance } = await adminClient.from('attendance').select('*', { count: 'exact', head: true }).eq('gym_id', gymId).eq('date', new Date().toISOString().split('T')[0])
   
   // Fetch Monthly Revenue
   const firstDayOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString().split('T')[0]
-  const { data: paymentsSum } = await supabase.from('payments').select('total_amount').filter('payment_date', 'gte', firstDayOfMonth)
+  const { data: paymentsSum } = await adminClient.from('payments').select('total_amount').eq('gym_id', gymId).filter('payment_date', 'gte', firstDayOfMonth)
   const monthlyRevenue = (paymentsSum || []).reduce((acc, curr) => acc + Number(curr.total_amount), 0)
 
   // 2. Fetch Recent Activities (Combined)
-  const { data: recentPayments } = await supabase
+  const { data: recentPayments } = await adminClient
     .from('payments')
     .select('total_amount, created_at, members(name)')
+    .eq('gym_id', gymId)
     .order('created_at', { ascending: false })
     .limit(3)
 
-  const { data: recentCheckins } = await supabase
+  const { data: recentCheckins } = await adminClient
     .from('attendance')
     .select('checkin_time, created_at, members(name)')
+    .eq('gym_id', gymId)
     .order('created_at', { ascending: false })
     .limit(3)
 

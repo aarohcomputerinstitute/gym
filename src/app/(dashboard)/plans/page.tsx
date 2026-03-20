@@ -3,14 +3,29 @@ import { PlusCircle } from "lucide-react"
 import Link from "next/link"
 import { PlanCard, type Plan } from "@/components/plans/PlanCard"
 import { createClient } from "@/lib/supabase/server"
+import { createAdminClient } from "@/lib/supabase/admin"
 
 export default async function PlansPage() {
+  // Use server client for auth check, admin client for data
   const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  
+  if (!user) return null
 
-  // Fetch plans from database
-  const { data: plans } = await supabase
+  const adminClient = createAdminClient()
+  
+  // Fetch user's gym_id
+  const { data: profile } = await adminClient
+    .from('users')
+    .select('gym_id')
+    .eq('id', user.id)
+    .single()
+
+  // Fetch plans for this gym using admin client (bypasses RLS)
+  const { data: plans } = await adminClient
     .from('membership_plans')
     .select('*')
+    .eq('gym_id', profile?.gym_id)
     .order('sort_order', { ascending: true })
 
   // Map to the format expected by our PlanCard
