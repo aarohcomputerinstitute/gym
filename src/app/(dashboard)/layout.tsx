@@ -1,5 +1,6 @@
 import { Navbar } from "@/components/layout/Navbar"
 import { Sidebar } from "@/components/layout/Sidebar"
+import { TrialBanner } from "@/components/layout/TrialBanner"
 import { createClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
 
@@ -29,6 +30,7 @@ export default async function DashboardLayout({
     <div className="flex h-screen overflow-hidden bg-[#020617]">
       <Sidebar role={role} />
       <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
+        <TrialBanner />
         <Navbar user={user} role={role} />
         <main className="flex-1 overflow-y-auto relative">
           {/* High-end subtle background decoration */}

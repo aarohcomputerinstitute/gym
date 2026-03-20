@@ -16,9 +16,10 @@ import { signup } from "@/app/(auth)/actions/index"
 import { useState } from "react"
 
 export function RegisterForm({
+  plan = 'basic',
   className,
   ...props
-}: React.ComponentPropsWithoutRef<"div">) {
+}: React.ComponentPropsWithoutRef<"div"> & { plan?: string }) {
   const [pending, setPending] = useState(false)
   const [error, setError] = useState<string | null>(null)
   
@@ -39,11 +40,12 @@ export function RegisterForm({
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-white tracking-tight">Scale your Gym</h1>
           <p className="text-slate-400 mt-2 text-sm">
-            Join the most advanced gym management platform
+            Start your 14-Day Free Trial of the <span className="capitalize text-blue-400 font-semibold">{plan}</span> Plan
           </p>
         </div>
 
         <form action={handleSubmit}>
+          <input type="hidden" name="selectedPlan" value={plan} />
           <div className="space-y-6">
             {error && (
               <div className="text-red-400 text-sm text-center bg-red-400/10 p-3 rounded-lg border border-red-400/20 animate-shake">

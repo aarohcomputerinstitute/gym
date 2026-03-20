@@ -22,7 +22,7 @@ export async function proxy(request: NextRequest) {
           return request.cookies.getAll();
         },
         setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) =>
+          cookiesToSet.forEach(({ name, value }) =>
             request.cookies.set(name, value)
           );
           supabaseResponse = NextResponse.next({
@@ -42,39 +42,58 @@ export async function proxy(request: NextRequest) {
 
   const isAuthRoute = request.nextUrl.pathname.startsWith('/login') || request.nextUrl.pathname.startsWith('/register') || request.nextUrl.pathname.startsWith('/forgot-password');
   const isPublicRoute = request.nextUrl.pathname === '/' || isAuthRoute;
+  const isExpiredPage = request.nextUrl.pathname === '/expired';
+  const isBillingPage = request.nextUrl.pathname.startsWith('/settings/billing');
   
+  // 1. Redirect unauthenticated users
   if (!user && !isPublicRoute) {
     const url = request.nextUrl.clone();
     url.pathname = '/login';
     return NextResponse.redirect(url);
   }
 
-  if (user && isAuthRoute) {
-    // Fetch user role to determine where to redirect
+  // 2. Handle authenticated users
+  if (user) {
+    // Fetch base user data
     const { data: userData } = await supabase
       .from('users')
-      .select('role')
+      .select('role, gym_id')
       .eq('id', user.id)
       .single();
 
-    const url = request.nextUrl.clone();
-    if (userData?.role === 'super_admin') {
-      url.pathname = '/super-admin/dashboard';
-    } else {
-      url.pathname = '/dashboard';
+    // 2a. Guard: Trial Expiration Check (Only for protected App routes)
+    if (!isPublicRoute && userData && userData.role !== 'super_admin' && !isExpiredPage && !isBillingPage && userData.gym_id) {
+      // Fetch gym status
+      const { data: gymData } = await supabase
+        .from('gyms')
+        .select('status, trial_ends_at')
+        .eq('id', userData.gym_id)
+        .single();
+
+      if (gymData?.status === 'trial' && gymData.trial_ends_at) {
+        const trialEndDate = new Date(gymData.trial_ends_at);
+        if (trialEndDate < new Date()) {
+          // Trial expired! Lock them out
+          const url = request.nextUrl.clone();
+          url.pathname = '/expired';
+          return NextResponse.redirect(url);
+        }
+      }
     }
-    return NextResponse.redirect(url);
-  }
 
-  // NEW: Protect Super Admin Routes
-  if (user && request.nextUrl.pathname.startsWith('/super-admin')) {
-    const { data: userData } = await supabase
-      .from('users')
-      .select('role')
-      .eq('id', user.id)
-      .single();
+    // 2b. Redirect logged-in users away from auth pages
+    if (isAuthRoute) {
+      const url = request.nextUrl.clone();
+      if (userData?.role === 'super_admin') {
+        url.pathname = '/super-admin/dashboard';
+      } else {
+        url.pathname = '/dashboard';
+      }
+      return NextResponse.redirect(url);
+    }
 
-    if (userData?.role !== 'super_admin') {
+    // 2c. Protect Super Admin routes
+    if (request.nextUrl.pathname.startsWith('/super-admin') && userData?.role !== 'super_admin') {
       const url = request.nextUrl.clone();
       url.pathname = '/dashboard';
       return NextResponse.redirect(url);
@@ -86,13 +105,6 @@ export async function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * Feel free to modify this pattern to include more paths.
-     */
     '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 };

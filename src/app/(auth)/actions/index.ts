@@ -33,6 +33,7 @@ export async function signup(formData: FormData) {
     password: formData.get("password") as string,
   }
   const gymName = formData.get("gymName") as string
+  const selectedPlan = (formData.get("selectedPlan") as string) || "basic"
 
   // 1. Sign up the user in Supabase Auth
   const { data: { user, session }, error: authError } = await supabase.auth.signUp({
@@ -53,6 +54,10 @@ export async function signup(formData: FormData) {
     return { error: "User creation failed." }
   }
 
+  // Calculate 14 days from now
+  const trialEndsAt = new Date()
+  trialEndsAt.setDate(trialEndsAt.getDate() + 14)
+
   // 2. Create the Gym record using Admin Client (bypasses RLS)
   const { data: gymData, error: gymError } = await adminClient
     .from('gyms')
@@ -61,7 +66,9 @@ export async function signup(formData: FormData) {
       slug: gymName.toLowerCase().replace(/\s+/g, '-'),
       owner_name: 'Owner', // Initial placeholder
       email: authData.email,
-      status: 'trial'
+      status: 'trial',
+      selected_plan: selectedPlan,
+      trial_ends_at: trialEndsAt.toISOString()
     })
     .select()
     .single()
