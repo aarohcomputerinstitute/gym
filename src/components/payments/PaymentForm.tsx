@@ -14,8 +14,11 @@ import {
   Receipt, 
   IndianRupee, 
   Smartphone,
-  Info
+  Info,
+  Clock
 } from "lucide-react"
+import { format } from "date-fns"
+import { cn } from "@/lib/utils"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -41,6 +44,11 @@ const paymentFormSchema = z.object({
   paymentMode: z.enum(['cash', 'upi', 'card', 'bank_transfer', 'online']),
   transactionId: z.string().optional(),
   notes: z.string().optional(),
+  nextInstallmentDate: z.date().optional(),
+}).refine(data => {
+  // If we had a way to strictly validate the plan price here we would, 
+  // but we enforce the required date at the UI rendering level and server level.
+  return true;
 })
 
 type PaymentFormValues = z.infer<typeof paymentFormSchema>
@@ -107,6 +115,8 @@ export function PaymentForm({ members, plans, initialMemberId }: PaymentFormProp
   }
 
   const currentMode = form.watch('paymentMode')
+  const currentAmount = form.watch('amount')
+  const isPartial = selectedPlan !== null && currentAmount < selectedPlan.price
 
   return (
     <Card className="bg-slate-900/50 border-white/10 backdrop-blur-xl shadow-2xl rounded-2xl overflow-hidden border">
@@ -275,6 +285,41 @@ export function PaymentForm({ members, plans, initialMemberId }: PaymentFormProp
                             />
                           </div>
                         </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
+
+                {isPartial && selectedPlan && (
+                  <FormField
+                    control={form.control}
+                    name="nextInstallmentDate"
+                    rules={{ required: isPartial }}
+                    render={({ field }) => (
+                      <FormItem className="animate-fade-in border border-rose-500/30 bg-rose-500/5 p-4 rounded-xl mt-4">
+                        <FormLabel className="text-rose-400 font-bold uppercase text-[10px] tracking-widest flex items-center gap-2">
+                          <Clock className="w-3 h-3" /> Next Installment Date (Required)
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            type="date"
+                            min={new Date().toISOString().split("T")[0]}
+                            className={cn(
+                              "bg-white/5 border-white/10 h-12 rounded-xl text-white focus:border-rose-500/50 [color-scheme:dark]",
+                              !field.value && "text-slate-500"
+                            )}
+                            value={field.value ? format(field.value, "yyyy-MM-dd") : ""}
+                            onChange={(e) => {
+                              const val = e.target.value
+                              field.onChange(val ? new Date(val) : undefined)
+                            }}
+                            required={isPartial}
+                          />
+                        </FormControl>
+                        <FormDescription className="text-xs text-rose-300/70 leading-relaxed mt-2">
+                          Member's gym access will explicitly expire on this date unless the pending <strong className="text-rose-400">₹{(selectedPlan.price - currentAmount).toLocaleString()}</strong> is paid.
+                        </FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}

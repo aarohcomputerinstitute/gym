@@ -11,6 +11,7 @@ export async function createPaymentAction(data: {
   paymentMode: 'cash' | 'upi' | 'card' | 'bank_transfer' | 'online';
   transactionId?: string;
   notes?: string;
+  nextInstallmentDate?: Date;
 }) {
   const supabase = await createClient()
   
@@ -45,8 +46,17 @@ export async function createPaymentAction(data: {
   if (!plan) throw new Error("Selected plan not found.")
 
   const startDate = new Date()
-  const endDate = new Date()
-  endDate.setDate(startDate.getDate() + (plan.duration_days || 30))
+  let endDate = new Date()
+  
+  const isPartial = data.amount < plan.price;
+  if (isPartial) {
+    if (!data.nextInstallmentDate) throw new Error("Next Installment Date is required for partial payments.");
+    // TEMPORARILY LOCK ACCESS: Gym access expires strictly on the installment date
+    endDate = new Date(data.nextInstallmentDate);
+  } else {
+    // FULL PAYMENT: standard duration applies
+    endDate.setDate(startDate.getDate() + (plan.duration_days || 30))
+  }
 
   // 5. Create subscription record
   const { data: sub, error: subError } = await adminClient
@@ -89,7 +99,10 @@ export async function createPaymentAction(data: {
       transaction_id: data.transactionId || null,
       invoice_number: invoiceNumber,
       payment_date: new Date().toISOString().split('T')[0],
-      status: data.amount >= plan.price ? 'paid' : 'partial',
+      status: isPartial ? 'partial' : 'paid',
+      next_installment_date: isPartial && data.nextInstallmentDate 
+        ? new Date(data.nextInstallmentDate).toISOString().split('T')[0] 
+        : null,
       received_by: user.id,
       notes: data.notes || null
     })
