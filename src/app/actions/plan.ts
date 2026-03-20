@@ -44,14 +44,21 @@ export async function createPlanAction(data: any) {
     })
     
   if (insertError) {
-    console.error("Supabase Insert Error (membership_plans):", insertError)
+    console.error("Supabase Insert Error (membership_plans):", {
+      code: insertError.code,
+      message: insertError.message,
+      details: insertError.details,
+      hint: insertError.hint
+    })
     throw new Error(insertError.message || "Failed to save membership plan.")
   }
   
-  console.log("Membership plan saved successfully!")
+  console.log("Membership plan saved successfully for gym:", profile.gym_id)
   
-  // 4. Force Next.js to re-fetch the plans list
+  // 4. Force Next.js to re-fetch the plans list with aggressive invalidation
   revalidatePath('/plans')
+  revalidatePath('/plans', 'page')
+  revalidatePath('/dashboard', 'layout')
   
   return { success: true }
 }

@@ -66,8 +66,19 @@ export function PlanForm() {
         }
         await createPlanAction(payload)
         toast.success("Membership plan saved correctly in database!")
+        
+        // Expert Refresh Strategy: Redirect + Refresh + Hard Fallback
         router.push("/plans")
         router.refresh()
+        
+        // Hard fallback to ensure the list is updated even if Next.js caching is stubborn
+        setTimeout(() => {
+          if (window.location.pathname !== "/plans") {
+            window.location.href = "/plans"
+          } else {
+            router.refresh()
+          }
+        }, 1500)
       } catch (error: any) {
         toast.error(error.message || "Failed to save plan.")
       }

@@ -11,7 +11,6 @@ export default async function PlansPage() {
   const { data: plans } = await supabase
     .from('membership_plans')
     .select('*')
-    .eq('is_active', true)
     .order('sort_order', { ascending: true })
 
   // Map to the format expected by our PlanCard
