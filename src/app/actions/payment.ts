@@ -13,11 +13,20 @@ export async function createPaymentAction(data: {
   notes?: string;
   nextInstallmentDate?: Date;
 }) {
+  console.log("createPaymentAction started with data:", {
+    memberId: data.memberId,
+    planId: data.planId,
+    amount: data.amount,
+    paymentMode: data.paymentMode,
+    isPartial: !!data.nextInstallmentDate
+  })
+
   const supabase = await createClient()
   
   // 1. Authenticate user
   const { data: { user }, error: authError } = await supabase.auth.getUser()
   if (authError || !user) {
+    console.error("Auth error in payment action:", authError)
     throw new Error("You must be logged in to record payments.")
   }
   
@@ -32,9 +41,11 @@ export async function createPaymentAction(data: {
     .single()
     
   if (profileError || !profile?.gym_id) {
-    console.error("Profile fetch error:", profileError)
+    console.error("Profile fetch error in payment action:", profileError)
     throw new Error("Could not find your associated Gym profile.")
   }
+
+  console.log("Logged in Gym ID:", profile.gym_id)
 
   // 4. Get plan details to calculate subscription end date and price
   const { data: plan } = await adminClient
