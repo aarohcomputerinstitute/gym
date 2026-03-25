@@ -44,21 +44,13 @@ export default async function InquiriesPage() {
     <div className="min-h-screen bg-[#020617] text-slate-200 selection:bg-blue-500/30 p-4 md:p-8">
       <div className="max-w-[1700px] mx-auto py-8 lg:py-12 space-y-12">
         
-        {/* Pro Header Section */}
-        <header className="flex flex-col xl:flex-row xl:items-center justify-between gap-10">
-          <div className="space-y-4">
-            <div className="flex items-center gap-3">
-               <div className="px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center gap-2">
-                  <Sparkles className="h-3 w-3 text-blue-400" />
-                  <span className="text-[10px] font-black text-blue-400 uppercase tracking-[0.2em]">Growth Engine v3.0</span>
-               </div>
-            </div>
-            <h1 className="text-5xl sm:text-6xl font-black tracking-tighter text-white leading-none">
-              Inquiry <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400 italic">Terminal</span>
+        <header className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
+          <div className="space-y-2">
+            <h1 className="text-4xl sm:text-5xl font-black tracking-tighter text-white leading-none">
+              Inquiry <span className="text-blue-400 italic">Dashboard</span>
             </h1>
-            <p className="text-slate-400 font-medium text-base sm:text-lg max-w-2xl leading-relaxed">
-              Elevate your conversion rate with our professional lead orchestration suite. 
-              Track, nurture, and automate your sales pipeline in an immersive, full-width workspace.
+            <p className="text-slate-400 font-medium text-sm sm:text-base max-w-xl">
+              Track and convert your gym's interest pipeline in real-time.
             </p>
           </div>
 
@@ -81,33 +73,22 @@ export default async function InquiriesPage() {
           </div>
         </header>
 
-        {/* Extended Stats Bar */}
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
-           <div className="col-span-2 lg:col-span-1 hidden lg:block">
-              <div className="h-full bg-gradient-to-br from-blue-600/20 to-indigo-700/10 border border-blue-500/20 p-6 rounded-3xl flex flex-col justify-center gap-3">
-                 <div className="text-[10px] font-black text-blue-400 uppercase tracking-widest leading-none">System Status</div>
-                 <div className="text-lg font-black text-white leading-none uppercase tracking-tighter">Operational</div>
-                 <div className="flex items-center gap-2">
-                    <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                    <span className="text-[10px] font-bold text-emerald-500/80 uppercase">Pipeline Secure</span>
-                 </div>
-              </div>
-           </div>
+        {/* Growth Stats */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
            {[
              { label: 'Total Leads', val: counts.all, icon: Users, color: 'text-blue-400', bg: 'bg-blue-400' },
-             { label: 'Hot Pipeline', val: counts.hot, icon: TrendingUp, color: 'text-orange-400', bg: 'bg-orange-400' },
-             { label: 'Active Pending', val: counts.pending, icon: Target, color: 'text-indigo-400', bg: 'bg-indigo-400' },
-             { label: 'Conversions', val: counts.joined, icon: Sparkles, color: 'text-green-400', bg: 'bg-green-400' },
+             { label: 'Hot Leads', val: counts.hot, icon: TrendingUp, color: 'text-orange-400', bg: 'bg-orange-400' },
+             { label: 'In-Process', val: counts.pending, icon: Target, color: 'text-indigo-400', bg: 'bg-indigo-400' },
+             { label: 'Converted', val: counts.joined, icon: Sparkles, color: 'text-green-400', bg: 'bg-green-400' },
            ].map((stat, i) => (
-             <div key={i} className="bg-slate-900/40 border border-slate-800/50 p-6 rounded-3xl backdrop-blur-sm group hover:border-slate-700/50 transition-all">
-                <div className="flex items-center justify-between mb-4">
-                   <div className={`p-3 rounded-2xl ${stat.bg}/10`}>
-                      <stat.icon className={`h-5 w-5 ${stat.color}`} />
+             <div key={i} className="bg-slate-900/30 border border-slate-800/50 p-6 rounded-2xl backdrop-blur-sm group transition-all hover:bg-slate-900/50">
+                <div className="flex items-center gap-3 mb-4">
+                   <div className={`p-2 rounded-lg ${stat.bg}/10`}>
+                      <stat.icon className={`h-4 w-4 ${stat.color}`} />
                    </div>
-                   <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest leading-none">Live</span>
+                   <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest">{stat.label}</div>
                 </div>
                 <div className="text-3xl font-black text-white">{stat.val}</div>
-                <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mt-2">{stat.label}</div>
              </div>
            ))}
         </div>
@@ -116,17 +97,17 @@ export default async function InquiriesPage() {
         <div className="w-full space-y-8">
            <Tabs defaultValue="all" className="w-full">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-10">
-                <TabsList className="bg-slate-900/50 p-1.5 rounded-2xl h-14 border border-slate-800 backdrop-blur-md">
-                  <TabsTrigger value="all" className="px-8 rounded-xl font-black text-[11px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-950 transition-all">
-                    Global Stream
+                <TabsList className="bg-slate-900/50 p-1 rounded-xl h-12 border border-slate-800 backdrop-blur-md">
+                  <TabsTrigger value="all" className="px-6 rounded-lg font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-950 transition-all">
+                    All Leads
                   </TabsTrigger>
-                  <TabsTrigger value="hot" className="px-8 rounded-xl font-black text-[11px] uppercase tracking-widest data-[state=active]:bg-orange-500 data-[state=active]:text-white transition-all">
-                    Hot Leads
+                  <TabsTrigger value="hot" className="px-6 rounded-lg font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-orange-500 data-[state=active]:text-white transition-all">
+                    Hot
                   </TabsTrigger>
-                  <TabsTrigger value="pending" className="px-8 rounded-xl font-black text-[11px] uppercase tracking-widest data-[state=active]:bg-blue-500 data-[state=active]:text-white transition-all">
-                    Pending
+                  <TabsTrigger value="pending" className="px-6 rounded-lg font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-blue-500 data-[state=active]:text-white transition-all">
+                    Needs Attention
                   </TabsTrigger>
-                   <TabsTrigger value="joined" className="px-8 rounded-xl font-black text-[11px] uppercase tracking-widest data-[state=active]:bg-green-500 data-[state=active]:text-white transition-all">
+                   <TabsTrigger value="joined" className="px-6 rounded-lg font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-green-500 data-[state=active]:text-white transition-all">
                     Converted
                   </TabsTrigger>
                 </TabsList>
@@ -152,38 +133,6 @@ export default async function InquiriesPage() {
            </Tabs>
         </div>
 
-        {/* Pro Conversion Dashboard (Now Full Width Footer) */}
-        <div className="relative group outline-none overflow-hidden rounded-[3rem] bg-gradient-to-r from-blue-600 to-indigo-700 p-12 shadow-2xl shadow-blue-500/10">
-          <div className="absolute top-0 right-0 -mr-20 -mt-20 h-80 w-80 bg-white/5 rounded-full blur-3xl p-10" />
-          <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-12">
-             <div className="space-y-6 max-w-2xl">
-                <div className="h-14 w-14 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/10 shadow-inner">
-                   <Target className="h-8 w-8 text-white" />
-                </div>
-                <div className="space-y-3">
-                   <h3 className="text-4xl font-black text-white leading-tight tracking-tighter">Elite Conversion <span className="text-white/60 italic">Optimization</span></h3>
-                   <p className="text-white/80 text-lg font-medium leading-relaxed">
-                     Utilize our data-driven sales terminal to scale your member base with unmatched efficiency.
-                   </p>
-                </div>
-             </div>
-             <div className="grid sm:grid-cols-2 gap-6 lg:w-[500px]">
-                {[
-                  'Response time < 10 mins',
-                  'Personalized transformation',
-                  'Exclusive limited-time perks',
-                  'Social proof & testimonials'
-                ].map((tip, idx) => (
-                  <div key={idx} className="flex items-center gap-4 bg-white/10 p-5 rounded-2xl backdrop-blur-sm border border-white/5">
-                     <div className="h-6 w-6 rounded-full bg-white/20 flex items-center justify-center">
-                        <Sparkles className="h-3 w-3 text-white" />
-                     </div>
-                     <span className="text-sm font-black text-white uppercase tracking-tight">{tip}</span>
-                  </div>
-                ))}
-             </div>
-          </div>
-        </div>
       </div>
     </div>
   )

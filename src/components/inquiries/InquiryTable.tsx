@@ -201,18 +201,9 @@ function ActionMenu({ inquiry, loading, onStatusUpdate, onConvert }: any) {
       <DropdownMenuTrigger className="inline-flex items-center justify-center h-12 w-12 rounded-2xl bg-slate-950 border border-white/5 text-slate-400 hover:text-white hover:border-blue-500/50 transition-all focus:outline-none disabled:opacity-50" disabled={loading === inquiry.id}>
         <MoreHorizontal className="h-5 w-5" />
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-64 rounded-2xl border-white/10 bg-slate-950 text-slate-200 p-2 shadow-2xl backdrop-blur-xl">
-        <DropdownMenuLabel className="text-[10px] font-black uppercase tracking-widest text-slate-600 px-3 py-2">Sales Protocol</DropdownMenuLabel>
-        <DropdownMenuItem onClick={() => onStatusUpdate(inquiry.id, 'visiting')} className="rounded-xl focus:bg-blue-600 focus:text-white py-3 px-3 font-bold transition-all">
-          Mark as Visiting
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => onStatusUpdate(inquiry.id, 'follow_up')} className="rounded-xl focus:bg-amber-600 focus:text-white py-3 px-3 font-bold transition-all">
-          Schedule Follow-up
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => onStatusUpdate(inquiry.id, 'hot')} className="rounded-xl font-black text-orange-400 focus:bg-orange-600 focus:text-white py-3 px-3 transition-all flex items-center justify-between">
-          Mark as HOT LEAD 🔥
-        </DropdownMenuItem>
-        <DropdownMenuSeparator className="bg-white/10" />
+      <DropdownMenuContent align="end" className="w-56 rounded-2xl border-white/10 bg-slate-950 text-slate-200 p-2 shadow-2xl backdrop-blur-xl">
+        <DropdownMenuLabel className="text-[10px] font-black uppercase tracking-widest text-slate-600 px-3 py-2">Quick Actions</DropdownMenuLabel>
+        
         <DropdownMenuItem 
           onClick={() => onConvert(inquiry.id)} 
           className="rounded-xl font-black text-green-400 focus:bg-green-600 focus:text-white py-4 px-3 flex items-center gap-3 transition-all"
@@ -221,9 +212,21 @@ function ActionMenu({ inquiry, loading, onStatusUpdate, onConvert }: any) {
           <UserCheck className="h-4 w-4" />
           Convert to Member
         </DropdownMenuItem>
+
         <DropdownMenuSeparator className="bg-white/10" />
-        <DropdownMenuItem onClick={() => onStatusUpdate(inquiry.id, 'cancelled')} className="rounded-xl text-slate-500 focus:bg-rose-600 focus:text-white py-3 px-3 font-bold transition-all">
-          Abort Pipeline
+
+        <DropdownMenuItem onClick={() => onStatusUpdate(inquiry.id, 'follow_up')} className="rounded-xl focus:bg-slate-800 py-3 px-3 font-bold transition-all">
+          Follow-up Needed
+        </DropdownMenuItem>
+        
+        <DropdownMenuItem onClick={() => onStatusUpdate(inquiry.id, 'hot')} className="rounded-xl font-black text-orange-400 focus:bg-orange-600 focus:text-white py-3 px-3 transition-all">
+          Hot Lead 🔥
+        </DropdownMenuItem>
+
+        <DropdownMenuSeparator className="bg-white/10" />
+        
+        <DropdownMenuItem onClick={() => onStatusUpdate(inquiry.id, 'cancelled')} className="rounded-xl text-rose-500/50 focus:bg-rose-600 focus:text-white py-3 px-3 font-bold transition-all">
+          Cancel Lead
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
