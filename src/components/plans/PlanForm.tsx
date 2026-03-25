@@ -22,6 +22,7 @@ import { useRouter } from "next/navigation"
 
 import { createPlanAction } from "@/app/actions/plan"
 import { useState, useTransition } from "react"
+import { Package, ShieldCheck, ListChecks, Banknote, UserPlus } from "lucide-react"
 
 const planFormSchema = z.object({
   name: z.string().min(2, {
@@ -87,19 +88,25 @@ export function PlanForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          <div className="space-y-4">
-            <h3 className="text-lg font-medium">Basic Information</h3>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-10 animate-fade-in max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 gap-x-12 gap-y-10 md:grid-cols-2">
+          {/* Basic Information */}
+          <div className="space-y-6">
+            <div className="flex items-center gap-3 mb-6 pb-2 border-b border-slate-200">
+              <div className="p-2 rounded-lg bg-blue-50 text-blue-600">
+                <Package className="h-5 w-5" />
+              </div>
+              <h3 className="text-lg font-bold text-slate-900 tracking-tight">Plan Definition</h3>
+            </div>
             
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Plan Name</FormLabel>
+                  <FormLabel className="text-slate-700 font-semibold mb-1.5 block">Plan Name*</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g. Pro - 6 Months" {...field} />
+                    <Input placeholder="e.g. Pro - 6 Months" className="bg-white border-slate-200 h-11 rounded-lg text-slate-900 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -111,12 +118,12 @@ export function PlanForm() {
               name="durationDays"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Duration (Days)</FormLabel>
+                  <FormLabel className="text-slate-700 font-semibold mb-1.5 block">Duration (Days)*</FormLabel>
                   <FormControl>
-                    <Input type="number" placeholder="180" {...field} />
+                    <Input type="number" placeholder="180" className="bg-white border-slate-200 h-11 rounded-lg text-slate-900 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    Number of days this membership is valid
+                  <FormDescription className="text-xs text-slate-500 mt-1.5">
+                    How long the membership remains active.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -128,11 +135,11 @@ export function PlanForm() {
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Description</FormLabel>
+                  <FormLabel className="text-slate-700 font-semibold mb-1.5 block">Plan Overview</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Benefits and features of this plan"
-                      className="resize-none"
+                      placeholder="High-level benefits of this membership"
+                      className="bg-white border-slate-200 rounded-lg text-slate-900 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all resize-none min-h-[100px]"
                       {...field}
                     />
                   </FormControl>
@@ -142,55 +149,62 @@ export function PlanForm() {
             />
           </div>
 
-          <div className="space-y-4">
-            <h3 className="text-lg font-medium">Pricing & Rules</h3>
+          {/* Pricing & Rules */}
+          <div className="space-y-6">
+            <div className="flex items-center gap-3 mb-6 pb-2 border-b border-slate-200">
+              <div className="p-2 rounded-lg bg-emerald-50 text-emerald-600">
+                <Banknote className="h-5 w-5" />
+              </div>
+              <h3 className="text-lg font-bold text-slate-900 tracking-tight">Financial & Rules</h3>
+            </div>
             
-            <FormField
-              control={form.control}
-              name="price"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Price (₹)</FormLabel>
-                  <FormControl>
-                    <Input type="number" placeholder="4500" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="price"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-slate-700 font-semibold mb-1.5 block">Base Price (₹)*</FormLabel>
+                    <FormControl>
+                      <Input type="number" placeholder="4500" className="bg-white border-slate-200 h-11 rounded-lg text-slate-900 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-bold" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <FormField
-              control={form.control}
-              name="registrationFee"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Registration Fee (₹)</FormLabel>
-                  <FormControl>
-                    <Input type="number" placeholder="500" {...field} />
-                  </FormControl>
-                  <FormDescription>
-                    One-time fee charged on first signup
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              <FormField
+                control={form.control}
+                name="registrationFee"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-slate-700 font-semibold mb-1.5 block">Entry Fee (₹)</FormLabel>
+                    <FormControl>
+                      <Input type="number" placeholder="500" className="bg-white border-slate-200 h-11 rounded-lg text-slate-900 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
             <FormField
               control={form.control}
               name="features"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Features (Comma separated)</FormLabel>
+                  <FormLabel className="text-slate-700 font-semibold mb-1.5 block flex items-center gap-2">
+                    <ListChecks className="h-4 w-4" /> Feature Highlights
+                  </FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="e.g. Yoga Classes, Steam Room, Personal Trainer"
-                      className="resize-none"
+                      placeholder="e.g. Free Trainer, 24/7 Access, Yoga Included"
+                      className="bg-white border-slate-200 rounded-lg text-slate-900 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all resize-none min-h-[44px] h-11"
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription>
-                    Separate features with commas to display them as a list
+                  <FormDescription className="text-xs text-slate-500 mt-1.5">
+                    Separate items with commas to list them professionally.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -202,35 +216,45 @@ export function PlanForm() {
               name="maxFreezeDays"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Max Freeze Days</FormLabel>
+                  <FormLabel className="text-slate-700 font-semibold mb-1.5 block">Freeze Allowance (Days)</FormLabel>
                   <FormControl>
-                    <Input type="number" placeholder="15" {...field} />
+                    <Input type="number" placeholder="15" className="bg-white border-slate-200 h-11 rounded-lg text-slate-900 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    Maximum days members can pause this plan
-                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
+          </div>
+        </div>
 
+        {/* Global Settings */}
+        <div className="space-y-6 pt-10 border-t border-slate-200">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="p-2 rounded-lg bg-amber-50 text-amber-600">
+              <ShieldCheck className="h-5 w-5" />
+            </div>
+            <h3 className="text-lg font-bold text-slate-900 tracking-tight">Plan Governance</h3>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <FormField
               control={form.control}
               name="isActive"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                  <div className="space-y-0.5">
-                    <FormLabel className="text-base">
-                      Plan Active Status
+                <FormItem className="flex flex-row items-center justify-between rounded-xl border border-slate-200 bg-slate-50/50 p-6 shadow-sm">
+                  <div className="space-y-1">
+                    <FormLabel className="text-base font-bold text-slate-900">
+                      Market Availability
                     </FormLabel>
-                    <FormDescription>
-                      Is this plan currently available for sale?
+                    <FormDescription className="text-xs text-slate-500">
+                      Is this plan currently available for gym members to purchase?
                     </FormDescription>
                   </div>
                   <FormControl>
                     <Switch
                       checked={field.value}
                       onCheckedChange={field.onChange}
+                      className="data-[state=checked]:bg-blue-600"
                     />
                   </FormControl>
                 </FormItem>
@@ -239,12 +263,22 @@ export function PlanForm() {
           </div>
         </div>
 
-        <div className="flex justify-end space-x-4 border-t pt-4">
-          <Button variant="outline" type="button" onClick={() => router.back()} disabled={isPending}>
+        <div className="flex justify-end items-center gap-6 pt-10 border-t border-slate-200 mt-10">
+          <Button 
+            variant="ghost" 
+            type="button" 
+            onClick={() => router.back()} 
+            disabled={isPending}
+            className="text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-lg h-11 px-8 transition-colors"
+          >
             Cancel
           </Button>
-          <Button type="submit" disabled={isPending}>
-            {isPending ? "Saving Plan..." : "Save Plan"}
+          <Button 
+            type="submit" 
+            disabled={isPending}
+            className="bg-blue-600 hover:bg-blue-700 text-white rounded-lg h-11 px-12 font-bold shadow-lg shadow-blue-500/20 active:scale-95 transition-all"
+          >
+            {isPending ? "Syncing Expert Details..." : "Save Membership Plan"}
           </Button>
         </div>
       </form>
