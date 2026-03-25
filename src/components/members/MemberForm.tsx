@@ -95,15 +95,15 @@ export function MemberForm({ plans = [] }: { plans?: PlanOption[] }) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-12 animate-fade-in max-w-5xl mx-auto">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-10 animate-fade-in max-w-5xl mx-auto">
         <div className="grid grid-cols-1 gap-x-12 gap-y-10 md:grid-cols-2">
           {/* Personal Information */}
           <div className="space-y-6">
-            <div className="flex items-center gap-3 mb-6 pb-2 border-b border-white/10">
-              <div className="p-2 rounded-lg bg-blue-500/10 text-blue-400">
+            <div className="flex items-center gap-3 mb-6 pb-2 border-b border-slate-200">
+              <div className="p-2 rounded-lg bg-blue-50 text-blue-600">
                 <User className="h-5 w-5" />
               </div>
-              <h3 className="text-xl font-bold text-white italic tracking-tight uppercase text-sm">Personal Profile</h3>
+              <h3 className="text-lg font-bold text-slate-900 tracking-tight">Personal Information</h3>
             </div>
             
             <FormField
@@ -111,9 +111,9 @@ export function MemberForm({ plans = [] }: { plans?: PlanOption[] }) {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-slate-300 font-bold uppercase text-[10px] tracking-widest pl-1">Full Name*</FormLabel>
+                  <FormLabel className="text-slate-700 font-semibold mb-1.5 block">Full Name*</FormLabel>
                   <FormControl>
-                    <Input placeholder="John Doe" className="bg-slate-950/50 border-white/10 h-11 rounded-xl text-white focus:border-blue-500/50" {...field} />
+                    <Input placeholder="John Doe" className="bg-white border-slate-200 h-11 rounded-lg text-slate-900 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -126,9 +126,9 @@ export function MemberForm({ plans = [] }: { plans?: PlanOption[] }) {
                 name="phone"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-slate-300 font-bold uppercase text-[10px] tracking-widest pl-1">Phone Number*</FormLabel>
+                    <FormLabel className="text-slate-700 font-semibold mb-1.5 block">Phone Number*</FormLabel>
                     <FormControl>
-                      <Input placeholder="+91 9876543210" className="bg-slate-950/50 border-white/10 h-11 rounded-xl text-white focus:border-blue-500/50" {...field} />
+                      <Input placeholder="+91 9876543210" className="bg-white border-slate-200 h-11 rounded-lg text-slate-900 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -140,9 +140,9 @@ export function MemberForm({ plans = [] }: { plans?: PlanOption[] }) {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-slate-300 font-bold uppercase text-[10px] tracking-widest pl-1">Email (Optional)</FormLabel>
+                    <FormLabel className="text-slate-700 font-semibold mb-1.5 block">Email (Optional)</FormLabel>
                     <FormControl>
-                      <Input placeholder="john@example.com" className="bg-slate-950/50 border-white/10 h-11 rounded-xl text-white focus:border-blue-500/50" {...field} />
+                      <Input placeholder="john@example.com" className="bg-white border-slate-200 h-11 rounded-lg text-slate-900 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -156,14 +156,14 @@ export function MemberForm({ plans = [] }: { plans?: PlanOption[] }) {
                 name="gender"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-slate-300 font-bold uppercase text-[10px] tracking-widest pl-1">Gender*</FormLabel>
+                    <FormLabel className="text-slate-700 font-semibold mb-1.5 block">Gender*</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
-                        <SelectTrigger className="bg-slate-950/50 border-white/10 h-11 rounded-xl text-white">
+                        <SelectTrigger className="bg-white border-slate-200 h-11 rounded-lg text-slate-900">
                           <SelectValue placeholder="Select gender" />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent className="bg-slate-900 border-white/10 text-white">
+                      <SelectContent className="bg-white border-slate-200 text-slate-900">
                         <SelectItem value="male">Male</SelectItem>
                         <SelectItem value="female">Female</SelectItem>
                         <SelectItem value="other">Other</SelectItem>
@@ -179,14 +179,14 @@ export function MemberForm({ plans = [] }: { plans?: PlanOption[] }) {
                 name="dob"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
-                    <FormLabel className="text-slate-300 font-bold uppercase text-[10px] tracking-widest pl-1 mb-2">Date of Birth</FormLabel>
+                    <FormLabel className="text-slate-700 font-semibold mb-2 mt-0.5">Date of Birth</FormLabel>
                     <FormControl>
                       <Input
                         type="date"
                         max={new Date().toISOString().split("T")[0]}
                         className={cn(
-                          "w-full bg-slate-950/50 border-white/10 text-white focus:border-blue-500/50 h-11 rounded-xl transition-all [color-scheme:dark]",
-                          !field.value && "text-slate-500"
+                          "w-full bg-white border-slate-200 text-slate-900 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 h-11 rounded-lg transition-all",
+                          !field.value && "text-slate-400"
                         )}
                         value={field.value ? format(field.value, "yyyy-MM-dd") : ""}
                         onChange={(e) => {
@@ -204,11 +204,11 @@ export function MemberForm({ plans = [] }: { plans?: PlanOption[] }) {
 
           {/* Membership Details */}
           <div className="space-y-6">
-            <div className="flex items-center gap-3 mb-6 pb-2 border-b border-white/10">
-              <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-400">
+            <div className="flex items-center gap-3 mb-6 pb-2 border-b border-slate-200">
+              <div className="p-2 rounded-lg bg-emerald-50 text-emerald-600">
                 <CreditCard className="h-5 w-5" />
               </div>
-              <h3 className="text-xl font-bold text-white italic tracking-tight uppercase text-sm">Membership Setup</h3>
+              <h3 className="text-lg font-bold text-slate-900 tracking-tight">Membership Setup</h3>
             </div>
             
             <FormField
@@ -216,16 +216,16 @@ export function MemberForm({ plans = [] }: { plans?: PlanOption[] }) {
               name="planId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-slate-300 font-bold uppercase text-[10px] tracking-widest pl-1">Membership Plan*</FormLabel>
+                  <FormLabel className="text-slate-700 font-semibold mb-1.5 block">Membership Plan*</FormLabel>
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
-                      <SelectTrigger className="bg-slate-950/50 border-white/10 h-11 rounded-xl text-white">
+                      <SelectTrigger className="bg-white border-slate-200 h-11 rounded-lg text-slate-900">
                         <SelectValue placeholder="Select a membership plan">
                           {plans.find(p => p.id === field.value)?.name}
                         </SelectValue>
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent className="bg-slate-900 border-white/10 text-white">
+                    <SelectContent className="bg-white border-slate-200 text-slate-900">
                       {plans.length > 0 ? (
                         plans.map((plan) => (
                           <SelectItem key={plan.id} value={plan.id}>
@@ -247,15 +247,15 @@ export function MemberForm({ plans = [] }: { plans?: PlanOption[] }) {
               name="joinDate"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel className="text-slate-300 font-bold uppercase text-[10px] tracking-widest pl-1 mb-2">Registration Date*</FormLabel>
+                  <FormLabel className="text-slate-700 font-semibold mb-2 mt-0.5">Registration Date*</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
                         <Button
                           variant={"outline"}
                           className={cn(
-                            "w-full pl-3 text-left h-11 rounded-xl bg-slate-950/50 border-white/10 text-white hover:bg-white/5 transition-colors",
-                            !field.value && "text-muted-foreground"
+                            "w-full pl-3 text-left h-11 rounded-lg bg-white border-slate-200 text-slate-900 hover:bg-slate-50 transition-colors",
+                            !field.value && "text-slate-400"
                           )}
                         >
                           {field.value ? (
@@ -267,17 +267,17 @@ export function MemberForm({ plans = [] }: { plans?: PlanOption[] }) {
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0 bg-slate-900 border-white/10" align="start">
+                    <PopoverContent className="w-auto p-0 bg-white border-slate-200" align="start">
                       <Calendar
                         mode="single"
                         selected={field.value}
                         onSelect={field.onChange}
                         initialFocus
-                        className="bg-slate-900 text-white"
+                        className="bg-white text-slate-900"
                       />
                     </PopoverContent>
                   </Popover>
-                  <FormDescription className="text-[10px] text-slate-500 italic pl-1">
+                  <FormDescription className="text-xs text-slate-500 mt-2">
                     Effective date for the new membership.
                   </FormDescription>
                   <FormMessage />
@@ -288,12 +288,12 @@ export function MemberForm({ plans = [] }: { plans?: PlanOption[] }) {
         </div>
 
         {/* Additional Information */}
-        <div className="space-y-6 pt-10 border-t border-white/10">
+        <div className="space-y-6 pt-10 border-t border-slate-200">
           <div className="flex items-center gap-3 mb-6">
-            <div className="p-2 rounded-lg bg-amber-500/10 text-amber-400">
+            <div className="p-2 rounded-lg bg-amber-50 text-amber-600">
               <ShieldCheck className="h-5 w-5" />
             </div>
-            <h3 className="text-xl font-bold text-white italic tracking-tight uppercase text-sm">Emergency & Vital Info</h3>
+            <h3 className="text-lg font-bold text-slate-900 tracking-tight">Emergency & Vital Info</h3>
           </div>
           
           <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
@@ -302,11 +302,9 @@ export function MemberForm({ plans = [] }: { plans?: PlanOption[] }) {
               name="emergencyContact"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-slate-300 font-bold uppercase text-[10px] tracking-widest pl-1 flex items-center gap-2">
-                    <HeartPulse className="h-3 w-3" /> Emergency Contact
-                  </FormLabel>
+                  <FormLabel className="text-slate-700 font-semibold mb-1.5 block">Emergency Contact</FormLabel>
                   <FormControl>
-                    <Input placeholder="Name - Phone" className="bg-slate-950/50 border-white/10 h-11 rounded-xl text-white focus:border-blue-500/50" {...field} />
+                    <Input placeholder="Name - Phone" className="bg-white border-slate-200 h-11 rounded-lg text-slate-900 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -318,14 +316,14 @@ export function MemberForm({ plans = [] }: { plans?: PlanOption[] }) {
               name="bloodGroup"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-slate-300 font-bold uppercase text-[10px] tracking-widest pl-1">Blood Group</FormLabel>
+                  <FormLabel className="text-slate-700 font-semibold mb-1.5 block">Blood Group</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
-                      <SelectTrigger className="bg-slate-950/50 border-white/10 h-11 rounded-xl text-white">
+                      <SelectTrigger className="bg-white border-slate-200 h-11 rounded-lg text-slate-900">
                         <SelectValue placeholder="Select blood group" />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent className="bg-slate-900 border-white/10 text-white">
+                    <SelectContent className="bg-white border-slate-200 text-slate-900">
                       <SelectItem value="A+">A+</SelectItem>
                       <SelectItem value="A-">A-</SelectItem>
                       <SelectItem value="B+">B+</SelectItem>
@@ -346,13 +344,11 @@ export function MemberForm({ plans = [] }: { plans?: PlanOption[] }) {
               name="address"
               render={({ field }) => (
                 <FormItem className="md:col-span-1">
-                  <FormLabel className="text-slate-300 font-bold uppercase text-[10px] tracking-widest pl-1 flex items-center gap-2">
-                    <MapPin className="h-3 w-3" /> Resident Address
-                  </FormLabel>
+                  <FormLabel className="text-slate-700 font-semibold mb-1.5 block">Resident Address</FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="Enter full address"
-                      className="bg-slate-950/50 border-white/10 rounded-xl text-white resize-none h-11 min-h-[44px]"
+                      className="bg-white border-slate-200 rounded-lg text-slate-900 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all resize-none h-11 min-h-[44px]"
                       {...field}
                     />
                   </FormControl>
@@ -363,20 +359,20 @@ export function MemberForm({ plans = [] }: { plans?: PlanOption[] }) {
           </div>
         </div>
 
-        <div className="flex justify-end space-x-4 pt-8 border-t border-white/10 mt-10">
+        <div className="flex justify-end items-center gap-6 pt-10 border-t border-slate-200 mt-10">
           <Button 
             variant="ghost" 
             type="button" 
             onClick={() => router.back()} 
             disabled={isPending}
-            className="text-slate-400 hover:text-white hover:bg-white/5 rounded-xl h-11 px-8"
+            className="text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-lg h-11 px-8 transition-colors"
           >
             Cancel
           </Button>
           <Button 
             type="submit" 
             disabled={isPending}
-            className="bg-blue-600 hover:bg-blue-500 text-white rounded-xl h-11 px-12 font-bold shadow-lg shadow-blue-500/20 active:scale-95 transition-all"
+            className="bg-blue-600 hover:bg-blue-700 text-white rounded-lg h-11 px-12 font-bold shadow-lg shadow-blue-500/20 active:scale-95 transition-all"
           >
             {isPending ? "Connecting to Real DB..." : "Create Member Profile"}
           </Button>
