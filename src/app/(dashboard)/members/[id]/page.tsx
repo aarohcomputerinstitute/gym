@@ -95,10 +95,8 @@ export default async function MemberProfilePage({
             </Link>
           </Button>
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="icon" className="bg-white/5 border-white/10">
-                <MoreHorizontal className="h-4 w-4 text-white" />
-              </Button>
+            <DropdownMenuTrigger className="flex h-9 w-9 items-center justify-center rounded-md border border-white/10 bg-white/5 hover:bg-white/10 transition-all focus-visible:outline-none cursor-pointer">
+              <MoreHorizontal className="h-4 w-4 text-white" />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="bg-slate-900 border-white/10 text-white">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
