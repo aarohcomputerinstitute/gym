@@ -182,6 +182,49 @@ export function MemberTable({ data = [] }: { data?: Member[] }) {
     },
   })
 
+  // Export to CSV function
+  const handleExport = () => {
+    // Get headers
+    const headers = table.getVisibleFlatColumns()
+      .filter(col => col.id !== 'actions')
+      .map(col => {
+        const header = col.columnDef.header
+        if (typeof header === 'string') return header
+        // For columns with functional headers (like Name with sort), we can use the ID or a manual map
+        if (col.id === 'name') return 'Name'
+        return col.id.charAt(0).toUpperCase() + col.id.slice(1).replace(/([A-Z])/g, ' $1')
+      })
+
+    // Get data rows
+    const rows = table.getFilteredRowModel().rows.map(row => {
+      return table.getVisibleFlatColumns()
+        .filter(col => col.id !== 'actions')
+        .map(col => {
+          const val = row.getValue(col.id)
+          // Handle specific formatting if needed
+          if (col.id === 'pendingDues') return `₹${val}`
+          return val
+        })
+    })
+
+    // Create CSV content
+    const csvContent = [
+      headers.join(','),
+      ...rows.map(row => row.map(cell => `"${String(cell || '').replace(/"/g, '""')}"`).join(','))
+    ].join('\n')
+
+    // Create blob and download
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+    const link = document.createElement('a')
+    const url = URL.createObjectURL(blob)
+    link.setAttribute('href', url)
+    link.setAttribute('download', `gym_members_export_${new Date().toISOString().split('T')[0]}.csv`)
+    link.style.visibility = 'hidden'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
   return (
     <div className="w-full">
       <div className="flex items-center py-4 gap-2">
@@ -193,7 +236,7 @@ export function MemberTable({ data = [] }: { data?: Member[] }) {
           }
           className="max-w-sm"
         />
-        <Button variant="outline" className="ml-auto">
+        <Button variant="outline" className="ml-auto" onClick={handleExport}>
           <FileDown className="mr-2 h-4 w-4" />
           Export
         </Button>
@@ -217,7 +260,9 @@ export function MemberTable({ data = [] }: { data?: Member[] }) {
                       column.toggleVisibility(!!value)
                     }
                   >
-                    {column.id}
+                    {column.columnDef.header && typeof column.columnDef.header === 'string' 
+                      ? column.columnDef.header 
+                      : column.id.charAt(0).toUpperCase() + column.id.slice(1).replace(/([A-Z])/g, ' $1')}
                   </DropdownMenuCheckboxItem>
                 )
               })}

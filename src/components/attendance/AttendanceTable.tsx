@@ -208,6 +208,38 @@ export function AttendanceTable({ data }: { data: AttendanceRecord[] }) {
     },
   })
 
+  const handleExport = () => {
+    const headers = table.getVisibleFlatColumns()
+      .filter(col => col.id !== 'actions')
+      .map(col => {
+        const header = col.columnDef.header
+        if (typeof header === 'string') return header
+        if (col.id === 'memberName') return 'Member Name'
+        return col.id.charAt(0).toUpperCase() + col.id.slice(1).replace(/([A-Z])/g, ' $1')
+      })
+
+    const rows = table.getFilteredRowModel().rows.map(row => {
+      return table.getVisibleFlatColumns()
+        .filter(col => col.id !== 'actions')
+        .map(col => {
+          const val = row.getValue(col.id)
+          return val
+        })
+    })
+
+    const csvContent = [
+      headers.join(','),
+      ...rows.map(row => row.map(cell => `"${String(cell || '').replace(/"/g, '""')}"`).join(','))
+    ].join('\n')
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+    const link = document.createElement('a')
+    const url = URL.createObjectURL(blob)
+    link.setAttribute('href', url)
+    link.setAttribute('download', `attendance_export_${new Date().toISOString().split('T')[0]}.csv`)
+    link.click()
+  }
+
   return (
     <div className="w-full">
       <div className="flex items-center py-4 gap-2">
@@ -219,7 +251,7 @@ export function AttendanceTable({ data }: { data: AttendanceRecord[] }) {
           }
           className="max-w-sm"
         />
-        <Button variant="outline" className="ml-auto">
+        <Button variant="outline" className="ml-auto" onClick={handleExport}>
           <Download className="mr-2 h-4 w-4" />
           Export Log
         </Button>
@@ -243,7 +275,9 @@ export function AttendanceTable({ data }: { data: AttendanceRecord[] }) {
                       column.toggleVisibility(!!value)
                     }
                   >
-                    {column.id === "memberName" ? "Name" : column.id}
+                    {column.columnDef.header && typeof column.columnDef.header === 'string' 
+                      ? column.columnDef.header 
+                      : column.id.charAt(0).toUpperCase() + column.id.slice(1).replace(/([A-Z])/g, ' $1')}
                   </DropdownMenuCheckboxItem>
                 )
               })}
