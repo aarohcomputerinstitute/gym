@@ -66,7 +66,7 @@ export async function createMemberAction(data: any) {
       const endDate = new Date(startDate)
       endDate.setDate(startDate.getDate() + plan.duration_days)
 
-      await adminClient
+      const { error: subError } = await adminClient
         .from('member_subscriptions')
         .insert({
           gym_id: profile.gym_id,
@@ -77,6 +77,10 @@ export async function createMemberAction(data: any) {
           amount_paid: plan.price,
           status: 'active'
         })
+      
+      if (subError) {
+        console.error("Subscription Auto-Creation Error:", subError)
+      }
     }
   }
   

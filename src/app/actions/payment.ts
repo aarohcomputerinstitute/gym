@@ -73,20 +73,19 @@ export async function createPaymentAction(data: {
     .select()
     .single()
 
-  if (subError) {
-    console.error("Subscription Error:", {
-      code: subError.code,
-      message: subError.message,
-      details: subError.details,
-      hint: subError.hint
+  if (subError || !sub) {
+    console.error("Subscription Error (Detailed):", {
+      code: subError?.code,
+      message: subError?.message,
+      details: subError?.details,
+      hint: subError?.hint
     })
-    throw new Error("Failed to create member subscription record.")
+    throw new Error(subError?.message || "Failed to create member subscription record.")
   }
 
   // 6. Insert the payment record
   const invoiceNumber = `INV-${Date.now().toString().slice(-8)}`
   
-  // Total amount should be the plan's exact price, amount is what was actually paid today.
   const { error: paymentError } = await adminClient
     .from('payments')
     .insert({
@@ -108,13 +107,23 @@ export async function createPaymentAction(data: {
     })
     
   if (paymentError) {
-    console.error("Payment Error:", {
+    console.error("Payment Error (Detailed):", {
       code: paymentError.code,
       message: paymentError.message,
       details: paymentError.details,
       hint: paymentError.hint
     })
-    throw new Error("Failed to record payment in database.")
+    throw new Error(paymentError.message || "Failed to record payment in database.")
+  }
+
+  // 7. Update member status to 'active' if they were expired, etc.
+  const { error: memberUpdateError } = await adminClient
+    .from('members')
+    .update({ status: 'active' })
+    .eq('id', data.memberId)
+
+  if (memberUpdateError) {
+    console.error("Member Status Update Error (Non-critical):", memberUpdateError)
   }
   
   // 7. Revalidate paths

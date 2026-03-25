@@ -16,7 +16,6 @@ export default async function RecordPaymentPage({
   const { data: members } = await supabase
     .from('members')
     .select('id, name, member_code')
-    .eq('status', 'active')
     .order('name', { ascending: true })
 
   // 2. Fetch Active Plans for selection
