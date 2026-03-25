@@ -76,6 +76,7 @@ export function PaymentForm({ members, plans, initialMemberId }: PaymentFormProp
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null)
+  const [memberSearch, setMemberSearch] = useState("")
 
   const form = useForm<PaymentFormValues>({
     resolver: zodResolver(paymentFormSchema) as any,
@@ -153,18 +154,48 @@ export function PaymentForm({ members, plans, initialMemberId }: PaymentFormProp
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-slate-300 font-bold uppercase text-[10px] tracking-widest">Select Member</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select 
+                        onValueChange={field.onChange} 
+                        value={field.value}
+                      >
                         <FormControl>
                           <SelectTrigger className="bg-white/5 border-white/10 h-12 rounded-xl text-white focus:ring-blue-500/50">
-                            <SelectValue placeholder="Search member by name..." />
+                            <SelectValue placeholder="Search member by name...">
+                              {members.find(m => m.id === field.value)?.name}
+                            </SelectValue>
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent className="bg-slate-900 border-white/10 text-white">
-                          {members.map(m => (
-                            <SelectItem key={m.id} value={m.id}>
-                              {m.name} {m.member_number ? `(#${m.member_number})` : ""}
-                            </SelectItem>
-                          ))}
+                          <div className="p-2 border-b border-white/10">
+                            <Input 
+                              placeholder="Type to filter..." 
+                              className="h-8 bg-white/5 border-white/10 text-xs"
+                              value={memberSearch}
+                              onChange={(e) => setMemberSearch(e.target.value)}
+                              onKeyDown={(e) => e.stopPropagation()} // Prevent select from closing
+                            />
+                          </div>
+                          <div className="max-h-[200px] overflow-y-auto p-1">
+                            {members
+                              .filter(m => 
+                                m.name.toLowerCase().includes(memberSearch.toLowerCase()) || 
+                                m.member_number?.toLowerCase().includes(memberSearch.toLowerCase())
+                              )
+                              .map(m => (
+                                <SelectItem key={m.id} value={m.id}>
+                                  {m.name} {m.member_number ? `(#${m.member_number})` : ""}
+                                </SelectItem>
+                              ))
+                            }
+                            {members.filter(m => 
+                              m.name.toLowerCase().includes(memberSearch.toLowerCase()) || 
+                              m.member_number?.toLowerCase().includes(memberSearch.toLowerCase())
+                            ).length === 0 && (
+                              <div className="p-4 text-center text-xs text-slate-500">
+                                No members found.
+                              </div>
+                            )}
+                          </div>
                         </SelectContent>
                       </Select>
                       <FormMessage />
