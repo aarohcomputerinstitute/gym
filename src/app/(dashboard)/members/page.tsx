@@ -8,10 +8,17 @@ import { createAdminClient } from "@/lib/supabase/admin"
 export default async function MembersPage() {
   const supabase = await createClient()
 
-  // Fetch members from database. RLS restricts to the user's gym_id.
+  // Fetch members with their active subscription and plan name
   const { data: members, error } = await supabase
     .from('members')
-    .select('id, name, phone, status, join_date')
+    .select(`
+      id, name, phone, status, join_date,
+      member_subscriptions(
+        status,
+        end_date,
+        membership_plans(name)
+      )
+    `)
     .order('created_at', { ascending: false })
 
   // Fetch pending dues using Admin Client
@@ -34,16 +41,22 @@ export default async function MembersPage() {
   })
 
   // Map to the format expected by our data table
-  const formattedMembers: Member[] = (members || []).map(m => ({
-    id: m.id,
-    name: m.name,
-    phone: m.phone,
-    plan: "Standard Options", // TODO: join with member_subscriptions table
-    status: (m.status as "active" | "inactive" | "expired" | "frozen") || "inactive",
-    joinDate: m.join_date ? new Date(m.join_date).toISOString().split('T')[0] : "N/A",
-    expiryDate: "N/A",
-    pendingDues: duesMap[m.id] || 0
-  }))
+  const formattedMembers: Member[] = (members || []).map(m => {
+    // Find active subscription
+    const activeSub = (m.member_subscriptions as any[])?.find(s => s.status === 'active') || 
+                      (m.member_subscriptions as any[])?.[0]
+    
+    return {
+      id: m.id,
+      name: m.name,
+      phone: m.phone,
+      plan: activeSub?.membership_plans?.name || "No Active Plan",
+      status: (m.status as "active" | "inactive" | "expired" | "frozen") || "inactive",
+      joinDate: m.join_date ? new Date(m.join_date).toISOString().split('T')[0] : "N/A",
+      expiryDate: activeSub?.end_date ? new Date(activeSub.end_date).toISOString().split('T')[0] : "N/A",
+      pendingDues: duesMap[m.id] || 0
+    }
+  })
 
   return (
     <div className="flex-1 space-y-4 pt-6">

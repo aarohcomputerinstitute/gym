@@ -29,8 +29,7 @@ export async function createMemberAction(data: any) {
   }
 
   // 4. Insert the new member into the database
-  // NOTE: plan_id is NOT a column in the members table - removed it
-  const { error: insertError } = await adminClient
+  const { data: member, error: insertError } = await adminClient
     .from('members')
     .insert({
       gym_id: profile.gym_id,
@@ -45,20 +44,45 @@ export async function createMemberAction(data: any) {
       address: data.address || null,
       status: 'active'
     })
+    .select()
+    .single()
     
-  if (insertError) {
-    console.error("Supabase Insert Error (members):", {
-      code: insertError.code,
-      message: insertError.message,
-      details: insertError.details,
-      hint: insertError.hint
-    })
-    throw new Error(insertError.message || "Failed to insert member into database.")
+  if (insertError || !member) {
+    console.error("Supabase Insert Error (members):", insertError)
+    throw new Error(insertError?.message || "Failed to insert member into database.")
+  }
+
+  // 5. If a plan is selected, create a subscription
+  if (data.planId) {
+    // Fetch plan details for duration and price
+    const { data: plan, error: planError } = await adminClient
+      .from('membership_plans')
+      .select('duration_days, price')
+      .eq('id', data.planId)
+      .single()
+
+    if (!planError && plan) {
+      const startDate = new Date(data.joinDate)
+      const endDate = new Date(startDate)
+      endDate.setDate(startDate.getDate() + plan.duration_days)
+
+      await adminClient
+        .from('member_subscriptions')
+        .insert({
+          gym_id: profile.gym_id,
+          member_id: member.id,
+          plan_id: data.planId,
+          start_date: startDate.toISOString().split('T')[0],
+          end_date: endDate.toISOString().split('T')[0],
+          amount_paid: plan.price,
+          status: 'active'
+        })
+    }
   }
   
-  // 5. Revalidate
+  // 6. Revalidate
   revalidatePath('/members')
   revalidatePath('/dashboard')
   
-  return { success: true }
+  return { success: true, id: member.id }
 }
