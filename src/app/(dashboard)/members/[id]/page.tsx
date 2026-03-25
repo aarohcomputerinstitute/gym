@@ -69,7 +69,7 @@ export default async function MemberProfilePage({
   const plan = subscription?.membership_plans as any
 
   return (
-    <div className="flex-1 space-y-4 pt-6">
+    <div className="max-w-7xl mx-auto p-4 md:p-8 flex-1 space-y-4 pt-6">
       <div className="flex items-center gap-4">
         <Button variant="outline" size="icon" asChild className="bg-white/5 border-white/10">
           <Link href="/members">
