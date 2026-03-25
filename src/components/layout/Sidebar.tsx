@@ -9,6 +9,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import {
   LayoutDashboard,
   Users,
+  MessageSquare,
   CreditCard,
   CalendarCheck,
   Dumbbell,
@@ -26,6 +27,7 @@ import { signOut } from "@/app/(auth)/actions/index"
 // Defines our navigation structure
 export const sidebarNavigation = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+  { name: "Inquiries", href: "/inquiries", icon: MessageSquare },
   { name: "Members", href: "/members", icon: Users },
   { name: "Membership Plans", href: "/plans", icon: Ticket },
   { name: "Payments", href: "/payments", icon: CreditCard },
