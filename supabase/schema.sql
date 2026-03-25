@@ -381,65 +381,49 @@ ALTER TABLE progress_tracking ENABLE ROW LEVEL SECURITY;
 ALTER TABLE notifications ENABLE ROW LEVEL SECURITY;
 ALTER TABLE audit_logs ENABLE ROW LEVEL SECURITY;
 
--- Helper function to extract gym_id from JWT
+-- Helper function to extract gym_id from JWT with robust fallback to users table
 CREATE OR REPLACE FUNCTION current_gym_id() RETURNS uuid AS $$
-    SELECT (auth.jwt() ->> 'gym_id')::uuid;
+DECLARE
+  _gym_id uuid;
+BEGIN
+  -- 1. Try to get from JWT claims (fastest)
+  _gym_id := (auth.jwt() ->> 'gym_id')::uuid;
+  
+  -- 2. Fallback: Lookup in users table if JWT doesn't have it
+  IF _gym_id IS NULL THEN
+    SELECT gym_id INTO _gym_id 
+    FROM public.users 
+    WHERE id = auth.uid();
+  END IF;
+  
+  RETURN _gym_id;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER STABLE;
+
+-- helper function to check if user is a super admin
+CREATE OR REPLACE FUNCTION is_super_admin() RETURNS boolean AS $$
+    SELECT (auth.jwt() ->> 'role') = 'super_admin';
 $$ LANGUAGE SQL STABLE;
 
--- RLS Policies (Example template applied to all tenant tables using dynamic gym_id from JWT)
+-- Apply robust Isolation Policies to all tenant tables
+DROP POLICY IF EXISTS "Gym Isolation - Trainers" ON trainers;
+DROP POLICY IF EXISTS "Gym Isolation - Plans" ON membership_plans;
+DROP POLICY IF EXISTS "Gym Isolation - Subs" ON member_subscriptions;
+DROP POLICY IF EXISTS "Gym Isolation - Payments" ON payments;
+DROP POLICY IF EXISTS "Gym Isolation - Attendance" ON attendance;
+DROP POLICY IF EXISTS "Gym Isolation - Workout Plans" ON workout_plans;
+DROP POLICY IF EXISTS "Gym Isolation - Progress" ON progress_tracking;
+DROP POLICY IF EXISTS "Gym Isolation - Notifications" ON notifications;
+DROP POLICY IF EXISTS "Gym Isolation - Audit" ON audit_logs;
 
--- Users Table Policies
-CREATE POLICY "Users can view staff in their gym" 
-ON users FOR SELECT 
-USING (gym_id = current_gym_id());
-
-CREATE POLICY "Owners and Managers can insert staff" 
-ON users FOR INSERT 
-WITH CHECK (gym_id = current_gym_id() AND (auth.jwt()->>'role' IN ('owner', 'manager')));
-
-CREATE POLICY "Owners and Managers can update staff" 
-ON users FOR UPDATE 
-USING (gym_id = current_gym_id() AND (auth.jwt()->>'role' IN ('owner', 'manager')));
-
-CREATE POLICY "Only Owners can delete staff" 
-ON users FOR DELETE 
-USING (gym_id = current_gym_id() AND (auth.jwt()->>'role' = 'owner'));
-
--- Members Table Policies
-CREATE POLICY "Staff can view members in their gym" 
-ON members FOR SELECT 
-USING (gym_id = current_gym_id());
-
-CREATE POLICY "Staff can insert members" 
-ON members FOR INSERT 
-WITH CHECK (gym_id = current_gym_id());
-
-CREATE POLICY "Staff can update members" 
-ON members FOR UPDATE 
-USING (gym_id = current_gym_id());
-
-CREATE POLICY "Owners and Managers can delete members" 
-ON members FOR DELETE 
-USING (gym_id = current_gym_id() AND (auth.jwt()->>'role' IN ('owner', 'manager')));
-
--- Additional Users Table Policies for Signup
-CREATE POLICY "Allow users to insert their own profile" 
-ON users FOR INSERT 
-WITH CHECK (auth.uid() = id);
-
-CREATE POLICY "Users can view their own profile" 
-ON users FOR SELECT 
-USING (auth.uid() = id);
-
--- Apply similar generic Isolation Policies to remaining tables
-CREATE POLICY "Gym Isolation - Trainers" ON trainers USING (gym_id = current_gym_id());
-CREATE POLICY "Gym Isolation - Plans" ON membership_plans USING (gym_id = current_gym_id());
-CREATE POLICY "Gym Isolation - Subs" ON member_subscriptions USING (gym_id = current_gym_id());
-CREATE POLICY "Gym Isolation - Payments" ON payments USING (gym_id = current_gym_id());
-CREATE POLICY "Gym Isolation - Attendance" ON attendance USING (gym_id = current_gym_id());
-CREATE POLICY "Gym Isolation - Workout Plans" ON workout_plans USING (gym_id = current_gym_id());
-CREATE POLICY "Gym Isolation - Progress" ON progress_tracking USING (gym_id = current_gym_id());
-CREATE POLICY "Gym Isolation - Notifications" ON notifications USING (gym_id = current_gym_id());
-CREATE POLICY "Gym Isolation - Audit" ON audit_logs USING (gym_id = current_gym_id());
+CREATE POLICY "Gym Isolation - Trainers" ON trainers FOR ALL USING (gym_id = current_gym_id() OR is_super_admin());
+CREATE POLICY "Gym Isolation - Plans" ON membership_plans FOR ALL USING (gym_id = current_gym_id() OR is_super_admin());
+CREATE POLICY "Gym Isolation - Subs" ON member_subscriptions FOR ALL USING (gym_id = current_gym_id() OR is_super_admin());
+CREATE POLICY "Gym Isolation - Payments" ON payments FOR ALL USING (gym_id = current_gym_id() OR is_super_admin());
+CREATE POLICY "Gym Isolation - Attendance" ON attendance FOR ALL USING (gym_id = current_gym_id() OR is_super_admin());
+CREATE POLICY "Gym Isolation - Workout Plans" ON workout_plans FOR ALL USING (gym_id = current_gym_id() OR is_super_admin());
+CREATE POLICY "Gym Isolation - Progress" ON progress_tracking FOR ALL USING (gym_id = current_gym_id() OR is_super_admin());
+CREATE POLICY "Gym Isolation - Notifications" ON notifications FOR ALL USING (gym_id = current_gym_id() OR is_super_admin());
+CREATE POLICY "Gym Isolation - Audit" ON audit_logs FOR ALL USING (gym_id = current_gym_id() OR is_super_admin());
 
 -- Note: In a production setup, we would run similar INSERT/UPDATE/DELETE policies for each table based on the RBAC matrix.

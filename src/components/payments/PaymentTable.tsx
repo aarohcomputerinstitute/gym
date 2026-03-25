@@ -47,44 +47,7 @@ export interface Payment {
   status: "paid" | "pending" | "failed" | "refunded"
 }
 
-const data: Payment[] = [
-  {
-    id: "p1",
-    invoiceNumber: "INV-2024-001",
-    memberName: "John Doe",
-    amount: 4499,
-    date: "2024-01-15",
-    method: "UPI",
-    status: "paid",
-  },
-  {
-    id: "p2",
-    invoiceNumber: "INV-2024-002",
-    memberName: "Jane Smith",
-    amount: 999,
-    date: "2024-01-16",
-    method: "Cash",
-    status: "paid",
-  },
-  {
-    id: "p3",
-    invoiceNumber: "INV-2024-003",
-    memberName: "Robert Johnson",
-    amount: 7999,
-    date: "2024-01-18",
-    method: "Credit Card",
-    status: "pending",
-  },
-  {
-    id: "p4",
-    invoiceNumber: "INV-2024-004",
-    memberName: "Emily Davis",
-    amount: 2499,
-    date: "2024-01-20",
-    method: "UPI",
-    status: "refunded",
-  },
-]
+// Sample data removed to prevent prop shadowing and visual confusion.
 
 export const columns: ColumnDef<Payment>[] = [
   {
