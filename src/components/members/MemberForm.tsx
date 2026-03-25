@@ -36,7 +36,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 import { createMemberAction } from "@/app/actions/member"
-import { User, CreditCard, HeartPulse, MapPin, Calendar, Info, ShieldCheck } from "lucide-react"
+import { User, CreditCard, HeartPulse, MapPin, Info, ShieldCheck } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 
 const memberFormSchema = z.object({
