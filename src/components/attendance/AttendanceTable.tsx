@@ -162,9 +162,11 @@ export const columns: ColumnDef<AttendanceRecord>[] = [
 
       return (
         <DropdownMenu>
-          <DropdownMenuTrigger className="flex h-8 w-8 items-center justify-center rounded-md hover:bg-white/5 transition-colors focus-visible:outline-none">
-            <span className="sr-only">Open menu</span>
-            <MoreHorizontal className="h-4 w-4" />
+          <DropdownMenuTrigger asChild>
+            <button className="flex h-8 w-8 items-center justify-center rounded-md hover:bg-white/5 transition-colors focus-visible:outline-none cursor-pointer">
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal className="h-4 w-4" />
+            </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
@@ -254,8 +256,10 @@ export function AttendanceTable({ data }: { data: AttendanceRecord[] }) {
           Export Log
         </Button>
         <DropdownMenu>
-          <DropdownMenuTrigger className="flex h-10 items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium ring-offset-background transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
-            Columns <ChevronDown className="ml-2 h-4 w-4" />
+          <DropdownMenuTrigger asChild>
+            <button className="flex h-10 items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium ring-offset-background transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 cursor-pointer">
+              Columns <ChevronDown className="ml-2 h-4 w-4" />
+            </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             {table
