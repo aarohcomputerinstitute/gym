@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useEffect } from "react"
-import { UserPlus } from "lucide-react"
+import { useState } from "react"
+import { UserPlus, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   Sheet,
@@ -9,40 +9,52 @@ import {
   SheetDescription,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
 } from "@/components/ui/sheet"
 import { InquiryForm } from "./InquiryForm"
 
 export function LeadCaptureButton() {
   const [open, setOpen] = useState(false)
 
-  // Debugging log
-  useEffect(() => {
-    console.log("LeadCaptureButton state:", { open })
-  }, [open])
-
   return (
     <div className="relative z-[200]">
-      <Sheet open={open} onOpenChange={(val) => {
-        console.log("Sheet onOpenChange:", val)
-        setOpen(val)
-      }}>
-        <SheetTrigger asChild>
-          <Button 
-            onClick={() => console.log("Capture Lead Button Clicked")}
-            className="h-12 px-6 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-black shadow-xl shadow-blue-500/20 transition-all flex items-center gap-2"
-          >
-            <UserPlus className="h-4 w-4" />
-            Capture New Lead
-          </Button>
-        </SheetTrigger>
-        <SheetContent side="right" className="w-[350px] sm:w-[540px] p-0 bg-slate-950 border-white/10 overflow-y-auto">
+      {/* Explicit Manual Trigger for maximum reliability */}
+      <Button 
+        type="button"
+        onClick={() => {
+          console.log("Forcing Sheet Open...")
+          setOpen(true)
+        }}
+        className="h-12 px-6 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-black shadow-xl shadow-blue-500/20 transition-all flex items-center gap-2 group cursor-pointer pointer-events-auto"
+      >
+        <UserPlus className="h-4 w-4 transition-transform group-hover:scale-110" />
+        Capture New Lead
+      </Button>
+
+      <Sheet open={open} onOpenChange={setOpen}>
+        <SheetContent 
+          side="right" 
+          className="w-full sm:max-w-[540px] p-0 bg-slate-950 border-l border-white/10 overflow-y-auto"
+        >
           <div className="p-8 space-y-8">
-            <SheetHeader className="p-0">
-               <SheetTitle className="text-2xl font-black text-white">Capture Lead</SheetTitle>
-               <SheetDescription className="text-slate-400 font-medium">Capture prospect data into your secure growth pipeline.</SheetDescription>
+            <SheetHeader className="p-0 space-y-4">
+               <div className="flex items-center gap-3">
+                  <div className="h-10 w-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
+                     <Sparkles className="h-5 w-5 text-blue-400" />
+                  </div>
+                  <div>
+                     <SheetTitle className="text-2xl font-black text-white tracking-tight leading-none">
+                        Lead <span className="text-blue-400 italic">Capture</span>
+                     </SheetTitle>
+                     <SheetDescription className="text-slate-400 font-medium text-xs mt-1">
+                        Professional intake orchestration.
+                     </SheetDescription>
+                  </div>
+               </div>
             </SheetHeader>
-            <InquiryForm onSuccess={() => setOpen(false)} />
+            
+            <div className="relative pt-4">
+               <InquiryForm onSuccess={() => setOpen(false)} />
+            </div>
           </div>
         </SheetContent>
       </Sheet>
