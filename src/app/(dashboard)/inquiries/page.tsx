@@ -41,8 +41,8 @@ export default async function InquiriesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#020617] text-slate-200 selection:bg-blue-500/30">
-      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-12 py-8 lg:py-12 space-y-10">
+    <div className="min-h-screen bg-[#020617] text-slate-200 selection:bg-blue-500/30 p-4 md:p-8">
+      <div className="max-w-[1600px] mx-auto py-8 lg:py-12 space-y-10">
         
         {/* Pro Header Section */}
         <header className="flex flex-col xl:flex-row xl:items-center justify-between gap-8">

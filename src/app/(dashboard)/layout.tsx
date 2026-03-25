@@ -3,6 +3,7 @@ import { Sidebar } from "@/components/layout/Sidebar"
 import { TrialBanner } from "@/components/layout/TrialBanner"
 import { createClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
+import { cn } from "@/lib/utils"
 
 export default async function DashboardLayout({
   children,
@@ -39,7 +40,7 @@ export default async function DashboardLayout({
             <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-indigo-600/10 rounded-full blur-[120px] animate-pulse delay-700"></div>
           </div>
           
-          <div className="max-w-7xl mx-auto p-4 md:p-8 relative z-10 transition-all duration-300">
+          <div className="relative z-10 transition-all duration-300">
             {children}
           </div>
         </main>

@@ -133,7 +133,7 @@ export default async function DashboardPage() {
   ]
 
   return (
-    <div className="flex-1 space-y-8 p-4 md:p-8 pt-6">
+    <div className="max-w-7xl mx-auto p-4 md:p-8 flex-1 space-y-8 pt-6">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 animate-fade-in-up">
         <div className="space-y-1">
           <p className="text-sm font-medium text-blue-500 uppercase tracking-wider">{greeting}</p>
