@@ -38,7 +38,11 @@ const inquiryFormSchema = z.object({
 
 type InquiryFormValues = z.infer<typeof inquiryFormSchema>
 
-export function InquiryForm() {
+interface InquiryFormProps {
+  onSuccess?: () => void
+}
+
+export function InquiryForm({ onSuccess }: InquiryFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const router = useRouter()
 
@@ -60,6 +64,7 @@ export function InquiryForm() {
       toast.success("Lead captured in pipeline!")
       form.reset()
       router.refresh()
+      onSuccess?.()
     } catch (error: any) {
       toast.error(error.message)
     } finally {
