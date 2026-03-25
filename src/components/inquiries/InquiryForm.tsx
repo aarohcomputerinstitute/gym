@@ -23,7 +23,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { UserPlus, Phone, Mail, MessageSquare, Target, Loader2, Sparkles } from "lucide-react"
+import { UserPlus, Phone, Mail, MessageSquare, Target, Loader2, Sparkles, Wand2 } from "lucide-react"
 import { createInquiryAction } from "@/app/actions/inquiry"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
@@ -57,7 +57,7 @@ export function InquiryForm() {
     try {
       setIsSubmitting(true)
       await createInquiryAction(data)
-      toast.success("Inquiry successfully recorded.")
+      toast.success("Lead captured in pipeline!")
       form.reset()
       router.refresh()
     } catch (error: any) {
@@ -68,28 +68,31 @@ export function InquiryForm() {
   }
 
   return (
-    <Card className="border-slate-100 bg-white shadow-xl rounded-3xl overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <CardHeader className="bg-slate-50/50 border-b border-slate-100 p-8">
-        <div className="flex items-center gap-3 mb-2">
-          <div className="h-10 w-10 rounded-2xl bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-200">
-            <UserPlus className="h-5 w-5" />
-          </div>
-          <Badge variant="outline" className="bg-blue-50 text-blue-600 border-blue-100 font-black text-[10px] uppercase tracking-widest px-2">
-            Lead Capture
-          </Badge>
+    <Card className="border-slate-800 bg-slate-900/40 backdrop-blur-xl shadow-2xl rounded-[2.5rem] overflow-hidden group">
+      <CardHeader className="bg-slate-900/50 border-b border-white/5 p-8 relative">
+        <div className="absolute top-0 right-0 p-6 opacity-20 group-hover:opacity-40 transition-opacity">
+           <Wand2 className="h-20 w-20 text-blue-500 absolute -right-4 -top-4 blur-3xl" />
         </div>
-        <CardTitle className="text-3xl font-black tracking-tight text-slate-900">Capture New <span className="text-blue-600 italic">Inquiry</span></CardTitle>
-        <CardDescription className="text-slate-500 font-medium text-base">Record walk-ins and digital leads for your sales pipeline.</CardDescription>
+        <div className="flex items-center gap-3 mb-4">
+          <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white shadow-xl shadow-blue-500/20">
+            <UserPlus className="h-6 w-6" />
+          </div>
+          <div className="flex flex-col">
+             <span className="text-[10px] font-black text-blue-400 uppercase tracking-widest">Entry Terminal</span>
+             <CardTitle className="text-2xl font-black text-white tracking-tight">Capture <span className="text-blue-400 italic">Lead</span></CardTitle>
+          </div>
+        </div>
+        <CardDescription className="text-slate-400 font-medium text-sm leading-relaxed">
+          Initialize new prospect records with multi-channel source tracking.
+        </CardDescription>
       </CardHeader>
       <CardContent className="p-8">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <div className="grid md:grid-cols-2 gap-8">
-              {/* Left Column: Personal Info */}
-              <div className="space-y-6">
-                <div className="flex items-center gap-2 pb-2 border-b border-slate-100 mb-4">
-                  <Sparkles className="h-4 w-4 text-amber-500" />
-                  <h4 className="text-xs font-black uppercase tracking-[0.2em] text-slate-400">Prospect Identity</h4>
+            <div className="space-y-6">
+                <div className="flex items-center gap-2 pb-2 border-b border-white/5 mb-6">
+                  <Sparkles className="h-3 w-3 text-amber-500" />
+                  <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Identity Protocol</h4>
                 </div>
 
                 <FormField
@@ -97,121 +100,98 @@ export function InquiryForm() {
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-slate-700 font-bold text-sm tracking-tight flex items-center gap-2">Full Name <span className="text-blue-500">*</span></FormLabel>
+                      <FormLabel className="text-slate-300 font-bold text-xs uppercase tracking-wider">Prospect Full Name</FormLabel>
                       <FormControl>
-                        <Input placeholder="John Doe" className="h-12 bg-slate-50 border-slate-100 focus:bg-white focus:ring-blue-500/10 rounded-xl transition-all font-medium" {...field} />
+                        <Input placeholder="John Doe" className="h-14 bg-slate-950/50 border-white/5 focus:border-blue-500/40 focus:bg-slate-950 rounded-2xl transition-all font-bold text-white placeholder:text-slate-700" {...field} />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="text-rose-500 text-[10px] font-black uppercase tracking-widest mt-2" />
                     </FormItem>
                   )}
                 />
 
-                <div className="grid grid-cols-1 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <FormField
                     control={form.control}
                     name="phone"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-slate-700 font-bold text-sm tracking-tight flex items-center gap-2">
-                          <Phone className="h-3 w-3 text-slate-400" />
-                          Phone Number <span className="text-blue-500">*</span>
+                         <FormLabel className="text-slate-300 font-bold text-xs uppercase tracking-wider flex items-center gap-2">
+                          <Phone className="h-3 w-3 text-blue-500" />
+                          Phone Number
                         </FormLabel>
                         <FormControl>
-                          <Input placeholder="+91 98765 43210" className="h-12 bg-slate-50 border-slate-100 focus:bg-white rounded-xl font-medium" {...field} />
+                          <Input placeholder="+91..." className="h-14 bg-slate-950/50 border-white/5 focus:bg-slate-950 rounded-2xl font-bold text-white placeholder:text-slate-700" {...field} />
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className="text-rose-500 text-[10px] font-black uppercase tracking-widest mt-2" />
                       </FormItem>
                     )}
                   />
 
                   <FormField
                     control={form.control}
-                    name="email"
+                    name="source"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-slate-700 font-bold text-sm tracking-tight flex items-center gap-2">
-                          <Mail className="h-3 w-3 text-slate-400" />
-                          Email (Optional)
+                        <FormLabel className="text-slate-300 font-bold text-xs uppercase tracking-wider flex items-center gap-2">
+                           <Target className="h-3 w-3 text-blue-500" />
+                           Marketing Source
                         </FormLabel>
-                        <FormControl>
-                          <Input placeholder="prospect@example.com" className="h-12 bg-slate-50 border-slate-100 focus:bg-white rounded-xl font-medium" {...field} />
-                        </FormControl>
-                        <FormMessage />
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger className="h-14 bg-slate-950/50 border-white/5 focus:bg-slate-950 rounded-2xl font-bold text-white">
+                              <SelectValue placeholder="Source" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent className="rounded-2xl border-slate-800 bg-slate-900 text-slate-200">
+                            <SelectItem value="Walk-in">Physical Walk-in</SelectItem>
+                            <SelectItem value="Website">Official Website</SelectItem>
+                            <SelectItem value="Social Media">Social Media (Insta/FB)</SelectItem>
+                            <SelectItem value="Referral">Member Referral</SelectItem>
+                            <SelectItem value="Google Maps">Google Maps / SEO</SelectItem>
+                            <SelectItem value="Advertisement">Other Ads</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage className="text-rose-500 text-[10px] font-black uppercase tracking-widest mt-2" />
                       </FormItem>
                     )}
                   />
                 </div>
-              </div>
-
-              {/* Right Column: Source & Notes */}
-              <div className="space-y-6">
-                 <div className="flex items-center gap-2 pb-2 border-b border-slate-100 mb-4">
-                  <Target className="h-4 w-4 text-blue-500" />
-                  <h4 className="text-xs font-black uppercase tracking-[0.2em] text-slate-400">Marketing Source</h4>
-                </div>
-
-                <FormField
-                  control={form.control}
-                  name="source"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-slate-700 font-bold text-sm tracking-tight flex items-center gap-2">Inquiry Source</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger className="h-12 bg-slate-50 border-slate-100 focus:bg-white rounded-xl font-medium">
-                            <SelectValue placeholder="Select how they found you" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent className="rounded-xl border-slate-200">
-                          <SelectItem value="Walk-in">Physical Walk-in</SelectItem>
-                          <SelectItem value="Website">Official Website</SelectItem>
-                          <SelectItem value="Social Media">Social Media (Instagram/FB)</SelectItem>
-                          <SelectItem value="Referral">Member Referral</SelectItem>
-                          <SelectItem value="Google Maps">Google Maps / SEO</SelectItem>
-                          <SelectItem value="Advertisement">Newspaper / Banner</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
 
                 <FormField
                   control={form.control}
                   name="notes"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-slate-700 font-bold text-sm tracking-tight flex items-center gap-2">
-                        <MessageSquare className="h-3 w-3 text-slate-400" />
-                        Initial Requirements / Budget
+                      <FormLabel className="text-slate-300 font-bold text-xs uppercase tracking-wider flex items-center gap-2">
+                        <MessageSquare className="h-3 w-3 text-blue-500" />
+                        Intelligence Notes
                       </FormLabel>
                       <FormControl>
                         <Textarea 
-                          placeholder="Interested in weight gain, budget is around 2k/month..." 
-                          className="min-h-[110px] bg-slate-50 border-slate-100 focus:bg-white rounded-xl resize-none font-medium leading-relaxed" 
+                          placeholder="Record intent, budget, and requirements..." 
+                          className="min-h-[100px] bg-slate-950/50 border-white/5 focus:bg-slate-950 rounded-2xl resize-none font-medium leading-relaxed text-white placeholder:text-slate-700 p-4" 
                           {...field} 
                         />
                       </FormControl>
-                      <FormMessage />
                     </FormItem>
                   )}
                 />
-              </div>
             </div>
 
-            <div className="pt-6 border-t border-slate-100 flex justify-end gap-4">
-               <Button type="button" variant="ghost" className="h-12 px-8 rounded-xl font-bold text-slate-500 hover:bg-slate-50" onClick={() => form.reset()}>
-                  Clear Form
+            <div className="pt-8 border-t border-white/5 flex flex-col sm:flex-row gap-4">
+               <Button type="button" variant="ghost" className="h-14 flex-1 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] text-slate-500 hover:text-white transition-all order-2 sm:order-1" onClick={() => form.reset()}>
+                  Reset Terminal
                </Button>
-               <Button type="submit" className="h-12 px-10 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-black shadow-lg shadow-blue-100 transition-all flex items-center gap-2" disabled={isSubmitting}>
+               <Button type="submit" className="h-14 flex-[2] bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-2xl shadow-blue-500/20 transition-all flex items-center justify-center gap-2 order-1 sm:order-2" disabled={isSubmitting}>
                 {isSubmitting ? (
                   <>
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    Recording...
+                    <Loader2 className="h-4 w-4 animate-spin text-white/50" />
+                    Processing...
                   </>
                 ) : (
                   <>
-                    Save Lead & Track
+                    <Sparkles className="h-4 w-4" />
+                    Record & Push Lead
                   </>
                 )}
               </Button>
@@ -220,13 +200,5 @@ export function InquiryForm() {
         </Form>
       </CardContent>
     </Card>
-  )
-}
-
-function Badge({ children, variant, className }: any) {
-  return (
-    <div className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ${className}`}>
-      {children}
-    </div>
   )
 }
