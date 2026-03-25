@@ -15,16 +15,18 @@ import { InquiryForm } from "./InquiryForm"
 export function LeadCaptureButton() {
   const [open, setOpen] = useState(false)
 
+  const handleOpen = () => {
+    console.log("Button clicked, setting open to true")
+    setOpen(true)
+  }
+
   return (
-    <div className="relative z-[200]">
-      {/* Explicit Manual Trigger for maximum reliability */}
+    <>
       <Button 
         type="button"
-        onClick={() => {
-          console.log("Forcing Sheet Open...")
-          setOpen(true)
-        }}
-        className="h-12 px-6 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-black shadow-xl shadow-blue-500/20 transition-all flex items-center gap-2 group cursor-pointer pointer-events-auto"
+        onMouseDown={handleOpen} // Try MouseDown for faster response
+        onClick={handleOpen}
+        className="h-12 px-6 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-black shadow-xl shadow-blue-500/20 transition-all flex items-center gap-2 group relative z-[150] cursor-pointer pointer-events-auto active:scale-95"
       >
         <UserPlus className="h-4 w-4 transition-transform group-hover:scale-110" />
         Capture New Lead
@@ -58,6 +60,6 @@ export function LeadCaptureButton() {
           </div>
         </SheetContent>
       </Sheet>
-    </div>
+    </>
   )
 }
