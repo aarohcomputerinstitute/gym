@@ -137,6 +137,9 @@ export function PaymentForm({ members, plans, initialMemberId }: PaymentFormProp
             <CardTitle className="text-2xl font-bold text-slate-900 flex items-center gap-2 tracking-tight">
               <Receipt className="h-6 w-6 text-blue-600" />
               Collect Member Payment
+              <span className="ml-2 text-[8px] text-slate-300 font-mono bg-slate-50 px-1 rounded uppercase tracking-widest">
+                v2.0.FINAL-{new Date().toISOString().slice(11, 16)}
+              </span>
             </CardTitle>
             <CardDescription className="text-slate-500 font-medium">
               Securely record transactions and activate member subscriptions.
