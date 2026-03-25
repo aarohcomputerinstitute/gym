@@ -212,7 +212,9 @@ export function PaymentForm({ members, plans, initialMemberId }: PaymentFormProp
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
                           <SelectTrigger className="bg-white/5 border-white/10 h-12 rounded-xl text-white">
-                            <SelectValue placeholder="Select a membership package" />
+                            <SelectValue placeholder="Select a membership package">
+                              {plans.find(p => p.id === field.value)?.name}
+                            </SelectValue>
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent className="bg-slate-900 border-white/10 text-white">

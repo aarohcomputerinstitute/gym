@@ -209,7 +209,9 @@ export function MemberForm({ plans = [] }: { plans?: PlanOption[] }) {
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select a membership plan" />
+                        <SelectValue placeholder="Select a membership plan">
+                          {plans.find(p => p.id === field.value)?.name}
+                        </SelectValue>
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
