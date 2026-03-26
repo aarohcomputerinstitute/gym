@@ -122,7 +122,8 @@ export function PaymentForm({ members, plans, initialMemberId }: PaymentFormProp
           router.push('/payments')
           router.refresh()
         } else {
-          toast.error("Process returned unsuccessful status.")
+          // Display the specific database/validation error returned from the server action
+          toast.error(result.error || "Process returned unsuccessful status.")
         }
       } catch (error: any) {
         console.error("Payment Submission Error:", error)

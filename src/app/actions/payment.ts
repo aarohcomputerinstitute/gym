@@ -27,7 +27,7 @@ export async function createPaymentAction(data: {
   const { data: { user }, error: authError } = await supabase.auth.getUser()
   if (authError || !user) {
     console.error("Auth error in payment action:", authError)
-    throw new Error("You must be logged in to record payments.")
+    return { success: false, error: "You must be logged in to record payments." };
   }
   
   // 2. Use admin client (bypasses RLS) for all DB operations
@@ -42,7 +42,7 @@ export async function createPaymentAction(data: {
     
   if (profileError || !profile?.gym_id) {
     console.error("Profile fetch error in payment action:", profileError)
-    throw new Error("Could not find your associated Gym profile.")
+    return { success: false, error: "Could not find your associated Gym profile." };
   }
 
   console.log("Logged in Gym ID:", profile.gym_id)
@@ -54,14 +54,14 @@ export async function createPaymentAction(data: {
     .eq('id', data.planId)
     .single()
 
-  if (!plan) throw new Error("Selected plan not found.")
+  if (!plan) return { success: false, error: "Selected plan not found." };
 
   const startDate = new Date()
   let endDate = new Date()
   
   const isPartial = data.amount < plan.price;
   if (isPartial) {
-    if (!data.nextInstallmentDate) throw new Error("Next Installment Date is required for partial payments.");
+    if (!data.nextInstallmentDate) return { success: false, error: "Next Installment Date is required for partial payments." };
     // TEMPORARILY LOCK ACCESS: Gym access expires strictly on the installment date
     endDate = new Date(data.nextInstallmentDate);
   } else {
@@ -91,7 +91,7 @@ export async function createPaymentAction(data: {
       details: subError?.details,
       hint: subError?.hint
     })
-    throw new Error(subError?.message || "Failed to create member subscription record.")
+    return { success: false, error: subError?.message || "Failed to create member subscription record." };
   }
 
   // 6. Insert the payment record
@@ -129,7 +129,7 @@ export async function createPaymentAction(data: {
       details: paymentError.details,
       hint: paymentError.hint
     })
-    throw new Error(paymentError.message || "Failed to record payment in database.")
+    return { success: false, error: paymentError.message || "Failed to record payment in database." };
   }
 
   // 7. Update member status to 'active' if they were expired, etc.
