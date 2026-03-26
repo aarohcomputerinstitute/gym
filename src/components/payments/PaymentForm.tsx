@@ -57,6 +57,7 @@ interface Member {
   id: string
   name: string
   member_number?: string
+  plan_id?: string
 }
 
 interface Plan {
@@ -89,6 +90,17 @@ export function PaymentForm({ members, plans, initialMemberId }: PaymentFormProp
       notes: "",
     },
   })
+
+  // Auto-select plan when member changes
+  useEffect(() => {
+    const memberId = form.getValues('memberId')
+    if (memberId) {
+      const member = members.find(m => m.id === memberId)
+      if (member && member.plan_id) {
+        form.setValue('planId', member.plan_id)
+      }
+    }
+  }, [form.watch('memberId'), members, form])
 
   // Update amount when plan changes
   useEffect(() => {

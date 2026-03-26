@@ -44,10 +44,18 @@ export default async function RecordPaymentPage({
 
   const gymId = profile.gym_id
 
-  // 4. Fetch Members for this specific gym
+  // 4. Fetch Members with their latest subscription for this specific gym
   const { data: members } = await adminClient
     .from('members')
-    .select('id, name, member_code')
+    .select(`
+      id, 
+      name, 
+      member_code,
+      member_subscriptions (
+        plan_id,
+        created_at
+      )
+    `)
     .eq('gym_id', gymId)
     .order('name', { ascending: true })
 
@@ -60,11 +68,23 @@ export default async function RecordPaymentPage({
     .order('sort_order', { ascending: true })
 
   // Format data for the form
-  const formattedMembers = (members || []).map(m => ({
-    id: m.id,
-    name: m.name,
-    member_number: m.member_code
-  }))
+  const formattedMembers = (members || []).map(m => {
+    // find latest subscription
+    let latestPlanId = undefined;
+    if (m.member_subscriptions && m.member_subscriptions.length > 0) {
+      const sortedSubs = [...m.member_subscriptions].sort((a: any, b: any) => 
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      );
+      latestPlanId = sortedSubs[0].plan_id;
+    }
+    
+    return {
+      id: m.id,
+      name: m.name,
+      member_number: m.member_code,
+      plan_id: latestPlanId
+    }
+  })
 
   const formattedPlans = (plans || []).map(p => ({
     id: p.id,
