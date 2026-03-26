@@ -164,7 +164,11 @@ export function PaymentForm({ members, plans, initialMemberId }: PaymentFormProp
       </CardHeader>
       <CardContent className="p-10">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit, (err) => console.log("Validation Failed:", err))} className="space-y-10">
+          <form onSubmit={form.handleSubmit(onSubmit, (errors) => {
+            console.log("Validation Failed:", errors);
+            const firstError = Object.values(errors)[0];
+            toast.error(`Validation Error: ${firstError?.message || "Please fill all required fields correctly"}`);
+          })} className="space-y-10">
             <div className="grid gap-12 md:grid-cols-2">
               {/* Left Column: Selection */}
               <div className="space-y-8">
