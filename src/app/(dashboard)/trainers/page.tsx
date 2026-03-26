@@ -35,11 +35,11 @@ export default function TrainersPage() {
         phone: t.phone,
         email: t.email || "",
         specializations: t.specializations || [],
-        experienceYears: t.experience_years || 0,
-        activeClients: t.active_clients || 0,
-        maxClients: t.max_clients || 20,
-        isActive: t.is_active,
-        joinedDate: t.joined_date
+        experienceYears: Number(t.experience_years) || 0,
+        activeClients: Number(t.active_clients) || 0,
+        maxClients: Number(t.max_clients) || 20,
+        isActive: t.is_active ?? true,
+        joinedDate: t.joined_date || new Date().toISOString()
       }))
       setTrainers(formatted)
     } catch (error) {
@@ -99,8 +99,8 @@ export default function TrainersPage() {
         </div>
         <div className="flex items-center space-x-2">
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogTrigger asChild>
-              <Button>
+            <DialogTrigger>
+              <Button type="button">
                 <PlusCircle className="mr-2 h-4 w-4" />
                 Add Trainer
               </Button>
