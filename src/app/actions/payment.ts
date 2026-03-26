@@ -113,9 +113,12 @@ export async function createPaymentAction(data: {
     notes: data.notes || null
   }
 
-  // Only add next_installment_date if partial (avoids error if column doesn't exist yet)
+  // Add installment date to notes since the next_installment_date column doesn't exist in the DB schema
   if (isPartial && data.nextInstallmentDate) {
-    paymentRecord.next_installment_date = new Date(data.nextInstallmentDate).toISOString().split('T')[0]
+    const formattedDate = new Date(data.nextInstallmentDate).toLocaleDateString();
+    paymentRecord.notes = paymentRecord.notes 
+      ? `${paymentRecord.notes}\n[Auto] Next Installment Due: ${formattedDate}`
+      : `[Auto] Next Installment Due: ${formattedDate}`;
   }
 
   const { error: paymentError } = await adminClient
