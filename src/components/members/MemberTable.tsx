@@ -44,6 +44,7 @@ export interface Member {
   status: "active" | "inactive" | "expired" | "frozen"
   joinDate: string
   expiryDate: string
+  nextInstallmentDate?: string
   pendingDues?: number
 }
 
@@ -97,6 +98,30 @@ export const columns: ColumnDef<Member>[] = [
           `}>
             {status}
           </span>
+        </div>
+      )
+    },
+  },
+  {
+    accessorKey: "nextInstallmentDate",
+    header: "Next Payment",
+    cell: ({ row }) => {
+      const dateStr = row.getValue("nextInstallmentDate") as string
+      if (!dateStr || dateStr === "N/A") return <div className="text-slate-400">Paid</div>
+      
+      const date = new Date(dateStr)
+      const now = new Date()
+      const diffDays = Math.ceil((date.getTime() - now.getTime()) / (1000 * 3600 * 24))
+      
+      let colorClass = "text-slate-600"
+      if (diffDays < 0) colorClass = "text-rose-600 font-bold"
+      else if (diffDays <= 3) colorClass = "text-amber-600 font-bold"
+
+      return (
+        <div className={`flex flex-col ${colorClass}`}>
+          <span className="text-sm">{date.toLocaleDateString()}</span>
+          {diffDays < 0 && <span className="text-[10px] uppercase tracking-tighter">Overdue</span>}
+          {diffDays >= 0 && diffDays <= 3 && <span className="text-[10px] uppercase tracking-tighter">Due Soon</span>}
         </div>
       )
     },

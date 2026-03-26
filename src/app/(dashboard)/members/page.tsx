@@ -17,6 +17,10 @@ export default async function MembersPage() {
         status,
         end_date,
         membership_plans(name)
+      ),
+      payments(
+        next_installment_date,
+        created_at
       )
     `)
     .order('created_at', { ascending: false })
@@ -25,13 +29,13 @@ export default async function MembersPage() {
   const adminClient = createAdminClient()
   const memberIds = (members || []).map(m => m.id)
   
-  const { data: payments } = memberIds.length > 0 ? await adminClient
+  const { data: paymentsForDues } = memberIds.length > 0 ? await adminClient
     .from('payments')
     .select('member_id, amount, total_amount')
     .in('member_id', memberIds) : { data: [] }
     
   const duesMap: Record<string, number> = {}
-  ;(payments || []).forEach(p => {
+  ;(paymentsForDues || []).forEach(p => {
     const total = Number(p.total_amount) || 0
     const paid = Number(p.amount) || 0
     const due = Math.max(0, total - paid)
@@ -46,6 +50,12 @@ export default async function MembersPage() {
     const activeSub = (m.member_subscriptions as any[])?.find(s => s.status === 'active') || 
                       (m.member_subscriptions as any[])?.[0]
     
+    // Find the latest payment that HAS a next_installment_date
+    const latestInstallmentDate = (m.payments as any[])
+      ?.filter(p => p.next_installment_date)
+      ?.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())[0]
+      ?.next_installment_date
+    
     return {
       id: m.id,
       name: m.name,
@@ -54,6 +64,7 @@ export default async function MembersPage() {
       status: (m.status as "active" | "inactive" | "expired" | "frozen") || "inactive",
       joinDate: m.join_date ? new Date(m.join_date).toISOString().split('T')[0] : "N/A",
       expiryDate: activeSub?.end_date ? new Date(activeSub.end_date).toISOString().split('T')[0] : "N/A",
+      nextInstallmentDate: latestInstallmentDate || "N/A",
       pendingDues: duesMap[m.id] || 0
     }
   })
