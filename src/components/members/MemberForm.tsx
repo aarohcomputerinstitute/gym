@@ -39,6 +39,7 @@ import { createMemberAction } from "@/app/actions/member"
 import { User, CreditCard, HeartPulse, MapPin, Info, ShieldCheck } from "lucide-react"
 
 const memberFormSchema = z.object({
+  inquiryId: z.string().optional(),
   name: z.string().min(2, {
     message: "Name must be at least 2 characters.",
   }),
@@ -71,13 +72,16 @@ const defaultValues: Partial<MemberFormValues> = {
   joinDate: new Date(),
 }
 
-export function MemberForm({ plans = [] }: { plans?: PlanOption[] }) {
+export function MemberForm({ plans = [], initialData }: { plans?: PlanOption[], initialData?: Partial<MemberFormValues> }) {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
   
   const form = useForm<MemberFormValues>({
     resolver: zodResolver(memberFormSchema),
-    defaultValues,
+    defaultValues: {
+      ...defaultValues,
+      ...initialData
+    },
   })
 
   function onSubmit(data: MemberFormValues) {

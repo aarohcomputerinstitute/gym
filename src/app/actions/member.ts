@@ -83,8 +83,22 @@ export async function createMemberAction(data: any) {
       }
     }
   }
+
+  // 6. Update inquiry status if this member was converted from an inquiry
+  if (data.inquiryId) {
+    const { error: inquiryUpdateError } = await adminClient
+      .from('inquiries')
+      .update({ status: 'joined' })
+      .eq('id', data.inquiryId)
+      
+    if (inquiryUpdateError) {
+      console.error("Failed to update inquiry status:", inquiryUpdateError)
+    } else {
+      revalidatePath('/inquiries')
+    }
+  }
   
-  // 6. Revalidate
+  // 7. Revalidate
   revalidatePath('/members')
   revalidatePath('/dashboard')
   

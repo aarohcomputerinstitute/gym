@@ -21,8 +21,9 @@ import {
 import { Button } from "@/components/ui/button"
 import { MoreHorizontal, UserCheck, PhoneOutgoing, Mail, Calendar, Sparkles, MessageSquare } from "lucide-react"
 import { format } from "date-fns"
-import { updateInquiryStatusAction, convertToMemberAction, type InquiryStatus } from "@/app/actions/inquiry"
+import { updateInquiryStatusAction, type InquiryStatus } from "@/app/actions/inquiry"
 import { toast } from "sonner"
+import Link from "next/link"
 
 interface Inquiry {
   id: string
@@ -54,17 +55,6 @@ export function InquiryTable({ inquiries }: InquiryTableProps) {
     }
   }
 
-  const handleConvert = async (id: string) => {
-    try {
-      setLoading(id)
-      const member = await convertToMemberAction(id)
-      toast.success(`${member.name} converted successfully!`)
-    } catch (error: any) {
-      toast.error(error.message)
-    } finally {
-      setLoading(null)
-    }
-  }
 
   const getStatusStyle = (status: InquiryStatus) => {
     switch (status) {
@@ -136,7 +126,7 @@ export function InquiryTable({ inquiries }: InquiryTableProps) {
                     </Badge>
                   </TableCell>
                   <TableCell className="text-right pr-8">
-                     <ActionMenu inquiry={inquiry} loading={loading} onStatusUpdate={handleStatusUpdate} onConvert={handleConvert} />
+                     <ActionMenu inquiry={inquiry} loading={loading} onStatusUpdate={handleStatusUpdate} />
                   </TableCell>
                 </TableRow>
               ))
@@ -166,7 +156,7 @@ export function InquiryTable({ inquiries }: InquiryTableProps) {
                          {inquiry.phone}
                       </div>
                    </div>
-                   <ActionMenu inquiry={inquiry} loading={loading} onStatusUpdate={handleStatusUpdate} onConvert={handleConvert} />
+                   <ActionMenu inquiry={inquiry} loading={loading} onStatusUpdate={handleStatusUpdate} />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
@@ -195,7 +185,7 @@ export function InquiryTable({ inquiries }: InquiryTableProps) {
   )
 }
 
-function ActionMenu({ inquiry, loading, onStatusUpdate, onConvert }: any) {
+function ActionMenu({ inquiry, loading, onStatusUpdate }: any) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="inline-flex items-center justify-center h-12 w-12 rounded-2xl bg-slate-950 border border-white/5 text-slate-400 hover:text-white hover:border-blue-500/50 transition-all focus:outline-none disabled:opacity-50" disabled={loading === inquiry.id}>
@@ -205,12 +195,14 @@ function ActionMenu({ inquiry, loading, onStatusUpdate, onConvert }: any) {
         <DropdownMenuLabel className="text-[10px] font-black uppercase tracking-widest text-slate-600 px-3 py-2">Quick Actions</DropdownMenuLabel>
         
         <DropdownMenuItem 
-          onClick={() => onConvert(inquiry.id)} 
+          asChild
           className="rounded-xl font-black text-green-400 focus:bg-green-600 focus:text-white py-4 px-3 flex items-center gap-3 transition-all"
           disabled={inquiry.status === 'joined'}
         >
-          <UserCheck className="h-4 w-4" />
-          Convert to Member
+          <Link href={`/members/new?inquiryId=${inquiry.id}`}>
+            <UserCheck className="h-4 w-4" />
+            Convert to Member
+          </Link>
         </DropdownMenuItem>
 
         <DropdownMenuSeparator className="bg-white/10" />
