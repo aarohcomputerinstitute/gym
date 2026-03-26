@@ -97,25 +97,30 @@ export async function createPaymentAction(data: {
   // 6. Insert the payment record
   const invoiceNumber = `INV-${Date.now().toString().slice(-8)}`
   
+  // Total amount = plan price, amount = what was paid today
+  const paymentRecord: Record<string, any> = {
+    gym_id: profile.gym_id,
+    member_id: data.memberId,
+    subscription_id: sub.id,
+    amount: data.amount,
+    total_amount: plan.price,
+    payment_mode: data.paymentMode,
+    transaction_id: data.transactionId || null,
+    invoice_number: invoiceNumber,
+    payment_date: new Date().toISOString().split('T')[0],
+    status: isPartial ? 'partial' : 'paid',
+    received_by: user.id,
+    notes: data.notes || null
+  }
+
+  // Only add next_installment_date if partial (avoids error if column doesn't exist yet)
+  if (isPartial && data.nextInstallmentDate) {
+    paymentRecord.next_installment_date = new Date(data.nextInstallmentDate).toISOString().split('T')[0]
+  }
+
   const { error: paymentError } = await adminClient
     .from('payments')
-    .insert({
-      gym_id: profile.gym_id,
-      member_id: data.memberId,
-      subscription_id: sub.id,
-      amount: data.amount,
-      total_amount: plan.price,
-      payment_mode: data.paymentMode,
-      transaction_id: data.transactionId || null,
-      invoice_number: invoiceNumber,
-      payment_date: new Date().toISOString().split('T')[0],
-      status: isPartial ? 'partial' : 'paid',
-      next_installment_date: isPartial && data.nextInstallmentDate 
-        ? new Date(data.nextInstallmentDate).toISOString().split('T')[0] 
-        : null,
-      received_by: user.id,
-      notes: data.notes || null
-    })
+    .insert(paymentRecord)
     
   if (paymentError) {
     console.error("Payment Error (Detailed):", {

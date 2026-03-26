@@ -81,7 +81,7 @@ export async function convertToMemberAction(inquiryId: string) {
       phone: inquiry.phone,
       email: inquiry.email,
       status: 'active',
-      joining_date: new Date().toISOString().split('T')[0]
+      join_date: new Date().toISOString().split('T')[0]
     })
     .select()
     .single()
