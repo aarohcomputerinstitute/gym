@@ -9,28 +9,32 @@ import {
   YAxis,
 } from "recharts"
 
-const data = [
-  { name: "Jan", active: 200, new: 40 },
-  { name: "Feb", active: 230, new: 50 },
-  { name: "Mar", active: 250, new: 35 },
-  { name: "Apr", active: 290, new: 60 },
-  { name: "May", active: 310, new: 45 },
-  { name: "Jun", active: 340, new: 55 },
-  { name: "Jul", active: 380, new: 70 },
-]
+export interface MemberGrowthDataPoint {
+  name: string
+  total: number
+  newMembers: number
+}
 
-export function MemberGrowthChart() {
+export function MemberGrowthChart({ data = [] }: { data?: MemberGrowthDataPoint[] }) {
+  if (data.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-full text-slate-500 text-sm italic">
+        Add members to see growth trends.
+      </div>
+    )
+  }
+
   return (
     <ResponsiveContainer width="100%" height={350}>
       <AreaChart data={data} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
         <defs>
-          <linearGradient id="colorActive" x1="0" y1="0" x2="0" y2="1">
+          <linearGradient id="colorTotal" x1="0" y1="0" x2="0" y2="1">
             <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3} />
             <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
           </linearGradient>
           <linearGradient id="colorNew" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%" stopColor="#94a3b8" stopOpacity={0.2} />
-            <stop offset="95%" stopColor="#94a3b8" stopOpacity={0} />
+            <stop offset="5%" stopColor="#22c55e" stopOpacity={0.2} />
+            <stop offset="95%" stopColor="#22c55e" stopOpacity={0} />
           </linearGradient>
         </defs>
         <XAxis
@@ -54,8 +58,8 @@ export function MemberGrowthChart() {
                 <div className="bg-slate-900/90 backdrop-blur-md border border-white/10 p-3 rounded-xl shadow-2xl space-y-2">
                   <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{payload[0].payload.name}</p>
                   <div className="space-y-1">
-                    <p className="text-sm font-bold text-blue-400">Active: {payload[0].value}</p>
-                    <p className="text-sm font-bold text-slate-400">New: {payload[1].value}</p>
+                    <p className="text-sm font-bold text-blue-400">Total: {payload[0].value}</p>
+                    <p className="text-sm font-bold text-green-400">New: {payload[1]?.value || 0}</p>
                   </div>
                 </div>
               )
@@ -65,16 +69,16 @@ export function MemberGrowthChart() {
         />
         <Area
           type="monotone"
-          dataKey="active"
+          dataKey="total"
           stroke="#3b82f6"
           strokeWidth={3}
           fillOpacity={1}
-          fill="url(#colorActive)"
+          fill="url(#colorTotal)"
         />
         <Area
           type="monotone"
-          dataKey="new"
-          stroke="#94a3b8"
+          dataKey="newMembers"
+          stroke="#22c55e"
           strokeWidth={2}
           fillOpacity={1}
           fill="url(#colorNew)"

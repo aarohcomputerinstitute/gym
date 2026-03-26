@@ -7,20 +7,22 @@ import {
   XAxis,
   YAxis,
   Tooltip,
-  Cell,
 } from "recharts"
 
-const data = [
-  { name: "Jan", total: 125000 },
-  { name: "Feb", total: 142000 },
-  { name: "Mar", total: 158000 },
-  { name: "Apr", total: 185000 },
-  { name: "May", total: 162000 },
-  { name: "Jun", total: 210000 },
-  { name: "Jul", total: 245000 },
-]
+export interface RevenueDataPoint {
+  name: string
+  total: number
+}
 
-export function RevenueChart() {
+export function RevenueChart({ data = [] }: { data?: RevenueDataPoint[] }) {
+  if (data.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-full text-slate-500 text-sm italic">
+        No revenue data yet. Collect your first payment to see insights.
+      </div>
+    )
+  }
+
   return (
     <ResponsiveContainer width="100%" height={350}>
       <BarChart data={data} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
