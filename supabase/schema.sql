@@ -233,6 +233,7 @@ CREATE TABLE payments (
     refund_reason TEXT,
     received_by UUID REFERENCES users(id) ON DELETE SET NULL,
     notes TEXT,
+    next_installment_date DATE,
     created_at TIMESTAMPTZ DEFAULT now(),
     CONSTRAINT unique_gym_invoice UNIQUE(gym_id, invoice_number)
 );
